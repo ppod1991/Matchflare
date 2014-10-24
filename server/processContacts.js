@@ -38,10 +38,27 @@ exports.processContacts = function(req, res) {
 				//Once all numbers have been filtered...
 
 				//res.send(201,{contacts: processedContacts});
-				//console.log(processedContacts);
+				// console.log("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
+				// 				+" VALUES "
+				// 				+ JSONtoSQL(processedContacts)
+				// 				+" ),"
+				// 				+" upsert as "
+				// 				+" ("
+				// 				+"	UPDATE contacts c"
+				// 				+"		SET guessed_gender = nv.guessed_gender"
+				// 				+"	FROM new_values nv"
+				// 				+"	WHERE c.normalized_phone_number = nv.normalized_phone_number"
+				// 				+"	RETURNING c.normalized_phone_number"
+				// 				+")"
+				// 				+" INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender)"
+				// 				+" SELECT guessed_full_name, normalized_phone_number, guessed_gender"
+				// 				+" FROM (SELECT max(guessed_full_name) guessed_full_name, normalized_phone_number, max(guessed_gender) guessed_gender FROM new_values GROUP BY normalized_phone_number) groupedValues"
+				// 				+" WHERE NOT EXISTS (SELECT 1"
+				// 				+"				  FROM upsert up"
+				// 				+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number); COMMIT;");
 
 				//UPSERT
-				PG.knex.raw("WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
+				PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
 								+" VALUES "
 								+ JSONtoSQL(processedContacts)
 								+" ),"
@@ -55,10 +72,11 @@ exports.processContacts = function(req, res) {
 								+")"
 								+" INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender)"
 								+" SELECT guessed_full_name, normalized_phone_number, guessed_gender"
-								+" FROM new_values"
+								+" FROM (SELECT max(guessed_full_name) guessed_full_name, normalized_phone_number, max(guessed_gender) guessed_gender FROM new_values GROUP BY normalized_phone_number) groupedValues"
 								+" WHERE NOT EXISTS (SELECT 1"
 								+"				  FROM upsert up"
-								+"				  WHERE up.normalized_phone_number = new_values.normalized_phone_number)")
+								+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number); COMMIT;")
+								//+" AND WHERE NOT EXISTS (SELECT 1 FROM contacts WHERE contacts.normalized_phone_number = new_values.normalized_phone_number)")
 								.then(function(response) {
 									console.log("Response after upserting table:", response); 
 									res.send(201,{response:"OK"});
@@ -82,15 +100,15 @@ var JSONtoSQL = function(contacts) {
 };
 
 
-var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
-				{guessed_full_name: "Anil's Patrl", raw_phone_number:"609-654-0053"},
-				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
-				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
-				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
+// var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
+// 				{guessed_full_name: "Anil's Patrl", raw_phone_number:"6098510053"},
+// 				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
+// 				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
+// 				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
 
-var req = {body:{}};
-req.body.contacts = contacts;
+// var req = {body:{}};
+// req.body.contacts = contacts;
 
 
-exports.processContacts(req,{});
+// exports.processContacts(req,{});
 // console.log("Time: " + (new Date().getTime() - start));
