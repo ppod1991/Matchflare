@@ -38,7 +38,7 @@ exports.processContacts = function(req, res) {
 				//Once all numbers have been filtered...
 
 				//res.send(201,{contacts: processedContacts});
-				console.log(processedContacts);
+				//console.log(processedContacts);
 
 				//UPSERT
 				PG.knex.raw("WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
@@ -64,8 +64,8 @@ exports.processContacts = function(req, res) {
 									res.send(201,{response:"OK"});
 								})
 								.catch(function(err) {
-										console.log("Error", err);
-										res.send(500,"Error upserting contacts: " + err);
+									console.log("Error", err);
+									res.status(500).send("Error upserting contacts: " + err);
 								});
 			}
 
@@ -76,21 +76,21 @@ exports.processContacts = function(req, res) {
 var JSONtoSQL = function(contacts) {
 	var stringSQL = "";
 	contacts.forEach(function(contact) {
-		stringSQL = stringSQL + "('" + contact.guessed_full_name + "','" + contact.normalized_phone_number + "','" + contact.guessed_gender + "'),"; 
+		stringSQL = stringSQL + "('" + contact.guessed_full_name.replace(/'/g, "''") + "','" + contact.normalized_phone_number + "','" + contact.guessed_gender + "'),"; 
 	});
 	return stringSQL.substring(0, stringSQL.length - 1);
 };
 
 
-// var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
-// 				{guessed_full_name: "Anil Patrl", raw_phone_number:"609-654-0053"},
-// 				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
-// 				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
-// 				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
+var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
+				{guessed_full_name: "Anil's Patrl", raw_phone_number:"609-654-0053"},
+				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
+				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
+				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
 
-// var req = {body:{}};
-// req.body.contacts = contacts;
+var req = {body:{}};
+req.body.contacts = contacts;
 
 
-// processContacts(req,{});
+exports.processContacts(req,{});
 // console.log("Time: " + (new Date().getTime() - start));
