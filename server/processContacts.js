@@ -23,7 +23,7 @@ exports.processContacts = function(req, res) {
 				//Guess the gender of the contact based on their first name
 				contact.guessed_gender = Names[(contact.guessed_full_name.split(' ')[0]).toLowerCase()];
 				if (typeof contact.guessed_gender === "undefined") {
-					contact.guessed_gender = "MALE";
+					contact.guessed_gender = "UNKNOWN";
 				}
 				processedContacts.push(contact);
 			}
