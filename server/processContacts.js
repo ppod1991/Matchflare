@@ -61,7 +61,7 @@ var processContacts = function(req, res) {
 								+"				  WHERE up.normalized_phone_number = new_values.normalized_phone_number)")
 								.then(function(response) {
 									console.log("Response after upserting table:", response); 
-									res.send(201,{response:"OK");
+									res.send(201,{response:"OK"});
 								})
 								.catch(function(err) {
 										console.log("Error", err);
