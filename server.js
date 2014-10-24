@@ -2,10 +2,10 @@ var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
 var pg = require('pg');
-var conString = "postgres://afhgrosdezwdmv:LpFK-i6sUW6vVkAYgf1aG-5sA5@ec2-174-129-21-42.compute-1.amazonaws.com:5432/d8bi4fo1kqr1ft?ssl=true";
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http');
+var processContacts = require('./server/processContacts');
 
 app.use(logfmt.requestLogger());
 app.use(bodyParser.json());
@@ -23,5 +23,6 @@ app.get('/', function(req, res) {
     res.sendfile('./client/index.html');
 });
 
+app.post('/processContacts',processContacts.processContacts);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
