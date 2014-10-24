@@ -3,9 +3,9 @@ var Phone = require('libphonenumber');
 var async = require('async');
 var Names = require('./nameDatabase');
 
-var start = new Date().getTime();
+// var start = new Date().getTime();
 
-var processContacts = function(req, res) {
+exports.processContacts = function(req, res) {
 	var contacts = req.body.contacts;
 	var processedContacts = []; //Stores contacts with valid phone numbers
 
@@ -82,15 +82,15 @@ var JSONtoSQL = function(contacts) {
 };
 
 
-var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
-				{guessed_full_name: "Anil Patrl", raw_phone_number:"609-654-0053"},
-				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
-				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
-				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
+// var contacts = [{guessed_full_name: "Anita George", raw_phone_number:"6098510053"},
+// 				{guessed_full_name: "Anil Patrl", raw_phone_number:"609-654-0053"},
+// 				{guessed_full_name: "George Smiths", raw_phone_number:"6107260826"},
+// 				{guessed_full_name: "Sunny Singh", raw_phone_number:"6098asfs510053"},
+// 				{guessed_full_name: "Mia sd", raw_phone_number:"7322079402"}];
 
-var req = {body:{}};
-req.body.contacts = contacts;
+// var req = {body:{}};
+// req.body.contacts = contacts;
 
 
-processContacts(req,{});
-console.log("Time: " + (new Date().getTime() - start));
+// processContacts(req,{});
+// console.log("Time: " + (new Date().getTime() - start));
