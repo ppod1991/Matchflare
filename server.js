@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http');
 var processContacts = require('./server/processContacts');
+var matches = require('./server/matches');
 
 app.use(logfmt.requestLogger());
 app.use(bodyParser.json());
@@ -24,5 +25,7 @@ app.get('/', function(req, res) {
 });
 
 app.post('/processContacts',processContacts.processContacts);
+
+app.get('/getMatches', matches.getMatches);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);

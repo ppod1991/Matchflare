@@ -1,0 +1,29 @@
+CREATE OR REPLACE FUNCTION match_contacts(matcher_contact_id integer, first_contact_id integer) RETURNS pair AS $$
+
+BEGIN
+
+	SELECT c.contact_id
+   		FROM contacts c 
+   			WHERE contact_id IN  --Make sure the second matched person is a contact of the matcher
+   				(SELECT unnest(contacts) FROM contacts WHERE contact_id = 90) 
+			AND guessed_gender IN  --Make sure the second matched person is of the first matched person's preferred gender
+				(SELECT unnest(guess_preferences(c_2.guessed_gender)) FROM contacts c_2 WHERE contact_id = 102)
+			AND contact_id != 90 --Make sure the second matched person is not the matcher
+			AND contact_id != 102 --Make sure the second matched person is the not the first matched person
+		ORDER BY (random()/2+1)* matchflare_score(c.*)
+		LIMIT 1;
+
+	RETURN QUERY
+	IF contact_row.verified = TRUE THEN
+		score := score + 50;
+	ELSIF contact_row.guessed_gender != 'UNKNOWN' THEN
+		score := score + 35;
+	END IF;
+	RETURN score;
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+--Need to add (If the second matched person was already matched with the first matched person, if the second matched person blocked the matcher, if the second matched person blocked matchflare)
