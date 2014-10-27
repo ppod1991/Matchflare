@@ -14,9 +14,9 @@ $$ LANGUAGE plpgsql;
 
 
 --WORKING QUERY!!
-SELECT c1.contact_id, c1.guessed_full_name, c1.guessed_gender, c2.contact_id, c2.guessed_full_name, c2.guessed_gender
+SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_contact_name, c1.guessed_gender first_contact_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_contact_name, c2.guessed_gender second_contact_gender
 	FROM contacts c1, contacts c2 
-		WHERE c1.contact_id IN --Make sure the first matched person is a contact of the matcher
+		WHERE c1.contact_id IN 	--Make sure the first matched person is a contact of the matcher
 			(SELECT unnest(contacts) FROM contacts WHERE contact_id = 90) 
 		AND c2.contact_id IN  --Make sure the second matched person is a contact of the matcher
 			(SELECT unnest(contacts) FROM contacts WHERE contact_id = 90)

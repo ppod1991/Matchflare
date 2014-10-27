@@ -14,7 +14,7 @@ exports.getMatches = function(req, res) {
 		AND c1.contact_id != c2.contact_id \
 		AND c1.contact_id != ? \
 		AND c2.contact_id != ? \
-	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC", [contact_id,contact_id,contact_id,contact_id])
+	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30", [contact_id,contact_id,contact_id,contact_id])
 	.then(function(results) {
    			console.log(results.rows);
    			res.send(201, {matches:results.rows})
