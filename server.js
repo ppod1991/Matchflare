@@ -28,4 +28,5 @@ app.post('/processContacts',processContacts.processContacts);
 
 app.get('/getMatches', matches.getMatches);
 
+app.post('/postMatch', matches.addMatchResult);
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
