@@ -43,7 +43,7 @@ exports.addMatchResult = function(req, res) {
 			
 		PG.knex.raw("SELECT update_elo_score(?,?)",orderArray).then(function(result) {
 			res.send(201,"Elo scores updated");
-			console.log("Elo scores updated");
+			console.log({response:"Elo scores updated"});
 		}).catch(function(err) {
 			console.error("Error updating elo score");
 			res.send(501,"Error updating elo score: " + err);
