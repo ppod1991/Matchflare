@@ -8,6 +8,8 @@ BEGIN
    				(SELECT unnest(contacts) FROM contacts WHERE contact_id = 90) 
 			AND guessed_gender IN  --Make sure the second matched person is of the first matched person's preferred gender
 				(SELECT unnest(guess_preferences(c_2.guessed_gender)) FROM contacts c_2 WHERE contact_id = 102)
+			AND guessed_gender IN  --Make sure the first matched person is of the second matched person's preferred gender
+				(SELECT unnest(guess_preferences(c_2.guessed_gender)) FROM contacts c_2 WHERE contact_id = 102)
 			AND contact_id != 90 --Make sure the second matched person is not the matcher
 			AND contact_id != 102 --Make sure the second matched person is the not the first matched person
 		ORDER BY (random()/2+1)* matchflare_score(c.*)

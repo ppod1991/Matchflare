@@ -1,415 +1,201 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node',
-1 verbose cli   '/usr/local/bin/npm',
-1 verbose cli   'install',
-1 verbose cli   'express,',
-1 verbose cli   'logfmt,',
-1 verbose cli   'pg,',
-1 verbose cli   'body-parser,',
-1 verbose cli   'cors,',
-1 verbose cli   'http',
-1 verbose cli   '--save' ]
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'react-tools' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.32
-4 warn package.json Matchflare@1.0.0 No README data
-5 verbose readDependencies using package.json deps
-6 verbose cache add [ 'express,', null ]
-7 verbose cache add name=undefined spec="express," args=["express,",null]
-8 verbose parsed url { protocol: null,
-8 verbose parsed url   slashes: null,
-8 verbose parsed url   auth: null,
-8 verbose parsed url   host: null,
-8 verbose parsed url   port: null,
-8 verbose parsed url   hostname: null,
-8 verbose parsed url   hash: null,
-8 verbose parsed url   search: null,
-8 verbose parsed url   query: null,
-8 verbose parsed url   pathname: 'express,',
-8 verbose parsed url   path: 'express,',
-8 verbose parsed url   href: 'express,' }
-9 verbose cache add [ 'logfmt,', null ]
-10 verbose cache add name=undefined spec="logfmt," args=["logfmt,",null]
-11 verbose parsed url { protocol: null,
-11 verbose parsed url   slashes: null,
-11 verbose parsed url   auth: null,
-11 verbose parsed url   host: null,
-11 verbose parsed url   port: null,
-11 verbose parsed url   hostname: null,
-11 verbose parsed url   hash: null,
-11 verbose parsed url   search: null,
-11 verbose parsed url   query: null,
-11 verbose parsed url   pathname: 'logfmt,',
-11 verbose parsed url   path: 'logfmt,',
-11 verbose parsed url   href: 'logfmt,' }
-12 verbose cache add [ 'pg,', null ]
-13 verbose cache add name=undefined spec="pg," args=["pg,",null]
-14 verbose parsed url { protocol: null,
-14 verbose parsed url   slashes: null,
-14 verbose parsed url   auth: null,
-14 verbose parsed url   host: null,
-14 verbose parsed url   port: null,
-14 verbose parsed url   hostname: null,
-14 verbose parsed url   hash: null,
-14 verbose parsed url   search: null,
-14 verbose parsed url   query: null,
-14 verbose parsed url   pathname: 'pg,',
-14 verbose parsed url   path: 'pg,',
-14 verbose parsed url   href: 'pg,' }
-15 verbose cache add [ 'body-parser,', null ]
-16 verbose cache add name=undefined spec="body-parser," args=["body-parser,",null]
-17 verbose parsed url { protocol: null,
-17 verbose parsed url   slashes: null,
-17 verbose parsed url   auth: null,
-17 verbose parsed url   host: null,
-17 verbose parsed url   port: null,
-17 verbose parsed url   hostname: null,
-17 verbose parsed url   hash: null,
-17 verbose parsed url   search: null,
-17 verbose parsed url   query: null,
-17 verbose parsed url   pathname: 'body-parser,',
-17 verbose parsed url   path: 'body-parser,',
-17 verbose parsed url   href: 'body-parser,' }
-18 verbose cache add [ 'cors,', null ]
-19 verbose cache add name=undefined spec="cors," args=["cors,",null]
-20 verbose parsed url { protocol: null,
-20 verbose parsed url   slashes: null,
-20 verbose parsed url   auth: null,
-20 verbose parsed url   host: null,
-20 verbose parsed url   port: null,
-20 verbose parsed url   hostname: null,
-20 verbose parsed url   hash: null,
-20 verbose parsed url   search: null,
-20 verbose parsed url   query: null,
-20 verbose parsed url   pathname: 'cors,',
-20 verbose parsed url   path: 'cors,',
-20 verbose parsed url   href: 'cors,' }
-21 verbose cache add [ 'http', null ]
-22 verbose cache add name=undefined spec="http" args=["http",null]
-23 verbose parsed url { protocol: null,
-23 verbose parsed url   slashes: null,
-23 verbose parsed url   auth: null,
-23 verbose parsed url   host: null,
-23 verbose parsed url   port: null,
-23 verbose parsed url   hostname: null,
-23 verbose parsed url   hash: null,
-23 verbose parsed url   search: null,
-23 verbose parsed url   query: null,
-23 verbose parsed url   pathname: 'http',
-23 verbose parsed url   path: 'http',
-23 verbose parsed url   href: 'http' }
-24 silly lockFile 02e2600c-express express,
-25 verbose lock express, /Users/piyushpoddar/.npm/02e2600c-express.lock
-26 silly lockFile 5074fc3b-logfmt logfmt,
-27 verbose lock logfmt, /Users/piyushpoddar/.npm/5074fc3b-logfmt.lock
-28 silly lockFile c1e525a4-pg pg,
-29 verbose lock pg, /Users/piyushpoddar/.npm/c1e525a4-pg.lock
-30 silly lockFile 14a46318-body-parser body-parser,
-31 verbose lock body-parser, /Users/piyushpoddar/.npm/14a46318-body-parser.lock
-32 silly lockFile 7760ccd0-cors cors,
-33 verbose lock cors, /Users/piyushpoddar/.npm/7760ccd0-cors.lock
-34 silly lockFile 77b5f8e3-http http
-35 verbose lock http /Users/piyushpoddar/.npm/77b5f8e3-http.lock
-36 silly lockFile 02e2600c-express express,
-37 silly lockFile 02e2600c-express express,
-38 silly lockFile 5074fc3b-logfmt logfmt,
-39 silly lockFile 5074fc3b-logfmt logfmt,
-40 silly lockFile 77b5f8e3-http http
-41 silly lockFile 77b5f8e3-http http
-42 silly lockFile 14a46318-body-parser body-parser,
-43 silly lockFile 14a46318-body-parser body-parser,
-44 verbose addNamed [ 'express,', '' ]
-45 verbose addNamed [ null, '*' ]
-46 silly lockFile a82e5fbd-express express,@
-47 verbose lock express,@ /Users/piyushpoddar/.npm/a82e5fbd-express.lock
-48 verbose addNamed [ 'logfmt,', '' ]
-49 verbose addNamed [ null, '*' ]
-50 silly lockFile ca7fe3df-logfmt logfmt,@
-51 verbose lock logfmt,@ /Users/piyushpoddar/.npm/ca7fe3df-logfmt.lock
-52 verbose addNamed [ 'http', '' ]
-53 verbose addNamed [ null, '*' ]
-54 silly lockFile c1086ff9-http http@
-55 verbose lock http@ /Users/piyushpoddar/.npm/c1086ff9-http.lock
-56 verbose addNamed [ 'body-parser,', '' ]
-57 verbose addNamed [ null, '*' ]
-58 silly lockFile 0bd19005-body-parser body-parser,@
-59 verbose lock body-parser,@ /Users/piyushpoddar/.npm/0bd19005-body-parser.lock
-60 silly lockFile c1e525a4-pg pg,
-61 silly lockFile c1e525a4-pg pg,
-62 silly lockFile 7760ccd0-cors cors,
-63 silly lockFile 7760ccd0-cors cors,
-64 verbose addNamed [ 'pg,', '' ]
-65 verbose addNamed [ null, '*' ]
-66 silly lockFile f2364114-pg pg,@
-67 verbose lock pg,@ /Users/piyushpoddar/.npm/f2364114-pg.lock
-68 silly addNameRange { name: 'express,', range: '*', hasData: false }
-69 silly addNameRange { name: 'logfmt,', range: '*', hasData: false }
-70 verbose addNamed [ 'cors,', '' ]
-71 verbose addNamed [ null, '*' ]
-72 silly lockFile e6c53d0b-cors cors,@
-73 verbose lock cors,@ /Users/piyushpoddar/.npm/e6c53d0b-cors.lock
-74 silly addNameRange { name: 'http', range: '*', hasData: false }
-75 silly addNameRange { name: 'body-parser,', range: '*', hasData: false }
-76 verbose request where is /express,
-77 verbose request registry https://registry.npmjs.org/
-78 verbose request id b1ea366f3e80fe09
-79 verbose url raw /express,
-80 verbose url resolving [ 'https://registry.npmjs.org/', './express%2C' ]
-81 verbose url resolved https://registry.npmjs.org/express%2C
-82 verbose request where is https://registry.npmjs.org/express%2C
-83 info trying registry request attempt 1 at 17:59:00
-84 http GET https://registry.npmjs.org/express%2C
-85 verbose request where is /logfmt,
-86 verbose request registry https://registry.npmjs.org/
-87 verbose url raw /logfmt,
-88 verbose url resolving [ 'https://registry.npmjs.org/', './logfmt%2C' ]
-89 verbose url resolved https://registry.npmjs.org/logfmt%2C
-90 verbose request where is https://registry.npmjs.org/logfmt%2C
-91 info trying registry request attempt 1 at 17:59:00
-92 http GET https://registry.npmjs.org/logfmt%2C
-93 verbose request where is /http
-94 verbose request registry https://registry.npmjs.org/
-95 verbose url raw /http
-96 verbose url resolving [ 'https://registry.npmjs.org/', './http' ]
-97 verbose url resolved https://registry.npmjs.org/http
-98 verbose request where is https://registry.npmjs.org/http
-99 info trying registry request attempt 1 at 17:59:00
-100 http GET https://registry.npmjs.org/http
-101 silly addNameRange { name: 'pg,', range: '*', hasData: false }
-102 verbose request where is /body-parser,
-103 verbose request registry https://registry.npmjs.org/
-104 verbose url raw /body-parser,
-105 verbose url resolving [ 'https://registry.npmjs.org/', './body-parser%2C' ]
-106 verbose url resolved https://registry.npmjs.org/body-parser%2C
-107 verbose request where is https://registry.npmjs.org/body-parser%2C
-108 info trying registry request attempt 1 at 17:59:00
-109 http GET https://registry.npmjs.org/body-parser%2C
-110 silly addNameRange { name: 'cors,', range: '*', hasData: false }
-111 verbose request where is /pg,
-112 verbose request registry https://registry.npmjs.org/
-113 verbose url raw /pg,
-114 verbose url resolving [ 'https://registry.npmjs.org/', './pg%2C' ]
-115 verbose url resolved https://registry.npmjs.org/pg%2C
-116 verbose request where is https://registry.npmjs.org/pg%2C
-117 info trying registry request attempt 1 at 17:59:00
-118 http GET https://registry.npmjs.org/pg%2C
-119 verbose request where is /cors,
-120 verbose request registry https://registry.npmjs.org/
-121 verbose url raw /cors,
-122 verbose url resolving [ 'https://registry.npmjs.org/', './cors%2C' ]
-123 verbose url resolved https://registry.npmjs.org/cors%2C
-124 verbose request where is https://registry.npmjs.org/cors%2C
-125 info trying registry request attempt 1 at 17:59:00
-126 http GET https://registry.npmjs.org/cors%2C
-127 http 404 https://registry.npmjs.org/logfmt%2C
-128 verbose headers { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-128 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-128 verbose headers   'content-type': 'application/json',
-128 verbose headers   'cache-control': 'max-age=0',
-128 verbose headers   'content-length': '52',
-128 verbose headers   'accept-ranges': 'bytes',
-128 verbose headers   via: '1.1 varnish',
-128 verbose headers   age: '0',
-128 verbose headers   'x-served-by': 'cache-jfk1034-JFK',
-128 verbose headers   'x-cache': 'MISS',
-128 verbose headers   'x-cache-hits': '0',
-128 verbose headers   'x-timer': 'S1414101540.089592,VS0,VE16',
-128 verbose headers   'keep-alive': 'timeout=10, max=50',
-128 verbose headers   connection: 'Keep-Alive' }
-129 silly registry.get cb [ 404,
-129 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-129 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-129 silly registry.get     'content-type': 'application/json',
-129 silly registry.get     'cache-control': 'max-age=0',
-129 silly registry.get     'content-length': '52',
-129 silly registry.get     'accept-ranges': 'bytes',
-129 silly registry.get     via: '1.1 varnish',
-129 silly registry.get     age: '0',
-129 silly registry.get     'x-served-by': 'cache-jfk1034-JFK',
-129 silly registry.get     'x-cache': 'MISS',
-129 silly registry.get     'x-cache-hits': '0',
-129 silly registry.get     'x-timer': 'S1414101540.089592,VS0,VE16',
-129 silly registry.get     'keep-alive': 'timeout=10, max=50',
-129 silly registry.get     connection: 'Keep-Alive' } ]
-130 silly lockFile ca7fe3df-logfmt logfmt,@
-131 silly lockFile ca7fe3df-logfmt logfmt,@
-132 http 404 https://registry.npmjs.org/pg%2C
-133 verbose headers { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-133 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-133 verbose headers   'content-type': 'application/json',
-133 verbose headers   'cache-control': 'max-age=0',
-133 verbose headers   'content-length': '52',
-133 verbose headers   'accept-ranges': 'bytes',
-133 verbose headers   via: '1.1 varnish',
-133 verbose headers   age: '0',
-133 verbose headers   'x-served-by': 'cache-jfk1024-JFK',
-133 verbose headers   'x-cache': 'MISS',
-133 verbose headers   'x-cache-hits': '0',
-133 verbose headers   'x-timer': 'S1414101540.077554,VS0,VE89',
-133 verbose headers   'keep-alive': 'timeout=10, max=50',
-133 verbose headers   connection: 'Keep-Alive' }
-134 silly registry.get cb [ 404,
-134 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-134 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-134 silly registry.get     'content-type': 'application/json',
-134 silly registry.get     'cache-control': 'max-age=0',
-134 silly registry.get     'content-length': '52',
-134 silly registry.get     'accept-ranges': 'bytes',
-134 silly registry.get     via: '1.1 varnish',
-134 silly registry.get     age: '0',
-134 silly registry.get     'x-served-by': 'cache-jfk1024-JFK',
-134 silly registry.get     'x-cache': 'MISS',
-134 silly registry.get     'x-cache-hits': '0',
-134 silly registry.get     'x-timer': 'S1414101540.077554,VS0,VE89',
-134 silly registry.get     'keep-alive': 'timeout=10, max=50',
-134 silly registry.get     connection: 'Keep-Alive' } ]
-135 silly lockFile f2364114-pg pg,@
-136 silly lockFile f2364114-pg pg,@
-137 http 404 https://registry.npmjs.org/body-parser%2C
-138 verbose headers { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-138 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-138 verbose headers   'content-type': 'application/json',
-138 verbose headers   'cache-control': 'max-age=0',
-138 verbose headers   'content-length': '52',
-138 verbose headers   'accept-ranges': 'bytes',
-138 verbose headers   via: '1.1 varnish',
-138 verbose headers   age: '0',
-138 verbose headers   'x-served-by': 'cache-jfk1031-JFK',
-138 verbose headers   'x-cache': 'MISS',
-138 verbose headers   'x-cache-hits': '0',
-138 verbose headers   'x-timer': 'S1414101540.081659,VS0,VE91',
-138 verbose headers   'keep-alive': 'timeout=10, max=50',
-138 verbose headers   connection: 'Keep-Alive' }
-139 silly registry.get cb [ 404,
-139 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-139 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-139 silly registry.get     'content-type': 'application/json',
-139 silly registry.get     'cache-control': 'max-age=0',
-139 silly registry.get     'content-length': '52',
-139 silly registry.get     'accept-ranges': 'bytes',
-139 silly registry.get     via: '1.1 varnish',
-139 silly registry.get     age: '0',
-139 silly registry.get     'x-served-by': 'cache-jfk1031-JFK',
-139 silly registry.get     'x-cache': 'MISS',
-139 silly registry.get     'x-cache-hits': '0',
-139 silly registry.get     'x-timer': 'S1414101540.081659,VS0,VE91',
-139 silly registry.get     'keep-alive': 'timeout=10, max=50',
-139 silly registry.get     connection: 'Keep-Alive' } ]
-140 silly lockFile 0bd19005-body-parser body-parser,@
-141 silly lockFile 0bd19005-body-parser body-parser,@
-142 http 404 https://registry.npmjs.org/express%2C
-143 verbose headers { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-143 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-143 verbose headers   'content-type': 'application/json',
-143 verbose headers   'cache-control': 'max-age=0',
-143 verbose headers   'content-length': '52',
-143 verbose headers   'accept-ranges': 'bytes',
-143 verbose headers   via: '1.1 varnish',
-143 verbose headers   age: '0',
-143 verbose headers   'x-served-by': 'cache-jfk1028-JFK',
-143 verbose headers   'x-cache': 'MISS',
-143 verbose headers   'x-cache-hits': '0',
-143 verbose headers   'x-timer': 'S1414101540.090386,VS0,VE88',
-143 verbose headers   'keep-alive': 'timeout=10, max=50',
-143 verbose headers   connection: 'Keep-Alive' }
-144 silly registry.get cb [ 404,
-144 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-144 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-144 silly registry.get     'content-type': 'application/json',
-144 silly registry.get     'cache-control': 'max-age=0',
-144 silly registry.get     'content-length': '52',
-144 silly registry.get     'accept-ranges': 'bytes',
-144 silly registry.get     via: '1.1 varnish',
-144 silly registry.get     age: '0',
-144 silly registry.get     'x-served-by': 'cache-jfk1028-JFK',
-144 silly registry.get     'x-cache': 'MISS',
-144 silly registry.get     'x-cache-hits': '0',
-144 silly registry.get     'x-timer': 'S1414101540.090386,VS0,VE88',
-144 silly registry.get     'keep-alive': 'timeout=10, max=50',
-144 silly registry.get     connection: 'Keep-Alive' } ]
-145 silly lockFile a82e5fbd-express express,@
-146 silly lockFile a82e5fbd-express express,@
-147 http 200 https://registry.npmjs.org/http
-148 silly registry.get cb [ 200,
-148 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-148 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-148 silly registry.get     etag: '"2XJY7QR87HZF27OQQ22I1CJLZ"',
-148 silly registry.get     'content-type': 'application/json',
-148 silly registry.get     'cache-control': 'max-age=60',
-148 silly registry.get     'content-length': '949',
-148 silly registry.get     'accept-ranges': 'bytes',
-148 silly registry.get     via: '1.1 varnish',
-148 silly registry.get     age: '0',
-148 silly registry.get     'x-served-by': 'cache-jfk1025-JFK',
-148 silly registry.get     'x-cache': 'HIT',
-148 silly registry.get     'x-cache-hits': '1',
-148 silly registry.get     'x-timer': 'S1414101540.089362,VS0,VE349',
-148 silly registry.get     vary: 'Accept',
-148 silly registry.get     'keep-alive': 'timeout=10, max=50',
-148 silly registry.get     connection: 'Keep-Alive' } ]
-149 http 404 https://registry.npmjs.org/cors%2C
-150 verbose headers { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-150 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-150 verbose headers   'content-type': 'application/json',
-150 verbose headers   'cache-control': 'max-age=0',
-150 verbose headers   'content-length': '52',
-150 verbose headers   'accept-ranges': 'bytes',
-150 verbose headers   via: '1.1 varnish',
-150 verbose headers   age: '0',
-150 verbose headers   'x-served-by': 'cache-jfk1034-JFK',
-150 verbose headers   'x-cache': 'MISS',
-150 verbose headers   'x-cache-hits': '0',
-150 verbose headers   'x-timer': 'S1414101540.126743,VS0,VE365',
-150 verbose headers   'keep-alive': 'timeout=10, max=49',
-150 verbose headers   connection: 'Keep-Alive' }
-151 silly registry.get cb [ 404,
-151 silly registry.get   { date: 'Thu, 23 Oct 2014 21:59:00 GMT',
-151 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-151 silly registry.get     'content-type': 'application/json',
-151 silly registry.get     'cache-control': 'max-age=0',
-151 silly registry.get     'content-length': '52',
-151 silly registry.get     'accept-ranges': 'bytes',
-151 silly registry.get     via: '1.1 varnish',
-151 silly registry.get     age: '0',
-151 silly registry.get     'x-served-by': 'cache-jfk1034-JFK',
-151 silly registry.get     'x-cache': 'MISS',
-151 silly registry.get     'x-cache-hits': '0',
-151 silly registry.get     'x-timer': 'S1414101540.126743,VS0,VE365',
-151 silly registry.get     'keep-alive': 'timeout=10, max=49',
-151 silly registry.get     connection: 'Keep-Alive' } ]
-152 silly lockFile e6c53d0b-cors cors,@
-153 silly lockFile e6c53d0b-cors cors,@
-154 silly addNameRange number 2 { name: 'http', range: '*', hasData: true }
-155 silly addNameRange versions [ 'http', [ '0.0.0' ] ]
-156 verbose addNamed [ 'http', '0.0.0' ]
-157 verbose addNamed [ '0.0.0', '0.0.0' ]
-158 silly lockFile 5c64bf45-http-0-0-0 http@0.0.0
-159 verbose lock http@0.0.0 /Users/piyushpoddar/.npm/5c64bf45-http-0-0-0.lock
-160 silly lockFile a092f7e2-ry-npmjs-org-http-http-0-0-0-tgz https://registry.npmjs.org/http/-/http-0.0.0.tgz
-161 verbose lock https://registry.npmjs.org/http/-/http-0.0.0.tgz /Users/piyushpoddar/.npm/a092f7e2-ry-npmjs-org-http-http-0-0-0-tgz.lock
-162 verbose addRemoteTarball [ 'https://registry.npmjs.org/http/-/http-0.0.0.tgz',
-162 verbose addRemoteTarball   '86e6326d29c5d039de9fac584a45689f929f4f72' ]
-163 info retry fetch attempt 1 at 17:59:01
-164 verbose fetch to= /tmp/npm-31838-Bdx-gurm/registry.npmjs.org/http/-/http-0.0.0.tgz
-165 http GET https://registry.npmjs.org/http/-/http-0.0.0.tgz
-166 http 200 https://registry.npmjs.org/http/-/http-0.0.0.tgz
-167 silly lockFile a092f7e2-ry-npmjs-org-http-http-0-0-0-tgz https://registry.npmjs.org/http/-/http-0.0.0.tgz
-168 silly lockFile a092f7e2-ry-npmjs-org-http-http-0-0-0-tgz https://registry.npmjs.org/http/-/http-0.0.0.tgz
-169 silly lockFile 5c64bf45-http-0-0-0 http@0.0.0
-170 silly lockFile 5c64bf45-http-0-0-0 http@0.0.0
-171 silly lockFile c1086ff9-http http@
-172 silly lockFile c1086ff9-http http@
-173 error 404 404 Not Found: logfmt%2C
-173 error 404
-173 error 404 'logfmt%2C' is not in the npm registry.
-173 error 404 You should bug the author to publish it
-173 error 404 It was specified as a dependency of 'Matchflare'
-173 error 404
-173 error 404 Note that you can also install from a
-173 error 404 tarball, folder, or http url, or git url.
-174 error System Darwin 13.2.0
-175 error command "node" "/usr/local/bin/npm" "install" "express," "logfmt," "pg," "body-parser," "cors," "http" "--save"
-176 error cwd /Users/piyushpoddar/Documents/Matchflare/website
-177 error node -v v0.10.32
-178 error npm -v 1.4.28
-179 error code E404
-180 verbose exit [ 1, true ]
+4 verbose cache add [ 'react-tools', null ]
+5 verbose cache add name=undefined spec="react-tools" args=["react-tools",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'react-tools',
+6 verbose parsed url   path: 'react-tools',
+6 verbose parsed url   href: 'react-tools' }
+7 silly lockFile 0f761efe-react-tools react-tools
+8 verbose lock react-tools /Users/piyushpoddar/.npm/0f761efe-react-tools.lock
+9 silly lockFile 0f761efe-react-tools react-tools
+10 silly lockFile 0f761efe-react-tools react-tools
+11 verbose addNamed [ 'react-tools', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 47fcd5e0-react-tools react-tools@
+14 verbose lock react-tools@ /Users/piyushpoddar/.npm/47fcd5e0-react-tools.lock
+15 silly addNameRange { name: 'react-tools', range: '*', hasData: false }
+16 verbose request where is /react-tools
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id b5160387a13ee550
+19 verbose url raw /react-tools
+20 verbose url resolving [ 'https://registry.npmjs.org/', './react-tools' ]
+21 verbose url resolved https://registry.npmjs.org/react-tools
+22 verbose request where is https://registry.npmjs.org/react-tools
+23 info trying registry request attempt 1 at 15:21:10
+24 http GET https://registry.npmjs.org/react-tools
+25 http 200 https://registry.npmjs.org/react-tools
+26 silly registry.get cb [ 200,
+26 silly registry.get   { date: 'Tue, 28 Oct 2014 19:21:10 GMT',
+26 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly registry.get     etag: '"XC9P5YODLIDV9C7WAFFUOVHF"',
+26 silly registry.get     'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=60',
+26 silly registry.get     'content-length': '41527',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     'x-served-by': 'cache-jfk1027-JFK',
+26 silly registry.get     'x-cache': 'HIT',
+26 silly registry.get     'x-cache-hits': '1',
+26 silly registry.get     'x-timer': 'S1414524070.837759,VS0,VE84',
+26 silly registry.get     vary: 'Accept',
+26 silly registry.get     'keep-alive': 'timeout=10, max=50',
+26 silly registry.get     connection: 'Keep-Alive' } ]
+27 silly addNameRange number 2 { name: 'react-tools', range: '*', hasData: true }
+28 silly addNameRange versions [ 'react-tools',
+28 silly addNameRange   [ '0.3.0',
+28 silly addNameRange     '0.3.1',
+28 silly addNameRange     '0.3.2',
+28 silly addNameRange     '0.3.3',
+28 silly addNameRange     '0.4.0',
+28 silly addNameRange     '0.4.1',
+28 silly addNameRange     '0.5.0',
+28 silly addNameRange     '0.5.1',
+28 silly addNameRange     '0.4.2',
+28 silly addNameRange     '0.5.2',
+28 silly addNameRange     '0.8.0',
+28 silly addNameRange     '0.9.0-rc1',
+28 silly addNameRange     '0.9.0',
+28 silly addNameRange     '0.10.0-rc1',
+28 silly addNameRange     '0.10.0',
+28 silly addNameRange     '0.11.0-rc1',
+28 silly addNameRange     '0.11.0',
+28 silly addNameRange     '0.11.1',
+28 silly addNameRange     '0.11.2',
+28 silly addNameRange     '0.12.0-rc1',
+28 silly addNameRange     '0.12.0' ] ]
+29 verbose addNamed [ 'react-tools', '0.12.0' ]
+30 verbose addNamed [ '0.12.0', '0.12.0' ]
+31 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
+32 verbose lock react-tools@0.12.0 /Users/piyushpoddar/.npm/44e84d0b-react-tools-0-12-0.lock
+33 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+34 verbose lock https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz /Users/piyushpoddar/.npm/219be7dc-act-tools-react-tools-0-12-0-tgz.lock
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz',
+35 verbose addRemoteTarball   '9bdb9a797587d70dfd627b357dacc83692fdf8b1' ]
+36 info retry fetch attempt 1 at 15:21:10
+37 verbose fetch to= /var/folders/rd/pn8l524d78753shlh5rkkn140000gp/T/npm-17279-RkjWjf8V/registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+38 http GET https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+39 http 200 https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+40 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+41 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
+42 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
+43 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
+44 silly lockFile 47fcd5e0-react-tools react-tools@
+45 silly lockFile 47fcd5e0-react-tools react-tools@
+46 silly resolved [ { name: 'react-tools',
+46 silly resolved     description: 'A set of complementary tools to React, including the JSX transformer.',
+46 silly resolved     version: '0.12.0',
+46 silly resolved     keywords: [ 'react', 'jsx', 'transformer', 'view' ],
+46 silly resolved     homepage: 'http://facebook.github.io/react',
+46 silly resolved     bugs: { url: 'https://github.com/facebook/react/issues' },
+46 silly resolved     license: 'BSD-3-Clause',
+46 silly resolved     files: [ 'main.js', 'bin/jsx', 'src/', 'vendor/fbtransform/' ],
+46 silly resolved     main: 'main.js',
+46 silly resolved     bin: { jsx: './bin/jsx' },
+46 silly resolved     repository: { type: 'git', url: 'https://github.com/facebook/react' },
+46 silly resolved     dependencies:
+46 silly resolved      { commoner: '^0.10.0',
+46 silly resolved        'esprima-fb': '^6001.1.0-dev-harmony-fb',
+46 silly resolved        jstransform: '^6.3.2' },
+46 silly resolved     devDependencies:
+46 silly resolved      { benchmark: '~1.0.0',
+46 silly resolved        browserify: '^6.1.0',
+46 silly resolved        coverify: '~1.0.4',
+46 silly resolved        derequire: '^1.2.0',
+46 silly resolved        envify: '^3.0.0',
+46 silly resolved        es3ify: '~0.1.2',
+46 silly resolved        'es5-shim': '^4.0.0',
+46 silly resolved        grunt: '~0.4.2',
+46 silly resolved        'grunt-cli': '~0.1.9',
+46 silly resolved        'grunt-compare-size': '~0.4.0',
+46 silly resolved        'grunt-contrib-clean': '^0.6.0',
+46 silly resolved        'grunt-contrib-compress': '^0.12.0',
+46 silly resolved        'grunt-contrib-connect': '~0.6.0',
+46 silly resolved        'grunt-contrib-copy': '^0.6.0',
+46 silly resolved        'grunt-contrib-jshint': '^0.10.0',
+46 silly resolved        'gzip-js': '~0.3.2',
+46 silly resolved        'jasmine-tapreporter': '~0.2.2',
+46 silly resolved        'jest-cli': '~0.1.5',
+46 silly resolved        lodash: '~2.4.1',
+46 silly resolved        optimist: '~0.6.0',
+46 silly resolved        phantomjs: '~1.9',
+46 silly resolved        platform: '^1.1.0',
+46 silly resolved        populist: '~0.1.6',
+46 silly resolved        recast: '^0.7.2',
+46 silly resolved        'sauce-tunnel': '~1.1.0',
+46 silly resolved        tmp: '~0.0.18',
+46 silly resolved        'uglify-js': '~2.4.0',
+46 silly resolved        uglifyify: '^2.4.0',
+46 silly resolved        wd: '~0.2.6' },
+46 silly resolved     engines: { node: '>=0.10.0' },
+46 silly resolved     preferGlobal: true,
+46 silly resolved     commonerConfig: { version: 4 },
+46 silly resolved     scripts: { test: 'grunt test', jest: 'jest' },
+46 silly resolved     jest:
+46 silly resolved      { rootDir: '',
+46 silly resolved        scriptPreprocessor: 'jest/preprocessor.js',
+46 silly resolved        setupEnvScriptFile: 'jest/environment.js',
+46 silly resolved        modulePathIgnorePatterns: [Object],
+46 silly resolved        testPathIgnorePatterns: [Object],
+46 silly resolved        unmockedModulePathPatterns: [Object] },
+46 silly resolved     _id: 'react-tools@0.12.0',
+46 silly resolved     _shasum: '9bdb9a797587d70dfd627b357dacc83692fdf8b1',
+46 silly resolved     _resolved: 'https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz',
+46 silly resolved     _from: 'react-tools@',
+46 silly resolved     _npmVersion: '2.1.4',
+46 silly resolved     _nodeVersion: '0.10.32',
+46 silly resolved     _npmUser: { name: 'zpao', email: 'paul@oshannessy.com' },
+46 silly resolved     maintainers: [ [Object], [Object] ],
+46 silly resolved     dist:
+46 silly resolved      { shasum: '9bdb9a797587d70dfd627b357dacc83692fdf8b1',
+46 silly resolved        tarball: 'http://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz' },
+46 silly resolved     directories: {} } ]
+47 info install react-tools@0.12.0 into /usr/local/lib
+48 info installOne react-tools@0.12.0
+49 verbose lib/node_modules/react-tools unbuild
+50 verbose tar unpack /Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz
+51 silly lockFile 5a40cc9f-cal-lib-node-modules-react-tools tar:///usr/local/lib/node_modules/react-tools
+52 verbose lock tar:///usr/local/lib/node_modules/react-tools /Users/piyushpoddar/.npm/5a40cc9f-cal-lib-node-modules-react-tools.lock
+53 silly lockFile a9616d92-m-react-tools-0-12-0-package-tgz tar:///Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz
+54 verbose lock tar:///Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz /Users/piyushpoddar/.npm/a9616d92-m-react-tools-0-12-0-package-tgz.lock
+55 silly gunzTarPerm modes [ '755', '644' ]
+56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools'
+56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools']
+56 error   errno: 3,
+56 error   code: 'EACCES',
+56 error   path: '/usr/local/lib/node_modules/react-tools',
+56 error   fstream_type: 'Directory',
+56 error   fstream_path: '/usr/local/lib/node_modules/react-tools',
+56 error   fstream_class: 'DirWriter',
+56 error   fstream_stack:
+56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+56 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+56 error      'Object.oncomplete (fs.js:107:15)' ] }
+57 error Please try running this command again as root/Administrator.
+58 error System Darwin 13.2.0
+59 error command "node" "/usr/local/bin/npm" "install" "-g" "react-tools"
+60 error cwd /Users/piyushpoddar/Documents/Matchflare/website
+61 error node -v v0.10.32
+62 error npm -v 1.4.28
+63 error path /usr/local/lib/node_modules/react-tools
+64 error fstream_path /usr/local/lib/node_modules/react-tools
+65 error fstream_type Directory
+66 error fstream_class DirWriter
+67 error code EACCES
+68 error errno 3
+69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools'
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+70 error fstream_stack Object.oncomplete (fs.js:107:15)
+71 verbose exit [ 3, true ]

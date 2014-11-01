@@ -22,6 +22,8 @@ SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_contact_name, 
 			(SELECT unnest(contacts) FROM contacts WHERE contact_id = 90)
 		AND c2.guessed_gender IN  --Make sure the second matched person is of the first matched person's preferred gender
 			(SELECT unnest(guess_preferences(c1.guessed_gender)))	
+		AND c1.guessed_gender IN  --Make sure the first matched person is of the second matched person's preferred gender
+			(SELECT unnest(guess_preferences(c2.guessed_gender)))	
 		AND c1.contact_id != c2.contact_id --Make sure the first and second matched person are different
 		AND c1.contact_id != 90 --Make sure the first matched person is the not the matcher
 		AND c2.contact_id != 90 --Make sure the second matched person is the not the matcher
