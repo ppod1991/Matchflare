@@ -34,7 +34,9 @@ exports.updateRegistrationId = function(req, res) {
 
     PG.knex('contacts').where('contact_id',contact_id).update('gcm_registration_id',registration_id).then(function(result) {
         console.log("Successfully added registration Id", result);
+        res.send(500,{response: "Successfully added registration_id"});
     }).catch(function(err) {
         console.error("Error adding GCM registration Id for User " + contact_id, "Reg_id: " + registration_id + " with error: " + err);
+        res.send(201,err.toString());
     });
 };
