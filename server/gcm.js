@@ -1,4 +1,5 @@
 var gcm = require('node-gcm');
+var PG = require('./knex');
 
 // create a message with default values
 var message = new gcm.Message();
@@ -26,3 +27,14 @@ registrationIds.push('APA91bH7-HUkana7mIYQnmURUzEiGzrpYcxmc5nTPEsXmbP7J4C3zqHNqa
 sender.send(message, registrationIds, 4, function (err, result) {
     console.log(result);
 });
+
+exports.updateRegistrationId = function(req, res) {
+    var contact_id = req.body.contact_id;
+    var registration_id = req.body.registration_id;
+
+    PG.knex('contacts').where('contact_id',contact_id).update('gcm_registration_id',registration_id).then(function(result) {
+        console.log("Successfully added registration Id", result);
+    }).catch(function(err) {
+        console.error("Error adding GCM registration Id for User " + contact_id, "Reg_id: " + registration_id + " with error: " + err);
+    });
+};

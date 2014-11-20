@@ -7,6 +7,7 @@ var cors = require('cors');
 var http = require('http');
 var processContacts = require('./server/processContacts');
 var matches = require('./server/matches');
+var gcm = require('./server/gcm');
 
 app.use(logfmt.requestLogger());
 app.use(bodyParser.json());
@@ -29,4 +30,6 @@ app.post('/processContacts',processContacts.processContacts);
 app.get('/getMatches', matches.getMatches);
 
 app.post('/postMatch', matches.addMatchResult);
+
+app.post('/gcm/registrationId',gcm.updateRegistrationId);
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
