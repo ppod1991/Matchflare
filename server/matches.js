@@ -1,5 +1,6 @@
 var PG = require('./knex');
 var notify = require('./notify');
+var int_encoder = require('int-encoder');
 
 exports.getMatches = function(req, res) {
 	var contact_id = Number(req.query.contact_id);
@@ -121,9 +122,17 @@ exports.addMatchResult = function(req, res) {
 						messageToText = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
 					}
 
-					var matchURL = "matchflare.com/aZd43";  //NEED TO GENERATE AUTOMATICALLY
-					messageToText = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
-					sendTextMessage(firstRecipient.normalized_phone_number,messageToText);
+					//Insert new match
+					PG.knex('matches').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
+						var pair_id = result[0].pair_id;
+						var matchURL = "matchflare.com/" + int_encoder.encode(pair_id);
+						messageToText = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
+						sendTextMessage(firstRecipient.normalized_phone_number,messageToText);
+					}).catch(function(err) {
+						console.error("Error inserting match:", err);
+					});
+
+
 				}).catch(function(err) {
 					console.error("Error getting matchee details", err);
 					res.send(501, err);
@@ -171,6 +180,8 @@ var sendTextMessage = function(phoneNumber, message) {
 	console.log("To: " + phoneNumber);
 	console.log("Message: " + message);
 };
+
+
 // var req = {query:{contact_id: 90}}
 // exports.getMatches(req);
 
