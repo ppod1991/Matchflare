@@ -174,8 +174,9 @@ var sendTextMessage = function(phoneNumber, message) {
 // var req = {query:{contact_id: 90}}
 // exports.getMatches(req);
 
-var req = {body:{first_contact_id:93, second_contact_id:92, match_status:"MATCHED", matcher_contact_id:90, is_anonymous:false}};
+var req = {body:{first_contact_id:93, second_contact_id:92, match_status:"FIRST_CONTACT_WINS", matcher_contact_id:90, is_anonymous:false}};
 var res = {send:function(a){}};
 
 exports.addMatchResult(req,res);
 
+//exports.addMatchResult()

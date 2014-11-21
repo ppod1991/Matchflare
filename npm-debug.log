@@ -1,201 +1,27 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'react-tools' ]
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   '-g',
+1 verbose cli   'uninstall',
+1 verbose cli   'node-debug',
+1 verbose cli   '--save' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.32
-4 verbose cache add [ 'react-tools', null ]
-5 verbose cache add name=undefined spec="react-tools" args=["react-tools",null]
-6 verbose parsed url { protocol: null,
-6 verbose parsed url   slashes: null,
-6 verbose parsed url   auth: null,
-6 verbose parsed url   host: null,
-6 verbose parsed url   port: null,
-6 verbose parsed url   hostname: null,
-6 verbose parsed url   hash: null,
-6 verbose parsed url   search: null,
-6 verbose parsed url   query: null,
-6 verbose parsed url   pathname: 'react-tools',
-6 verbose parsed url   path: 'react-tools',
-6 verbose parsed url   href: 'react-tools' }
-7 silly lockFile 0f761efe-react-tools react-tools
-8 verbose lock react-tools /Users/piyushpoddar/.npm/0f761efe-react-tools.lock
-9 silly lockFile 0f761efe-react-tools react-tools
-10 silly lockFile 0f761efe-react-tools react-tools
-11 verbose addNamed [ 'react-tools', '' ]
-12 verbose addNamed [ null, '*' ]
-13 silly lockFile 47fcd5e0-react-tools react-tools@
-14 verbose lock react-tools@ /Users/piyushpoddar/.npm/47fcd5e0-react-tools.lock
-15 silly addNameRange { name: 'react-tools', range: '*', hasData: false }
-16 verbose request where is /react-tools
-17 verbose request registry https://registry.npmjs.org/
-18 verbose request id b5160387a13ee550
-19 verbose url raw /react-tools
-20 verbose url resolving [ 'https://registry.npmjs.org/', './react-tools' ]
-21 verbose url resolved https://registry.npmjs.org/react-tools
-22 verbose request where is https://registry.npmjs.org/react-tools
-23 info trying registry request attempt 1 at 15:21:10
-24 http GET https://registry.npmjs.org/react-tools
-25 http 200 https://registry.npmjs.org/react-tools
-26 silly registry.get cb [ 200,
-26 silly registry.get   { date: 'Tue, 28 Oct 2014 19:21:10 GMT',
-26 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-26 silly registry.get     etag: '"XC9P5YODLIDV9C7WAFFUOVHF"',
-26 silly registry.get     'content-type': 'application/json',
-26 silly registry.get     'cache-control': 'max-age=60',
-26 silly registry.get     'content-length': '41527',
-26 silly registry.get     'accept-ranges': 'bytes',
-26 silly registry.get     via: '1.1 varnish',
-26 silly registry.get     age: '0',
-26 silly registry.get     'x-served-by': 'cache-jfk1027-JFK',
-26 silly registry.get     'x-cache': 'HIT',
-26 silly registry.get     'x-cache-hits': '1',
-26 silly registry.get     'x-timer': 'S1414524070.837759,VS0,VE84',
-26 silly registry.get     vary: 'Accept',
-26 silly registry.get     'keep-alive': 'timeout=10, max=50',
-26 silly registry.get     connection: 'Keep-Alive' } ]
-27 silly addNameRange number 2 { name: 'react-tools', range: '*', hasData: true }
-28 silly addNameRange versions [ 'react-tools',
-28 silly addNameRange   [ '0.3.0',
-28 silly addNameRange     '0.3.1',
-28 silly addNameRange     '0.3.2',
-28 silly addNameRange     '0.3.3',
-28 silly addNameRange     '0.4.0',
-28 silly addNameRange     '0.4.1',
-28 silly addNameRange     '0.5.0',
-28 silly addNameRange     '0.5.1',
-28 silly addNameRange     '0.4.2',
-28 silly addNameRange     '0.5.2',
-28 silly addNameRange     '0.8.0',
-28 silly addNameRange     '0.9.0-rc1',
-28 silly addNameRange     '0.9.0',
-28 silly addNameRange     '0.10.0-rc1',
-28 silly addNameRange     '0.10.0',
-28 silly addNameRange     '0.11.0-rc1',
-28 silly addNameRange     '0.11.0',
-28 silly addNameRange     '0.11.1',
-28 silly addNameRange     '0.11.2',
-28 silly addNameRange     '0.12.0-rc1',
-28 silly addNameRange     '0.12.0' ] ]
-29 verbose addNamed [ 'react-tools', '0.12.0' ]
-30 verbose addNamed [ '0.12.0', '0.12.0' ]
-31 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
-32 verbose lock react-tools@0.12.0 /Users/piyushpoddar/.npm/44e84d0b-react-tools-0-12-0.lock
-33 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-34 verbose lock https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz /Users/piyushpoddar/.npm/219be7dc-act-tools-react-tools-0-12-0-tgz.lock
-35 verbose addRemoteTarball [ 'https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz',
-35 verbose addRemoteTarball   '9bdb9a797587d70dfd627b357dacc83692fdf8b1' ]
-36 info retry fetch attempt 1 at 15:21:10
-37 verbose fetch to= /var/folders/rd/pn8l524d78753shlh5rkkn140000gp/T/npm-17279-RkjWjf8V/registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-38 http GET https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-39 http 200 https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-40 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-41 silly lockFile 219be7dc-act-tools-react-tools-0-12-0-tgz https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz
-42 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
-43 silly lockFile 44e84d0b-react-tools-0-12-0 react-tools@0.12.0
-44 silly lockFile 47fcd5e0-react-tools react-tools@
-45 silly lockFile 47fcd5e0-react-tools react-tools@
-46 silly resolved [ { name: 'react-tools',
-46 silly resolved     description: 'A set of complementary tools to React, including the JSX transformer.',
-46 silly resolved     version: '0.12.0',
-46 silly resolved     keywords: [ 'react', 'jsx', 'transformer', 'view' ],
-46 silly resolved     homepage: 'http://facebook.github.io/react',
-46 silly resolved     bugs: { url: 'https://github.com/facebook/react/issues' },
-46 silly resolved     license: 'BSD-3-Clause',
-46 silly resolved     files: [ 'main.js', 'bin/jsx', 'src/', 'vendor/fbtransform/' ],
-46 silly resolved     main: 'main.js',
-46 silly resolved     bin: { jsx: './bin/jsx' },
-46 silly resolved     repository: { type: 'git', url: 'https://github.com/facebook/react' },
-46 silly resolved     dependencies:
-46 silly resolved      { commoner: '^0.10.0',
-46 silly resolved        'esprima-fb': '^6001.1.0-dev-harmony-fb',
-46 silly resolved        jstransform: '^6.3.2' },
-46 silly resolved     devDependencies:
-46 silly resolved      { benchmark: '~1.0.0',
-46 silly resolved        browserify: '^6.1.0',
-46 silly resolved        coverify: '~1.0.4',
-46 silly resolved        derequire: '^1.2.0',
-46 silly resolved        envify: '^3.0.0',
-46 silly resolved        es3ify: '~0.1.2',
-46 silly resolved        'es5-shim': '^4.0.0',
-46 silly resolved        grunt: '~0.4.2',
-46 silly resolved        'grunt-cli': '~0.1.9',
-46 silly resolved        'grunt-compare-size': '~0.4.0',
-46 silly resolved        'grunt-contrib-clean': '^0.6.0',
-46 silly resolved        'grunt-contrib-compress': '^0.12.0',
-46 silly resolved        'grunt-contrib-connect': '~0.6.0',
-46 silly resolved        'grunt-contrib-copy': '^0.6.0',
-46 silly resolved        'grunt-contrib-jshint': '^0.10.0',
-46 silly resolved        'gzip-js': '~0.3.2',
-46 silly resolved        'jasmine-tapreporter': '~0.2.2',
-46 silly resolved        'jest-cli': '~0.1.5',
-46 silly resolved        lodash: '~2.4.1',
-46 silly resolved        optimist: '~0.6.0',
-46 silly resolved        phantomjs: '~1.9',
-46 silly resolved        platform: '^1.1.0',
-46 silly resolved        populist: '~0.1.6',
-46 silly resolved        recast: '^0.7.2',
-46 silly resolved        'sauce-tunnel': '~1.1.0',
-46 silly resolved        tmp: '~0.0.18',
-46 silly resolved        'uglify-js': '~2.4.0',
-46 silly resolved        uglifyify: '^2.4.0',
-46 silly resolved        wd: '~0.2.6' },
-46 silly resolved     engines: { node: '>=0.10.0' },
-46 silly resolved     preferGlobal: true,
-46 silly resolved     commonerConfig: { version: 4 },
-46 silly resolved     scripts: { test: 'grunt test', jest: 'jest' },
-46 silly resolved     jest:
-46 silly resolved      { rootDir: '',
-46 silly resolved        scriptPreprocessor: 'jest/preprocessor.js',
-46 silly resolved        setupEnvScriptFile: 'jest/environment.js',
-46 silly resolved        modulePathIgnorePatterns: [Object],
-46 silly resolved        testPathIgnorePatterns: [Object],
-46 silly resolved        unmockedModulePathPatterns: [Object] },
-46 silly resolved     _id: 'react-tools@0.12.0',
-46 silly resolved     _shasum: '9bdb9a797587d70dfd627b357dacc83692fdf8b1',
-46 silly resolved     _resolved: 'https://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz',
-46 silly resolved     _from: 'react-tools@',
-46 silly resolved     _npmVersion: '2.1.4',
-46 silly resolved     _nodeVersion: '0.10.32',
-46 silly resolved     _npmUser: { name: 'zpao', email: 'paul@oshannessy.com' },
-46 silly resolved     maintainers: [ [Object], [Object] ],
-46 silly resolved     dist:
-46 silly resolved      { shasum: '9bdb9a797587d70dfd627b357dacc83692fdf8b1',
-46 silly resolved        tarball: 'http://registry.npmjs.org/react-tools/-/react-tools-0.12.0.tgz' },
-46 silly resolved     directories: {} } ]
-47 info install react-tools@0.12.0 into /usr/local/lib
-48 info installOne react-tools@0.12.0
-49 verbose lib/node_modules/react-tools unbuild
-50 verbose tar unpack /Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz
-51 silly lockFile 5a40cc9f-cal-lib-node-modules-react-tools tar:///usr/local/lib/node_modules/react-tools
-52 verbose lock tar:///usr/local/lib/node_modules/react-tools /Users/piyushpoddar/.npm/5a40cc9f-cal-lib-node-modules-react-tools.lock
-53 silly lockFile a9616d92-m-react-tools-0-12-0-package-tgz tar:///Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz
-54 verbose lock tar:///Users/piyushpoddar/.npm/react-tools/0.12.0/package.tgz /Users/piyushpoddar/.npm/a9616d92-m-react-tools-0-12-0-package-tgz.lock
-55 silly gunzTarPerm modes [ '755', '644' ]
-56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools'
-56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools']
-56 error   errno: 3,
-56 error   code: 'EACCES',
-56 error   path: '/usr/local/lib/node_modules/react-tools',
-56 error   fstream_type: 'Directory',
-56 error   fstream_path: '/usr/local/lib/node_modules/react-tools',
-56 error   fstream_class: 'DirWriter',
-56 error   fstream_stack:
-56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
-56 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
-56 error      'Object.oncomplete (fs.js:107:15)' ] }
-57 error Please try running this command again as root/Administrator.
-58 error System Darwin 13.2.0
-59 error command "node" "/usr/local/bin/npm" "install" "-g" "react-tools"
-60 error cwd /Users/piyushpoddar/Documents/Matchflare/website
-61 error node -v v0.10.32
-62 error npm -v 1.4.28
-63 error path /usr/local/lib/node_modules/react-tools
-64 error fstream_path /usr/local/lib/node_modules/react-tools
-65 error fstream_type Directory
-66 error fstream_class DirWriter
-67 error code EACCES
-68 error errno 3
-69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/react-tools'
-70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
-70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
-70 error fstream_stack Object.oncomplete (fs.js:107:15)
-71 verbose exit [ 3, true ]
+4 verbose lib/node_modules/node-debug unbuild
+5 info preuninstall node-debug@0.1.0
+6 info uninstall node-debug@0.1.0
+7 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild node-debug@0.1.0
+8 verbose /usr/local/bin,[object Object] binRoot
+9 error Error: EACCES, unlink '/usr/local/bin/node-debug'
+9 error  { [Error: EACCES, unlink '/usr/local/bin/node-debug'] errno: 3, code: 'EACCES', path: '/usr/local/bin/node-debug' }
+10 error Please try running this command again as root/Administrator.
+11 error System Darwin 13.2.0
+12 error command "node" "/usr/local/bin/npm" "-g" "uninstall" "node-debug" "--save"
+13 error cwd /Users/piyushpoddar/Documents/Matchflare/website
+14 error node -v v0.10.32
+15 error npm -v 1.4.28
+16 error path /usr/local/bin/node-debug
+17 error code EACCES
+18 error errno 3
+19 error stack Error: EACCES, unlink '/usr/local/bin/node-debug'
+20 verbose exit [ 3, true ]

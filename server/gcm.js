@@ -21,7 +21,7 @@ exports.updateRegistrationId = function(req, res) {
     });
 };
 
-exports.notify = function(data, registration_id) {
+exports.notify = function(registration_id, data) {
 
     var registrationIds = [];
     // or with object values
