@@ -1,4 +1,5 @@
 var PG = require('./knex');
+var notify = require('./notify');
 
 exports.getMatches = function(req, res) {
 	var contact_id = Number(req.query.contact_id);
@@ -51,6 +52,8 @@ exports.addMatchResult = function(req, res) {
 			console.error("Error updating elo score");
 			res.send(501,"Error updating elo score: " + err);
 		});
+
+		notify.sendNotification(90,{message:"ELO SCORES WOOT"});
 		
 	}
 	else if (match_status === "MATCHED") {
