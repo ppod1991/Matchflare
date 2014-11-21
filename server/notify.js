@@ -19,6 +19,6 @@ exports.sendNotification = function(contact_id, data) {
 			}
 		}	
 	}).catch(function(err) {
-		console.log("Error notifying the recipient via iOS, android or SMS");
+		console.log("Error notifying the recipient via iOS, android or SMS:", err);
 	});
 }
