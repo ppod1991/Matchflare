@@ -123,13 +123,15 @@ exports.addMatchResult = function(req, res) {
 					}
 
 					//Insert new match
-					PG.knex('matches').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
+					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
 						var pair_id = result[0].pair_id;
 						var matchURL = "matchflare.com/" + int_encoder.encode(pair_id);
 						messageToText = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 						sendTextMessage(firstRecipient.normalized_phone_number,messageToText);
+						res.send(201);
 					}).catch(function(err) {
 						console.error("Error inserting match:", err);
+						res.send(501,err);
 					});
 
 
@@ -138,7 +140,7 @@ exports.addMatchResult = function(req, res) {
 					res.send(501, err);
 				});
 
-				res.send(201);
+				
 			}).catch(function(err) {
 				console.error("Error getting gender of the matcher: ", err);
 			});
