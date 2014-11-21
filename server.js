@@ -22,7 +22,7 @@ console.log("http server listening on %d", port);
 
 
 app.get('/', function(req, res) {
-    res.sendfile('./client/index.html');
+    res.sendfile('./client/build/html/index.html');
 });
 
 app.post('/processContacts',processContacts.processContacts);
@@ -32,4 +32,11 @@ app.get('/getMatches', matches.getMatches);
 app.post('/postMatch', matches.addMatchResult);
 
 app.post('/gcm/registrationId',gcm.updateRegistrationId);
+
+app.get('/match',matches.getMatch);
+
+app.get('/m/:encoded_pair_id',function(req, res) {
+	var encoded_pair_id = req.params.encoded_pair_id;
+	res.redirect('/#/m/' + encoded_pair_id);
+});
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
