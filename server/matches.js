@@ -7,7 +7,10 @@ exports.getMatch = function(req, res) {
 	var encoded_pair_id = req.query.encoded_pair_id;
 	var pair_id = int_encoder.decode(encoded_pair_id);
 
-	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name \
+	
+
+	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image \
 					FROM pairs \
 					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
 					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \

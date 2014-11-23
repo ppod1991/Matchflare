@@ -4,12 +4,71 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+div.text-container {
+    position: relative;
+}
+
+div.text-container:hover {
+}
+
+div.gradient {
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1),  rgba(0, 0, 0, 0));
+}
+
+div.circular {
+/*    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    background-size: 80%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    width: 400px;
+    height: 400px;*/
+    box-shadow: 0 0 3px rgba(0, 0, 0, .9);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .9);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .9); /* Can also be 50px */
+    border-radius: 50%;
+    -webkit-transition: all 0.1s ease;
+      transition: all 0.1s ease
+/*    border: 1px solid #DDD;
+    width: 110px;
+    height: 110px;
+    -webkit-border-radius: 50%; /* Can also be 55px 
+    -moz-border-radius: 50%;
+    border-radius: 50%;*/
+}
+
+div.circular:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+}
+
+.circular img { /* Can also be 50px */
+  border-radius: 50%;
+
+ }
+ 
+ #text
+{
+    z-index:100;
+    position:absolute;    
+    color:white;
+    font-size:2vw;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom:0;
+}
+
 body {
     width: 100%;
     height: 100%;
     font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #fff;
-    background-color: #000;
+    background-color: #2c2c2c;
 }
 
 html {
@@ -246,7 +305,7 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 250px;
+        padding-top: 100px;
     }
 
     .download-section {
