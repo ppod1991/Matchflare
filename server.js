@@ -44,4 +44,5 @@ app.get('/m/:encoded_pair_id',function(req, res) {
 app.get('/notifications',notify.getNotifications);
 
 app.post('/seeNotification',notify.markAsSeen);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
