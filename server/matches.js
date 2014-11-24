@@ -144,12 +144,12 @@ exports.addMatchResult = function(req, res) {
 						messageToText = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
 					}
 
-					var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
-					var text_message = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 					
 					//Insert new match
 					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
 						var pair_id = result[0];
+						var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
+						var text_message = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 						console.log("Successfully inserted match with pair_id: ", result);
 						notify.newMatchNotification(firstRecipient.contact_id, text_message, messageToText, pair_id);
 						res.send(201);
