@@ -47,3 +47,25 @@ exports.postNotification = function(target_contact_id, notification) {
 		console.error("Error posting new notification: ", err);
 	});
 }
+
+exports.getNotifications = function(req, res) {
+	var contact_id = req.query.contact_id;
+	PG.knex('notifications').select().where('contact_id',contact_id).where('seen',false).orderBy().then(function(result) {
+		console.log("Notifications retrieved with result: ", result);
+		res.send(201,{notifications: result});
+	}).catch(function(err) {
+		console.error("Error retrieiving notifications for user: " + contact_id, err);
+		res.send(501,err);
+	});
+};
+
+exports.markAsSeen = function(req, res) {
+	var notification_id = req.body.notification_id;
+	PG.knex.raw("UPDATE notifications SET seen=TRUE, seen_at=timezone('utc'::text, now()) WHERE notification_id = ?", notification_id).then(function(result) {
+		console.log("Successfully marked as seen");
+		res.send(201,{response: "Successfully marked as seen"});
+	}).catch(function(err) {
+		console.log("Error marking notification as seen", err);
+		res.send(501,err);
+	});
+}
