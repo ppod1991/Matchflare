@@ -30,10 +30,8 @@ exports.sendNotification = function(contact_id, notification) {
 	});
 }
 
-exports.newMatchNotification = function(target_contact_id, baseMessage, pair_id) {
+exports.newMatchNotification = function(target_contact_id, text_message, push_message, pair_id) {
 	
-	var matchURL = "matchflare.com/m/" + int_encoder.encode(pair_id);
-	var text_message = baseMessage + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 	var notification = {text_message: text_message, push_message: baseMessage, notification_type: 'MATCHEE_NEW_MATCH', pair_id: pair_id};
 
 	exports.postNotification(target_contact_id,notification);
