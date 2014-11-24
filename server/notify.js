@@ -3,7 +3,7 @@ var gcm = require('./gcm');
 var int_encoder = require('int-encoder');
 
 exports.sendNotification = function(contact_id, notification) {
-
+	console.log("Notification to " + contact_id + ": " + notification);
 	//Determine if the contact to notify has Android, iOS, or SMS
 	PG.knex('contacts').select('verified','gcm_registration_id','apn_device_token','normalized_phone_number').where('contact_id',contact_id).then(function(result) {
 		var contact = result[0];
@@ -11,14 +11,17 @@ exports.sendNotification = function(contact_id, notification) {
 		if (!contact.verified) {  //If the contact is not verified...
 			//Send message via SMS
 			//NEED TO IMPLEMENT
-			console.log("Contact not verified, sending SMS");
+			console.log("MOCK Sending SMS to " + contact_id + ": " + notification.text_message);
 		}
 		else {
 			if(contact.gcm_registration_id) {
 				gcm.notify(contact.gcm_registration_id,notification);
+				console.log("Sending Google Push Notification to " + contact_id + ": " + notification.push_message);
 			}
 
 			if(contact.apn_device_token) {
+				console.log("MOCK Sending iOS Push Notification to " + contact_id + ": " + notification.push_message);
+
 				//Send iOS push notification
 			}
 		}	
