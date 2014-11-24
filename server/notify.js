@@ -49,8 +49,8 @@ exports.postNotification = function(target_contact_id, notification) {
 }
 
 exports.getNotifications = function(req, res) {
-	var contact_id = req.query.contact_id;
-	PG.knex('notifications').where('contact_id',contact_id).where('seen',false).orderBy('created_at','desc').then(function(result) {
+	var target_contact_id = req.query.target_contact_id;
+	PG.knex('notifications').where('target_contact_id',contact_id).where('seen',false).orderBy('created_at','desc').then(function(result) {
 		console.log("Notifications retrieved with result: ", result);
 		res.send(201,{notifications: result});
 	}).catch(function(err) {
