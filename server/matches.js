@@ -136,12 +136,16 @@ exports.addMatchResult = function(req, res) {
 						recipientGenderPronoun = 'her';
 					}
 
-					var messageToText;
+					var text_message;
+					var push_message;
 					if (is_anonymous) {
-						messageToText = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " secondRecipient.guessed_full_name ". Tap to message " + recipientGenderPronoun + "."; 
 					}
 					else {
-						messageToText = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " secondRecipient.guessed_full_name ". Tap to message " + recipientGenderPronoun + "."; 
+
 					}
 
 					
@@ -149,9 +153,9 @@ exports.addMatchResult = function(req, res) {
 					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
 						var pair_id = result[0];
 						var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
-						var text_message = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
+						text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 						console.log("Successfully inserted match with pair_id: ", result);
-						notify.newMatchNotification(firstRecipient.contact_id, text_message, messageToText, pair_id);
+						notify.newMatchNotification(firstRecipient.contact_id, text_message, push_message, pair_id);
 						res.send(201);
 					}).catch(function(err) {
 						console.error("Error inserting match:", err);
