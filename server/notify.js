@@ -60,7 +60,7 @@ exports.getNotifications = function(req, res) {
 };
 
 exports.markAsSeen = function(req, res) {
-	var notification_id = req.body.notification_id;
+	var notification_id = req.query.notification_id;
 	PG.knex.raw("UPDATE notifications SET seen=TRUE, seen_at=timezone('utc'::text, now()) WHERE notification_id = ?", notification_id).then(function(result) {
 		console.log("Successfully marked as seen");
 		res.send(201,{response: "Successfully marked as seen"});
