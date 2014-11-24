@@ -1,0 +1,44 @@
+MATCHFLARE NOTES
+----------------
+
+Table of Possible contact_status Values for 'pairs' Table:
+1) NOT_SENT : Before any of the matchees are contacted
+2) NOTIFIED : When a given matchee of a match is contacted
+3) REJECT : When a given matchee rejects a match
+4) ACCEPT : When a given matchee accepts a match
+5) SENT_MESSAGE: When a given matchee send a message to the other matchee
+
+
+Table of Possible notification values:
+	
+	Notifications for the generic user:
+		1) USER_REMINDER: Reminder (if more than 2 days since last interaction) for a new match i.e. 'Aleesha Shaik and Sanjiv Godse together? Make it happen.'
+			-fields: pair_id
+
+	Notifications for the matcher:
+		1) MATCHER_MATCH_ACCEPTED: One of the matchees accepted the match i.e. 'Ow Ow. Sanjiv Godse accepted your match. Next up Aleesha Shaik. Let's see what happens.'
+			-fields: pair_id
+		2) MATCHER_BOTH_ACCEPTED: Both matchees accept the match i.e. 'You're a sharpshooter. Sanjiv and Aleesha matched with each other. Look at you go.'
+			-fields: pair_id
+		3) MATCHER_MESSAGING_STARTED: Either matchee sends a message i.e. '...and they're off. Sanjiv and Aleesha are talking ;) You're awesome.'
+			-fields: pair_id
+		4) MATCHER_QUESTION_ASKED: matchee asks the matcher a question i.e. 'Sanjiv asked you a question about Aleesha?'
+			-fields: pair_id, conversation_id
+
+	Notifications for a matchee:
+		1) MATCHEE_NEW_MATCH: When a matcher matches this matchee i.e. 'Sanjiv! Piyush thinks you might hit it off...'
+			-fields: pair_id
+		2) MATCHEE_MATCH_ACCEPTED: When the other matchee matches with you i.e. 'Aleesha thinks you're alright too! Message her now'
+			-fields: pair_id, conversation_id
+		3) MATCHEE_QUESTION_ANSWERED: When the matcher responds to a question i.e. 'Piyush answered your question about Aleesha'
+			-fields: conversation_id, pair_id
+		4) MATCHEE_MESSAGE_SENT: What the other matchee sends you a message i.e. 'Aleesha says: ...';
+			-fields: conversation_id
+
+	Structure of Notification Data:
+	data : {text_message: 'This is a sample SMS message',
+			push_message: 'This is a sample Push Notification message'
+			notification_type: 'MATCHEE_MESSAGE_SENT'
+			}
+
+

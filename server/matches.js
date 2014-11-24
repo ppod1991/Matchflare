@@ -76,7 +76,7 @@ exports.addMatchResult = function(req, res) {
 			res.send(501,"Error updating elo score: " + err);
 		});
 
-		notify.sendNotification(90,{message:"ELO SCORES WOOT"});
+		//notify.sendNotification(90,{text_message:"ELO SCORES WOOT"});
 		
 	}
 	else if (match_status === "MATCHED") {
@@ -148,9 +148,7 @@ exports.addMatchResult = function(req, res) {
 					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
 						var pair_id = result[0];
 						console.log("Successfully inserted match with pair_id: ", result);
-						var matchURL = "matchflare.com/m/" + int_encoder.encode(pair_id);
-						messageToText = messageToText + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
-						sendTextMessage(firstRecipient.normalized_phone_number,messageToText);
+						notify.newMatchNotification(firstRecipient.contact_id, messageToText, pair_id);
 						res.send(201);
 					}).catch(function(err) {
 						console.error("Error inserting match:", err);
