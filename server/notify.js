@@ -32,7 +32,7 @@ exports.sendNotification = function(contact_id, notification) {
 
 exports.newMatchNotification = function(target_contact_id, text_message, push_message, pair_id) {
 	
-	var notification = {text_message: text_message, push_message: baseMessage, notification_type: 'MATCHEE_NEW_MATCH', pair_id: pair_id};
+	var notification = {text_message: text_message, push_message: push_message, notification_type: 'MATCHEE_NEW_MATCH', pair_id: pair_id};
 
 	exports.postNotification(target_contact_id,notification);
 };
