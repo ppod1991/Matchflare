@@ -140,11 +140,11 @@ exports.addMatchResult = function(req, res) {
 					var push_message;
 					if (is_anonymous) {
 						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " secondRecipient.guessed_full_name ". Tap to message " + recipientGenderPronoun + "."; 
+						push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + "."; 
 					}
 					else {
 						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " secondRecipient.guessed_full_name ". Tap to message " + recipientGenderPronoun + "."; 
+						push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + "."; 
 
 					}
 
