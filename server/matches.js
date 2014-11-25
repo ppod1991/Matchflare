@@ -23,7 +23,7 @@ exports.getMatch = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ? ;",[pair_id]).then(function(result) {
 		console.log('Retrieved match with result: ', result.rows);
-		res.send(201,{result.rows[0]});
+		res.send(201,result.rows[0]);
 	}).catch(function(err) {
 		console.error('Error retrieving match: ', err);
 		res.send(500,err);
