@@ -277,7 +277,7 @@ exports.respondToMatchRequest = function(req, res) {
 			new_status_object[which_contact_is_this + "_contact_status"] = new_status;
 			PG.knex('pairs').update(new_status_object).where(which_contact_is_this + '_contact_id',this_contact.id).then(function(result) {
 				console.log("Successfully updated contact status for contact: " + this_contact.id + " as: " + new_status);
-				res.send(201,{response: "Successfully updated contact_status to:" + new_status})
+				res.send(201,{response: "Successfully updated contact_status to:" + new_status});
 			}).catch(function(error) {
 				console.error("Error updating contact status:", error);
 				res.send(501, error);
