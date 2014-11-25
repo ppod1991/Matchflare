@@ -234,9 +234,9 @@ exports.addMatchResult = function(req, res) {
 
 //The function called when somone accepts/rejects a potential match
 exports.respondToMatchRequest = function(req, res) {
-	var decision = req.query.decision;
-	var contact_id = req.query.contact_id;
-	var pair_id = req.query.pair_id;
+	var decision = req.body.decision;
+	var contact_id = req.body.contact_id;
+	var pair_id = req.body.pair_id;
 
 	PG.knex('pairs').where('pair_id',pair_id).then(function(result) {
 		var pair = result[0];
