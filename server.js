@@ -36,6 +36,8 @@ app.post('/gcm/registrationId',gcm.updateRegistrationId);
 
 app.get('/match',matches.getMatch);
 
+app.post('/match/respond',matches.respondToMatchRequest);
+
 app.get('/pendingMatches', matches.getPendingMatches);
 
 app.get('/m/:encoded_pair_id',function(req, res) {

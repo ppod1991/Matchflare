@@ -35,7 +35,7 @@ exports.getPendingMatches = function(req, res) {
 	var contact_id = req.query.contact_id;
 	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
 					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
-					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id \
+					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, pair_id \
 					FROM pairs \
 					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
 					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
@@ -230,6 +230,65 @@ exports.addMatchResult = function(req, res) {
 		// var new_second_elo_score = second_elo_score + k_second * (S_second - E_second);
 	}
 	
+};
+
+//The function called when somone accepts/rejects a potential match
+var respondToMatchRequest = function(req, res) {
+	var decision = req.query.decision;
+	var contact_id = req.query.contact_id;
+	var pair_id = req.query.pair_id;
+
+	PG.knex('pairs').where('pair_id',pair_id).then(function(result) {
+		var pair = result[0];
+
+		var first_matchee = {id: pair.first_contact_id, status: pair.first_contact_status};
+		var second_matchee = {id: pair.second_contact_id, status: pair.second_contact_status};
+		var this_contact;
+		var other_contact;
+		var which_contact_is_this;
+		//Determine which matchee the caller is...
+		if (first_matchee.id === contact_id) {
+			this_contact = first_matchee;
+			other_contact = second_matchee;
+			which_contact_is_this = 'first';
+		}
+		else if (second_matchee.id === contact_id) {
+			this_contact = second_matchee;
+			other_contact = first_matchee;
+			which_contact_is_this = 'second';
+		}
+
+		var new_status;
+		//If the match was accepted
+		if (decision === 'ACCEPT') {
+			if (other_contact.status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
+				new_status = 'ACCEPT';
+			}
+			else { //If the other matchee has not accepted, then notify the other matchee and the matcher
+
+			}
+		}
+		else if (decision === 'REJECT') { //If the match was rejected, then change status
+			new_status = 'REJECT';
+		}
+
+		if (new_status) {  //Update the status of this matchee
+			var new_status_object = {};
+			new_status_object[which_contact_is_this + "_contact_status"] = new_status;
+			PG.knex('pairs').update(new_status_object).where(which_contact_is_this + '_contact_id',this_contact.id).then(function(result) {
+				console.log("Successfully updated contact status for contact: " + this_contact.id + " as: " + new_status);
+				res.send(201,{response: "Successfully updated contact_status to:" + new_status})
+			}).catch(function(error) {
+				console.error("Error updating contact status:", error);
+				res.send(501, error);
+			});
+		}
+
+	}).catch(function(err) {
+
+	});
+
+
 };
 
 var sendTextMessage = function(phoneNumber, message) {

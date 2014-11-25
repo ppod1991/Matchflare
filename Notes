@@ -41,4 +41,6 @@ Table of Possible notification values:
 			notification_type: 'MATCHEE_MESSAGE_SENT'
 			}
 
-
+TABLE OF RESPONSE VALUES TO A POTENTIAL MATCH;
+1) ACCEPT
+2) REJECT
