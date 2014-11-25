@@ -30,6 +30,24 @@ exports.getMatch = function(req, res) {
 	});
 };
 
+exports.getPendingMatches = function(req, res) {
+	
+	var contact_id = req.query.contact_id;
+	PG.knex('pairs').where(function() {
+		this.where('first_contact_id',contact_id).where('first_contact_status','NOTIFIED');
+	}).orWhere(function() {
+		this.where('second_contact_id',contact_id).where('second_contact_status','NOTIFIED');
+	}).then(function(result) {
+		console.log("Pending Matches Successfully retrieved: ", result);
+		res.send(201,{matches: result});
+	}).catch(function(err) {
+		console.error("Error getting pending matches: ", err);
+		res.send(501,err);
+	});
+
+
+};
+
 exports.getMatches = function(req, res) {
 	var contact_id = Number(req.query.contact_id);
 
