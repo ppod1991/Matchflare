@@ -5,19 +5,25 @@ var int_encoder = require('int-encoder');
 exports.getMatch = function(req, res) {
 
 	var encoded_pair_id = req.query.encoded_pair_id;
-	var pair_id = int_encoder.decode(encoded_pair_id);
 
+	var pair_id;
+	if(!encoded_pair_id) {  //If not encoded...
+		pair_id = req.query.pair_id;
+	}
+	else {
+		pair_id = int_encoder.decode(encoded_pair_id);
+	}
 	
-
 	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
-					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image \
+					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id \
 					FROM pairs \
 					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
 					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ? ;",[pair_id]).then(function(result) {
 		console.log('Retrieved match with result: ', result.rows);
-		res.send(201,{match: result.rows[0]});
+		res.send(201,{result.rows[0]});
 	}).catch(function(err) {
 		console.error('Error retrieving match: ', err);
 		res.send(500,err);
