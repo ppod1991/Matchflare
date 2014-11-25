@@ -31,14 +31,17 @@ exports.getMatch = function(req, res) {
 };
 
 exports.getPendingMatches = function(req, res) {
-	
+
 	var contact_id = req.query.contact_id;
-	PG.knex('pairs').where(function() {
-		this.where('first_contact_id',contact_id).where('first_contact_status','NOTIFIED');
-	}).orWhere(function() {
-		this.where('second_contact_id',contact_id).where('second_contact_status','NOTIFIED');
-	}).then(function(result) {
-		console.log("Pending Matches Successfully retrieved: ", result);
+	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id \
+					FROM pairs \
+					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
+					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
+					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
+					WHERE (first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED');",[contact_id, contact_id]).then(function(result) {
+		console.log("Pending Matches Successfully retrieved: ", result.rows);
 		res.send(201,{matches: result});
 	}).catch(function(err) {
 		console.error("Error getting pending matches: ", err);
