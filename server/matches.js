@@ -234,6 +234,7 @@ exports.addMatchResult = function(req, res) {
 
 //The function called when somone accepts/rejects a potential match
 exports.respondToMatchRequest = function(req, res) {
+	console.log("Request:" + req.body);
 	var decision = req.body.decision;
 	var contact_id = req.body.contact_id;
 	var pair_id = req.body.pair_id;
