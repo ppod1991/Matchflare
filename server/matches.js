@@ -239,9 +239,17 @@ exports.respondToMatchRequest = function(req, res) {
 	var contact_id = req.body.contact_id;
 	var pair_id = req.body.pair_id;
 
-	PG.knex('pairs').where('pair_id',pair_id).then(function(result) {
+	PG.knex.raw('SELECT matcher_contact_id, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+					first.guessed_gender AS first_gender, second.guessed_gender AS second_gender, \
+					first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
+					first_contact_status, second_contact_status \
+					FROM pairs \
+					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
+					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
+					WHERE pair_id = ?',[pair_id]).then(function(result) {
+
 		console.log('Received pair');
-		var pair = result[0];
+		var pair = result.rows[0];
 
 		var first_matchee = {id: pair.first_contact_id, status: pair.first_contact_status};
 		var second_matchee = {id: pair.second_contact_id, status: pair.second_contact_status};
@@ -265,10 +273,12 @@ exports.respondToMatchRequest = function(req, res) {
 		if (decision === 'ACCEPT') {
 			new_status = 'ACCEPT';
 			if (other_contact.status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
-				
+				//New verified match!
+				//Create chat! NEED TO IMPLEMENT
+				notify.verifiedMatchNotification(pair);
 			}
-			else { //If the other matchee has not accepted, then notify the other matchee and the matcher
-
+			else { //If the other matchee has not yet been notified, then notify the other matchee and the matcher
+				notify.otherMatchNotification(pair);
 			}
 		}
 		else if (decision === 'REJECT') { //If the match was rejected, then change status
