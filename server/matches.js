@@ -234,12 +234,13 @@ exports.addMatchResult = function(req, res) {
 
 //The function called when somone accepts/rejects a potential match
 exports.respondToMatchRequest = function(req, res) {
-	console.log("Request:" + req.body);
+	//console.log("Request:", req);
 	var decision = req.body.decision;
 	var contact_id = req.body.contact_id;
 	var pair_id = req.body.pair_id;
 
 	PG.knex('pairs').where('pair_id',pair_id).then(function(result) {
+		console.log('Received pair');
 		var pair = result[0];
 
 		var first_matchee = {id: pair.first_contact_id, status: pair.first_contact_status};
@@ -262,8 +263,9 @@ exports.respondToMatchRequest = function(req, res) {
 		var new_status;
 		//If the match was accepted
 		if (decision === 'ACCEPT') {
+			new_status = 'ACCEPT';
 			if (other_contact.status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
-				new_status = 'ACCEPT';
+				
 			}
 			else { //If the other matchee has not accepted, then notify the other matchee and the matcher
 
