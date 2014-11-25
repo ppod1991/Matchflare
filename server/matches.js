@@ -285,7 +285,7 @@ exports.respondToMatchRequest = function(req, res) {
 		}
 
 	}).catch(function(err) {
-
+		console.error("Error handling match response", err);
 	});
 
 
