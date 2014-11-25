@@ -42,7 +42,7 @@ exports.getPendingMatches = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE (first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED');",[contact_id, contact_id]).then(function(result) {
 		console.log("Pending Matches Successfully retrieved: ", result.rows);
-		res.send(201,{matches: result});
+		res.send(201,result.rows);
 	}).catch(function(err) {
 		console.error("Error getting pending matches: ", err);
 		res.send(501,err);
