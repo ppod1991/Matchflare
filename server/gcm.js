@@ -24,12 +24,13 @@ exports.updateRegistrationId = function(req, res) {
 exports.notify = function(registration_id, data) {
 
     var registrationIds = [];
+    var encapsulated_data = {data: JSON.stringify(data)};
     // or with object values
     var message = new gcm.Message({
         collapseKey: 'Notifications from Matchflare!',
         delayWhileIdle: false,
         timeToLive: 4,
-        data: data
+        data: encapsulated_data
     });
 
     registrationIds.push(registration_id);

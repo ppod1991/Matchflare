@@ -32,7 +32,7 @@ exports.sendNotification = function(contact_id, notification) {
 
 exports.newMatchNotification = function(toNotifyRecipient, otherRecipient, matcher, is_anonymous, pair_id, which_contact) {
 	
-	var recipientGenderPronoun = 'UNKNOWN';
+	var recipientGenderPronoun = 'him/her';
 	if (otherRecipient.guessed_gender === "MALE") {
 		recipientGenderPronoun = 'him';
 	}
@@ -40,10 +40,13 @@ exports.newMatchNotification = function(toNotifyRecipient, otherRecipient, match
 		recipientGenderPronoun = 'her';
 	}
 
-	var matcherGenderPronoun = 'her';
+	var matcherGenderPronoun = 'his/her';
 
 	if (matcher.guessed_gender === "MALE") {
 		matcherGenderPronoun = 'his';
+	}
+	else if (matcher.guessed_gender === "FEMALE") {
+		matcherGenderPronoun = 'her';
 	}
 
 	var text_message;
@@ -79,14 +82,21 @@ exports.newMatchNotification = function(toNotifyRecipient, otherRecipient, match
 
 exports.verifiedMatchNotification = function(pair, first, second, matcher) {
 
-	var firstGenderPronoun = 'her';
-	var secondGenderPronoun = 'her';
+	var firstGenderPronoun = 'him/her';
+	var secondGenderPronoun = 'him/her';
 
 	if (first.guessed_gender === "MALE") {
 		firstGenderPronoun = 'him';
 	}
+	else if (first.guessed_gender === "FEMALE") {
+		firstGenderPronoun = 'her';
+	}
+
 	if (second.guessed_gender === 'MALE') {
 		secondGenderPronoun = 'him';
+	}
+	else if (second.guessed_gender === 'FEMALE') {
+		secondGenderPronoun = 'her';
 	}
 
 	var messageToFirst = second.guessed_full_name + " likes you too! Tap to chat with " + secondGenderPronoun + "!";
