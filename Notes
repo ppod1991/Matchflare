@@ -16,7 +16,7 @@ Table of Possible notification values:
 			-fields: pair_id
 
 	Notifications for the matcher:
-		1) MATCHER_MATCH_ACCEPTED: One of the matchees accepted the match i.e. 'Ow Ow. Sanjiv Godse accepted your match. Next up Aleesha Shaik. Let's see what happens.'
+		1) MATCHER_ONE_MATCH_ACCEPTED: One of the matchees accepted the match i.e. 'Ow Ow. Sanjiv Godse accepted your match. Next up Aleesha Shaik. Let's see what happens.'
 			-fields: pair_id
 		2) MATCHER_BOTH_ACCEPTED: Both matchees accept the match i.e. 'You're a sharpshooter. Sanjiv and Aleesha matched with each other. Look at you go.'
 			-fields: pair_id
@@ -44,3 +44,8 @@ Table of Possible notification values:
 TABLE OF RESPONSE VALUES TO A POTENTIAL MATCH;
 1) ACCEPT
 2) REJECT
+
+POSSIBLE VALUES A MATCHER CAN GIVE TO A POTENTIAL MATCH:
+1) FIRST_CONTACT_WINS
+2) SECOND_CONTACT_WINS
+3) MATCHED

@@ -111,13 +111,14 @@ exports.addMatchResult = function(req, res) {
 
 		//Determine who to send first text to...
 		PG.knex('contacts').select('guessed_gender','guessed_full_name').where('contact_id',matcher_contact_id).then(function(result) {
+				var matcher = result[0];
+				matcher.contact_id = matcher_contact_id;
+				// var matcher_full_name = result[0].guessed_full_name;
+				// var matcherGenderPronoun = 'her';
 
-				var matcher_full_name = result[0].guessed_full_name;
-				var matcherGenderPronoun = 'her';
-
-				if (result[0].guessed_gender === "MALE") {
-					matcherGenderPronoun = 'his';
-				}
+				// if (result[0].guessed_gender === "MALE") {
+				// 	matcherGenderPronoun = 'his';
+				// }
 
 				PG.knex('contacts').select().where('contact_id',first_contact_id).orWhere('contact_id',second_contact_id).then(function(result) {
 
@@ -155,34 +156,37 @@ exports.addMatchResult = function(req, res) {
 						}
 					};
 
-					var recipientGenderPronoun = 'UNKNOWN';
-					if (secondRecipient.guessed_gender === "MALE") {
-						recipientGenderPronoun = 'him';
-					}
-					else if (secondRecipient.guessed_gender === "FEMALE") {
-						recipientGenderPronoun = 'her';
-					}
 
-					var text_message;
-					var push_message;
-					if (is_anonymous) {
-						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + "."; 
-					}
-					else {
-						text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + "."; 
-
-					}
 
 					
 					//Insert new match
-					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_contact_status:"NOTIFIED"},'pair_id').then(function(result) {
+					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous},'pair_id').then(function(result) {
 						var pair_id = result[0];
-						var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
-						text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
+						
+						// var recipientGenderPronoun = 'UNKNOWN';
+						// if (secondRecipient.guessed_gender === "MALE") {
+						// 	recipientGenderPronoun = 'him';
+						// }
+						// else if (secondRecipient.guessed_gender === "FEMALE") {
+						// 	recipientGenderPronoun = 'her';
+						// }
+
+						// var text_message;
+						// var push_message;
+						// if (is_anonymous) {
+						// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						// 	push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + "."; 
+						// }
+						// else {
+						// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+						// 	push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + "."; 
+
+						// }
+
+						// var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
+						// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 						console.log("Successfully inserted match with pair_id: ", result);
-						notify.newMatchNotification(firstRecipient.contact_id, text_message, push_message, pair_id);
+						notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
 						res.send(201);
 					}).catch(function(err) {
 						console.error("Error inserting match:", err);
@@ -239,11 +243,14 @@ exports.respondToMatchRequest = function(req, res) {
 	var contact_id = req.body.contact_id;
 	var pair_id = req.body.pair_id;
 
-	PG.knex.raw('SELECT matcher_contact_id, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+	PG.knex.raw('SELECT is_anonymous, pair_id, matcher.guessed_full_name AS matcher_full_name, \
+					matcher.contact_id AS matcher_contact_id, matcher.guessed_gender AS matcher_gender, \
+					first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
 					first.guessed_gender AS first_gender, second.guessed_gender AS second_gender, \
 					first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
 					first_contact_status, second_contact_status \
 					FROM pairs \
+					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
 					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ?',[pair_id]).then(function(result) {
@@ -251,18 +258,21 @@ exports.respondToMatchRequest = function(req, res) {
 		console.log('Received pair');
 		var pair = result.rows[0];
 
-		var first_matchee = {id: pair.first_contact_id, status: pair.first_contact_status};
-		var second_matchee = {id: pair.second_contact_id, status: pair.second_contact_status};
+		var first_matchee = {contact_id: pair.first_contact_id, status: pair.first_contact_status, guessed_gender: pair.first_gender, guessed_full_name: pair.first_full_name};
+		var second_matchee = {contact_id: pair.second_contact_id, status: pair.second_contact_status, guessed_gender: pair.second_gender, guessed_full_name: pair.second_full_name};
+		var matcher = {contact_id: pair.matcher_contact_id, guessed_gender: pair.matcher_gender, guessed_full_name: pair.matcher_full_name};
+		
 		var this_contact;
 		var other_contact;
 		var which_contact_is_this;
+
 		//Determine which matchee the caller is...
-		if (first_matchee.id === contact_id) {
+		if (first_matchee.contact_id === contact_id) {
 			this_contact = first_matchee;
 			other_contact = second_matchee;
 			which_contact_is_this = 'first';
 		}
-		else if (second_matchee.id === contact_id) {
+		else if (second_matchee.contact_id === contact_id) {
 			this_contact = second_matchee;
 			other_contact = first_matchee;
 			which_contact_is_this = 'second';
@@ -275,10 +285,10 @@ exports.respondToMatchRequest = function(req, res) {
 			if (other_contact.status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
 				//New verified match!
 				//Create chat! NEED TO IMPLEMENT
-				notify.verifiedMatchNotification(pair);
+				notify.verifiedMatchNotification(pair, this_contact, other_contact, matcher);
 			}
 			else { //If the other matchee has not yet been notified, then notify the other matchee and the matcher
-				notify.otherMatchNotification(pair);
+				notify.otherMatchNotification(pair, this_contact, other_contact, matcher, which_contact_is_this);
 			}
 		}
 		else if (decision === 'REJECT') { //If the match was rejected, then change status
@@ -288,8 +298,8 @@ exports.respondToMatchRequest = function(req, res) {
 		if (new_status) {  //Update the status of this matchee
 			var new_status_object = {};
 			new_status_object[which_contact_is_this + "_contact_status"] = new_status;
-			PG.knex('pairs').update(new_status_object).where(which_contact_is_this + '_contact_id',this_contact.id).then(function(result) {
-				console.log("Successfully updated contact status for contact: " + this_contact.id + " as: " + new_status);
+			PG.knex('pairs').update(new_status_object).where(which_contact_is_this + '_contact_id',this_contact.contact_id).then(function(result) {
+				console.log("Successfully updated contact status for contact: " + this_contact.contact_id + " as: " + new_status);
 				res.send(201,{response: "Successfully updated contact_status to:" + new_status});
 			}).catch(function(error) {
 				console.error("Error updating contact status:", error);
