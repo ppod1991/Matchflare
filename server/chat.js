@@ -4,7 +4,7 @@
 var PG = require('./knex');
 
 exports.getChatHistory = function(chat_id, callback) {
-  PG.knex.select('content','sender_contact_id','messages.created_at','guessed_full_name').from('messages').where('chat_id',chat_id).orderBy('created_at','desc').innerJoin('contacts','contacts.contact_id','messages.sender_contact_id').then(function(results) {
+  PG.knex.select('content','sender_contact_id','messages.created_at','guessed_full_name').from('messages').where('chat_id',chat_id).orderBy('created_at','asc').innerJoin('contacts','contacts.contact_id','messages.sender_contact_id').then(function(results) {
      console.log("Successfully retrieved chat " + chat_id);
      callback(results);
   }).catch(function(err) {
