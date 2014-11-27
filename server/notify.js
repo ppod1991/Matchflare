@@ -28,7 +28,7 @@ exports.sendNotification = function(contact_id, notification) {
 	}).catch(function(err) {
 		console.log("Error notifying the recipient via iOS, android or SMS:", err);
 	});
-}
+};
 
 exports.newMatchNotification = function(toNotifyRecipient, otherRecipient, matcher, is_anonymous, pair_id, which_contact) {
 	
@@ -141,6 +141,7 @@ exports.postNotification = function(target_contact_id, notification) {
 		console.error("Error posting new notification: ", err);
 	});
 }
+
 
 exports.getNotifications = function(req, res) {
 	var target_contact_id = req.query.target_contact_id;

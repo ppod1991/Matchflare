@@ -12,7 +12,7 @@ angular.module('matchflareApp.controllers.match', ['matchflareApp.services.match
             console.log(response);
             $scope.match = response;
 
-        },function(errorResponse) {
+        }, function(errorResponse) {
             console.log("Error getting match:");
             console.error(errorResponse);
         } );
