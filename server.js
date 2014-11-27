@@ -98,19 +98,21 @@ wss.on("connection", function(ws) {
 
 		}
 		else if (ws.chat_id) {  //Else if it is a normal message, then post the message and send it to all active sockets in that chat
-			chat.addMessage(receivedData, function (err) {
-				if (!err) {
-					_(activeConnections).filter(function (socket) {
-						return socket.chat_id === ws.chat_id;
-					}).forEach(function (socket) {
-						socket.send(JSON.stringify(receivedData));
-					});
-				}
-				else {
-					ws.send(JSON.stringify({error: err}));
-				}
-		});
 
+			if(receivedData.type==='message') {
+				chat.addMessage(receivedData, function (err) {
+					if (!err) {
+						_(activeConnections).filter(function (socket) {
+							return socket.chat_id === ws.chat_id;
+						}).forEach(function (socket) {
+							socket.send(JSON.stringify(receivedData));
+						});
+					}
+					else {
+						ws.send(JSON.stringify({error: err}));
+					}
+				});
+			}
 
 
 		}

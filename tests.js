@@ -33,7 +33,7 @@ testSocket.on('message',function(message) {
 
 
 var send = function(message) {
-    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message}));
+    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
   }
 
 
