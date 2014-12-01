@@ -42,12 +42,12 @@ var client = request.newClient('http://localhost:5000/');
 
 //Test websocket connection
 
-//var WebSocket = require('ws');
+var WebSocket = require('ws');
 ////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
 var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
 testSocket.on('open', function(event) {
-  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 1, sender_contact_id:91}));
+  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 5, sender_contact_id:91}));
 });
 
 testSocket.on('message',function(message) {
@@ -56,7 +56,7 @@ testSocket.on('message',function(message) {
 
 
 var send = function(message) {
-    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
+    testSocket.send(JSON.stringify({chat_id:5, sender_contact_id: 91, content: message, type:'message'}));
   }
 
 

@@ -42,14 +42,16 @@ exports.getMatch = function(req, res) {
 exports.getPendingMatches = function(req, res) {
 
 	var contact_id = req.query.contact_id;
-	PG.knex.raw("SELECT matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+	PG.knex.raw("SELECT chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
 					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
-					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, pair_id \
+					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
+					first_contact_status, second_contact_status \
 					FROM pairs \
 					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
 					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
-					WHERE (first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED');",[contact_id, contact_id]).then(function(result) {
+					WHERE ((first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED')) \
+					OR ((first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT') AND (first.contact_id = ? OR second.contact_id = ?));",[contact_id, contact_id, contact_id, contact_id]).then(function(result) {
 		console.log("Pending Matches Successfully retrieved: ", result.rows);
 		var matches = rowsToObjects(result.rows, function(err, results) {
 			if(err) {

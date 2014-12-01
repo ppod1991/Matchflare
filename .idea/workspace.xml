@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="297df0d5-d0e4-4a83-89d0-30eaaa0870ab" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/server/server.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/notify.js" afterPath="$PROJECT_DIR$/server/notify.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/matches.js" afterPath="$PROJECT_DIR$/server/matches.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests.js" afterPath="$PROJECT_DIR$/tests.js" />
     </list>
     <ignored path="website.iws" />
@@ -38,10 +38,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="notify.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="notify.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/notify.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7111111" vertical-offset="945" max-vertical-offset="1845">
+            <state vertical-scroll-proportion="-18.461538" vertical-offset="945" max-vertical-offset="1845">
               <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
               <folding>
                 <element signature="e#1392#3567#0" expanded="false" />
@@ -64,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/tests.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1020">
-              <caret line="59" column="3" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
+              <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -92,14 +92,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="matches.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="matches.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/matches.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.076923" vertical-offset="1800" max-vertical-offset="3225">
-              <caret line="299" column="44" selection-start-line="299" selection-start-column="44" selection-end-line="299" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.4888889" vertical-offset="375" max-vertical-offset="3255">
+              <caret line="47" column="64" selection-start-line="47" selection-start-column="64" selection-end-line="47" selection-end-column="64" />
               <folding>
-                <element signature="e#4144#10270#0" expanded="false" />
-                <element signature="e#13406#13449#0" expanded="false" />
+                <element signature="e#4366#10492#0" expanded="false" />
+                <element signature="e#13628#13671#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -148,9 +148,9 @@
         <option value="$PROJECT_DIR$/server/chat.js" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/client/views/match/match.jade" />
-        <option value="$PROJECT_DIR$/server/matches.js" />
-        <option value="$PROJECT_DIR$/tests.js" />
         <option value="$PROJECT_DIR$/server/notify.js" />
+        <option value="$PROJECT_DIR$/tests.js" />
+        <option value="$PROJECT_DIR$/server/matches.js" />
       </list>
     </option>
   </component>
@@ -509,8 +509,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5070">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="27" />
           <folding>
-            <element signature="e#4144#10270#0" expanded="false" />
-            <element signature="e#13406#13449#0" expanded="false" />
+            <element signature="e#4366#10492#0" expanded="false" />
+            <element signature="e#13628#13671#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -596,8 +596,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5070">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="27" />
           <folding>
-            <element signature="e#4144#10270#0" expanded="false" />
-            <element signature="e#13406#13449#0" expanded="false" />
+            <element signature="e#4366#10492#0" expanded="false" />
+            <element signature="e#13628#13671#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -726,31 +726,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server/notify.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.461538" vertical-offset="945" max-vertical-offset="1845">
+          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+          <folding>
+            <element signature="e#1392#3567#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1020">
-          <caret line="59" column="3" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
+          <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/matches.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.076923" vertical-offset="1800" max-vertical-offset="3225">
-          <caret line="299" column="44" selection-start-line="299" selection-start-column="44" selection-end-line="299" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.4888889" vertical-offset="375" max-vertical-offset="3255">
+          <caret line="47" column="64" selection-start-line="47" selection-start-column="64" selection-end-line="47" selection-end-column="64" />
           <folding>
-            <element signature="e#4144#10270#0" expanded="false" />
-            <element signature="e#13406#13449#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/notify.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7111111" vertical-offset="945" max-vertical-offset="1845">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
-          <folding>
-            <element signature="e#1392#3567#0" expanded="false" />
+            <element signature="e#4366#10492#0" expanded="false" />
+            <element signature="e#13628#13671#0" expanded="false" />
           </folding>
         </state>
       </provider>
