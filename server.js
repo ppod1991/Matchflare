@@ -24,7 +24,6 @@ var server = http.createServer(app);
 server.listen(port);
 console.log("http server listening on %d", port);
 
-
 app.get('/', function(req, res) {
     res.sendfile('./client/build/html/index.html');
 });

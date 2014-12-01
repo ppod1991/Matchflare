@@ -18,22 +18,41 @@ var client = request.newClient('http://localhost:5000/');
 //   return console.log(res.statusCode);
 // });
 
+
+
+//Test the various 'GETS' of matches
+//client.get('/match?pair_id=87',function(err, res, body) {
+//    console.log("GET MATCH", body);
+//});
+
+//client.get('/getMatches?contact_id=90',function(err, res, body) {
+//    console.log("GET MATCHES", JSON.stringify(body));
+//});
+
+client.get('/pendingMatches?contact_id=90',function(err, res, body) {
+    console.log("GET PENDING MATCHES", JSON.stringify(body));
+});
+
+
+
+
 //Test websocket connection
 
-var WebSocket = require('ws');
-var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-
-testSocket.on('open', function(event) {
-  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 1, sender_contact_id:91}));
-});
-
-testSocket.on('message',function(message) {
-  console.log("Received message", message);
-});
-
-
-var send = function(message) {
-    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
-  }
+//var WebSocket = require('ws');
+////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+//var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+//
+//testSocket.on('open', function(event) {
+//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 1, sender_contact_id:91}));
+//});
+//
+//testSocket.on('message',function(message) {
+//  console.log("Received message", message);
+//});
+//
+//
+//var send = function(message) {
+//    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
+//  }
 
 

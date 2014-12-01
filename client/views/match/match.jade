@@ -3,13 +3,13 @@ section.container.content-section.text-center(ng-controller="matchController")
 		.col-xs-5.col-xs-offset-1
 			.text-container
 				div.circular
-					img.img-responsive(ng-src='{{match.first_image}}')
+					img.img-responsive(ng-src='{{match.first_matchee.image_url}}')
 					div.gradient
 					p#text
-						{{match.first_full_name}}
+						{{match.first_matchee.guessed_full_name}}
 		.col-xs-5
 			.text-container
 				div.circular
-					img.img-responsive(ng-src='{{match.second_image}}')
+					img.img-responsive(ng-src='{{match.second_matchee.image_url}}')
 					p#text
-						{{match.second_full_name}}
+						{{match.second_matchee.guessed_full_name}}

@@ -1,6 +1,8 @@
 var PG = require('./knex');
 var notify = require('./notify');
 var int_encoder = require('int-encoder');
+var _ = require('lodash');
+var async = require('async');
 
 exports.getMatch = function(req, res) {
 
@@ -23,7 +25,14 @@ exports.getMatch = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ? ;",[pair_id]).then(function(result) {
 		console.log('Retrieved match with result: ', result.rows);
-		res.send(201,result.rows[0]);
+		var matches = rowsToObjects(result.rows, function(err, results) {
+			if(err) {
+				throw err;
+			}
+			else {
+				res.send(201,results[0]);
+			}
+		});
 	}).catch(function(err) {
 		console.error('Error retrieving match: ', err);
 		res.send(500,err);
@@ -42,7 +51,14 @@ exports.getPendingMatches = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE (first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED');",[contact_id, contact_id]).then(function(result) {
 		console.log("Pending Matches Successfully retrieved: ", result.rows);
-		res.send(201,result.rows);
+		var matches = rowsToObjects(result.rows, function(err, results) {
+			if(err) {
+				throw err;
+			}
+			else {
+				res.send(201,{matches:results});
+			}
+		});
 	}).catch(function(err) {
 		console.error("Error getting pending matches: ", err);
 		res.send(501,err);
@@ -54,7 +70,7 @@ exports.getPendingMatches = function(req, res) {
 exports.getMatches = function(req, res) {
 	var contact_id = Number(req.query.contact_id);
 
-	PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_contact_name, c1.guessed_gender first_contact_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_contact_name, c2.guessed_gender second_contact_gender, ?::integer matcher_contact_id \
+	PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, ?::integer matcher_contact_id \
 	FROM contacts c1, contacts c2  \
 		WHERE c1.contact_id IN \
 			(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?)  \
@@ -68,13 +84,20 @@ exports.getMatches = function(req, res) {
 		AND c1.contact_id != ? \
 		AND c2.contact_id != ? \
 	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30", [contact_id,contact_id,contact_id,contact_id, contact_id])
-	.then(function(results) {
-   			console.log(results.rows);
-   			res.send(201, {matches:results.rows})
+	.then(function(result) {
+   			console.log(result.rows);
+			var matches = rowsToObjects(result.rows, function(err, results) {
+				if(err) {
+					throw err;
+				}
+				else {
+					res.send(201,results);
+				}
+			});
    		}).catch(function(err) {
    			console.error("Error getting matches", err);
    			res.send(500, "Error getting matches: " + err.toString());
-   		})
+   		});
 };
 
 exports.addMatchResult = function(req, res) {
@@ -154,44 +177,52 @@ exports.addMatchResult = function(req, res) {
 								secondRecipient = contactA;
 							}
 						}
-					};
+					}
 
 
 
 					
 					//Insert new match
-					PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous},'pair_id').then(function(result) {
-						var pair_id = result[0];
-						
-						// var recipientGenderPronoun = 'UNKNOWN';
-						// if (secondRecipient.guessed_gender === "MALE") {
-						// 	recipientGenderPronoun = 'him';
-						// }
-						// else if (secondRecipient.guessed_gender === "FEMALE") {
-						// 	recipientGenderPronoun = 'her';
-						// }
+					PG.knex('chats').insert({},'chat_id').then(function(result) {
+						var chat_id = result[0];
 
-						// var text_message;
-						// var push_message;
-						// if (is_anonymous) {
-						// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						// 	push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + "."; 
-						// }
-						// else {
-						// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-						// 	push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + "."; 
+						PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, chat_id: chat_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous},'pair_id').then(function(result) {
+							var pair_id = result[0];
 
-						// }
+							// var recipientGenderPronoun = 'UNKNOWN';
+							// if (secondRecipient.guessed_gender === "MALE") {
+							// 	recipientGenderPronoun = 'him';
+							// }
+							// else if (secondRecipient.guessed_gender === "FEMALE") {
+							// 	recipientGenderPronoun = 'her';
+							// }
 
-						// var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
-						// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
-						console.log("Successfully inserted match with pair_id: ", result);
-						notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
-						res.send(201);
+							// var text_message;
+							// var push_message;
+							// if (is_anonymous) {
+							// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+							// 	push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + ".";
+							// }
+							// else {
+							// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+							// 	push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + ".";
+
+							// }
+
+							// var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
+							// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
+							console.log("Successfully inserted match with pair_id: ", result);
+							notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
+							res.send(201);
+						}).catch(function(err) {
+							console.error("Error inserting match:", err);
+							res.send(501,err);
+						});
+
 					}).catch(function(err) {
-						console.error("Error inserting match:", err);
-						res.send(501,err);
+						console.error("Error inserting new chat", err);
 					});
+
 
 
 				}).catch(function(err) {
@@ -236,7 +267,7 @@ exports.addMatchResult = function(req, res) {
 	
 };
 
-//The function called when somone accepts/rejects a potential match
+//The function called when someone accepts/rejects a potential match
 exports.respondToMatchRequest = function(req, res) {
 	//console.log("Request:", req);
 	var decision = req.body.decision;
@@ -314,13 +345,29 @@ exports.respondToMatchRequest = function(req, res) {
 
 };
 
-var sendTextMessage = function(phoneNumber, message) {
-	console.log("Mock sent message:");
-	console.log("To: " + phoneNumber);
-	console.log("Message: " + message);
+var rowsToObjects = function(rows, callback) {
+
+	async.map(rows,rowToObject,callback);
 };
 
+var rowToObject = function(match, callback) {
 
+	try {
+		var matchObject =  {first_matchee:{guessed_full_name: match.first_full_name,image_url:match.first_image, contact_id:match.first_contact_id, guessed_gender: match.first_gender, contact_status:match.first_contact_status, matcher_chat_id: match.first_matcher_chat_id},
+			second_matchee: {guessed_full_name: match.second_full_name,image_url:match.second_image, contact_id:match.second_contact_id, guessed_gender: match.second_gender, contact_status: match.second_contact_status,matcher_chat_id: match.second_matcher_chat_id},
+			matcher:{guessed_full_name: match.matcher_full_name,image_url:match.matcher_image, contact_id:match.matcher_contact_id, guessed_gender: match.matcher_gender},
+			pair_id: match.pair_id,
+			chat_id: match.chat_id,
+			is_anonymous: match.is_anonymous,
+			created_at: match.created_at
+		};
+		callback(null,matchObject);
+	}
+	catch (e) {
+		callback(e,null);
+	}
+
+};
 // var req = {query:{contact_id: 90}}
 // exports.getMatches(req);
 
