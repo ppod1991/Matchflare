@@ -12,17 +12,17 @@ var client = request.newClient('http://localhost:5000/');
 //});
 
 //Test ACCEPTING of a match
-var data = {"decision":"ACCEPT","contact_id":90,"pair_id":90};
+//var data = {"decision":"ACCEPT","contact_id":90,"pair_id":90};
 
 //client.post('match/respond', data, function(err, res, body) {
 //   return console.log(res.statusCode);
 //});
 
 //Test second ACCEPTING of a match
-var data = {"decision":"ACCEPT","contact_id":91,"pair_id":90};
-client.post('match/respond', data, function(err, res, body) {
-    return console.log(res.statusCode);
-});
+//var data = {"decision":"ACCEPT","contact_id":91,"pair_id":90};
+//client.post('match/respond', data, function(err, res, body) {
+//    return console.log(res.statusCode);
+//});
 
 //Test the various 'GETS' of matches
 //client.get('/match?pair_id=86',function(err, res, body) {
@@ -44,19 +44,19 @@ client.post('match/respond', data, function(err, res, body) {
 
 //var WebSocket = require('ws');
 ////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-//var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
-//
-//testSocket.on('open', function(event) {
-//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 1, sender_contact_id:91}));
-//});
-//
-//testSocket.on('message',function(message) {
-//  console.log("Received message", message);
-//});
-//
-//
-//var send = function(message) {
-//    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
-//  }
+var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+
+testSocket.on('open', function(event) {
+  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 1, sender_contact_id:91}));
+});
+
+testSocket.on('message',function(message) {
+  console.log("Received message", message);
+});
+
+
+var send = function(message) {
+    testSocket.send(JSON.stringify({chat_id:1, sender_contact_id: 91, content: message, type:'message'}));
+  }
 
 

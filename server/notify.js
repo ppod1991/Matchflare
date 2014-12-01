@@ -133,7 +133,7 @@ exports.otherMatchNotification = function(pair, first, second, matcher, which_co
 
 exports.postNotification = function(target_contact_id, notification) {
 
-	PG.knex('notifications').insert({target_contact_id: target_contact_id, text_message: notification.text_message, push_message: notification.push_message, notification_type: notification.notification_type, pair_id: notification.pair_id},'notification_id').then(function(result) {
+	PG.knex('notifications').insert({target_contact_id: target_contact_id, text_message: notification.text_message, push_message: notification.push_message, notification_type: notification.notification_type, pair_id: notification.pair_id, chat_id: notification.chat_id},'notification_id').then(function(result) {
 		console.log("Successfully posted notification");
 		notification.notification_id = result[0];
 		exports.sendNotification(target_contact_id, notification);
