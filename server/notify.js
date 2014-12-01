@@ -103,8 +103,8 @@ exports.verifiedMatchNotification = function(pair, first, second, matcher) {
 	var messageToSecond = first.guessed_full_name + " likes you too! Tap to chat with " + firstGenderPronoun + "!";
 	var messageToMatcher = first.guessed_full_name + " and " + second.guessed_full_name + " just liked each other! Look at you go!";
 
-	var notificationToFirst = {text_message: messageToFirst, push_message:messageToFirst, notification_type: 'MATCHEE_MATCH_ACCEPTED', pair_id: pair.pair_id};
-	var notificationToSecond = {text_message: messageToSecond, push_message:messageToSecond, notification_type: 'MATCHEE_MATCH_ACCEPTED', pair_id: pair.pair_id};
+	var notificationToFirst = {text_message: messageToFirst, push_message:messageToFirst, notification_type: 'MATCHEE_MATCH_ACCEPTED', pair_id: pair.pair_id, chat_id: pair.chat_id};
+	var notificationToSecond = {text_message: messageToSecond, push_message:messageToSecond, notification_type: 'MATCHEE_MATCH_ACCEPTED', pair_id: pair.pair_id, chat_id: pair.chat_id};
 	var notificationToMatcher = {text_message: messageToMatcher, push_message:messageToMatcher, notification_type: 'MATCHER_BOTH_ACCEPTED', pair_id: pair.pair_id};
 
 	exports.postNotification(first.contact_id, notificationToFirst);

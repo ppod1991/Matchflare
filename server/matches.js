@@ -274,7 +274,7 @@ exports.respondToMatchRequest = function(req, res) {
 	var contact_id = req.body.contact_id;
 	var pair_id = req.body.pair_id;
 
-	PG.knex.raw('SELECT is_anonymous, pair_id, matcher.guessed_full_name AS matcher_full_name, \
+	PG.knex.raw('SELECT chat_id, is_anonymous, pair_id, matcher.guessed_full_name AS matcher_full_name, \
 					matcher.contact_id AS matcher_contact_id, matcher.guessed_gender AS matcher_gender, \
 					first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
 					first.guessed_gender AS first_gender, second.guessed_gender AS second_gender, \
@@ -286,26 +286,22 @@ exports.respondToMatchRequest = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ?',[pair_id]).then(function(result) {
 
-		console.log('Received pair');
-		var pair = result.rows[0];
+		console.log('Received pair', result.rows[0]);
+		var pair = conversion(result.rows[0]);
 
-		var first_matchee = {contact_id: pair.first_contact_id, status: pair.first_contact_status, guessed_gender: pair.first_gender, guessed_full_name: pair.first_full_name};
-		var second_matchee = {contact_id: pair.second_contact_id, status: pair.second_contact_status, guessed_gender: pair.second_gender, guessed_full_name: pair.second_full_name};
-		var matcher = {contact_id: pair.matcher_contact_id, guessed_gender: pair.matcher_gender, guessed_full_name: pair.matcher_full_name};
-		
 		var this_contact;
 		var other_contact;
 		var which_contact_is_this;
 
 		//Determine which matchee the caller is...
-		if (first_matchee.contact_id === contact_id) {
-			this_contact = first_matchee;
-			other_contact = second_matchee;
+		if (pair.first_matchee.contact_id === contact_id) {
+			this_contact = pair.first_matchee;
+			other_contact = pair.second_matchee;
 			which_contact_is_this = 'first';
 		}
-		else if (second_matchee.contact_id === contact_id) {
-			this_contact = second_matchee;
-			other_contact = first_matchee;
+		else if (pair.second_matchee.contact_id === contact_id) {
+			this_contact = pair.second_matchee;
+			other_contact = pair.first_matchee;
 			which_contact_is_this = 'second';
 		}
 
@@ -313,13 +309,12 @@ exports.respondToMatchRequest = function(req, res) {
 		//If the match was accepted
 		if (decision === 'ACCEPT') {
 			new_status = 'ACCEPT';
-			if (other_contact.status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
+			if (other_contact.contact_status === 'ACCEPT') { //If the other matchee also accepted, then create a new chat and notify all parties
 				//New verified match!
-				//Create chat! NEED TO IMPLEMENT
-				notify.verifiedMatchNotification(pair, this_contact, other_contact, matcher);
+				notify.verifiedMatchNotification(pair, this_contact, other_contact, pair.matcher);
 			}
 			else { //If the other matchee has not yet been notified, then notify the other matchee and the matcher
-				notify.otherMatchNotification(pair, this_contact, other_contact, matcher, which_contact_is_this);
+				notify.otherMatchNotification(pair, this_contact, other_contact, pair.matcher, which_contact_is_this);
 			}
 		}
 		else if (decision === 'REJECT') { //If the match was rejected, then change status
@@ -342,7 +337,6 @@ exports.respondToMatchRequest = function(req, res) {
 		console.error("Error handling match response", err);
 	});
 
-
 };
 
 var rowsToObjects = function(rows, callback) {
@@ -353,14 +347,7 @@ var rowsToObjects = function(rows, callback) {
 var rowToObject = function(match, callback) {
 
 	try {
-		var matchObject =  {first_matchee:{guessed_full_name: match.first_full_name,image_url:match.first_image, contact_id:match.first_contact_id, guessed_gender: match.first_gender, contact_status:match.first_contact_status, matcher_chat_id: match.first_matcher_chat_id},
-			second_matchee: {guessed_full_name: match.second_full_name,image_url:match.second_image, contact_id:match.second_contact_id, guessed_gender: match.second_gender, contact_status: match.second_contact_status,matcher_chat_id: match.second_matcher_chat_id},
-			matcher:{guessed_full_name: match.matcher_full_name,image_url:match.matcher_image, contact_id:match.matcher_contact_id, guessed_gender: match.matcher_gender},
-			pair_id: match.pair_id,
-			chat_id: match.chat_id,
-			is_anonymous: match.is_anonymous,
-			created_at: match.created_at
-		};
+		var matchObject = conversion(match);
 		callback(null,matchObject);
 	}
 	catch (e) {
@@ -368,6 +355,17 @@ var rowToObject = function(match, callback) {
 	}
 
 };
+
+var conversion = function(match) {
+	return {first_matchee:{guessed_full_name: match.first_full_name,image_url:match.first_image, contact_id:match.first_contact_id, guessed_gender: match.first_gender, contact_status:match.first_contact_status, matcher_chat_id: match.first_matcher_chat_id},
+		second_matchee: {guessed_full_name: match.second_full_name,image_url:match.second_image, contact_id:match.second_contact_id, guessed_gender: match.second_gender, contact_status: match.second_contact_status,matcher_chat_id: match.second_matcher_chat_id},
+		matcher:{guessed_full_name: match.matcher_full_name,image_url:match.matcher_image, contact_id:match.matcher_contact_id, guessed_gender: match.matcher_gender},
+		pair_id: match.pair_id,
+		chat_id: match.chat_id,
+		is_anonymous: match.is_anonymous,
+		created_at: match.created_at
+	};
+}
 // var req = {query:{contact_id: 90}}
 // exports.getMatches(req);
 

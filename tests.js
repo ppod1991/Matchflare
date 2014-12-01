@@ -12,16 +12,20 @@ var client = request.newClient('http://localhost:5000/');
 //});
 
 //Test ACCEPTING of a match
-// var data = {"decision":"ACCEPT","contact_id":90,"pair_id":51};
+var data = {"decision":"ACCEPT","contact_id":90,"pair_id":90};
 
-// client.post('match/respond', data, function(err, res, body) {
+//client.post('match/respond', data, function(err, res, body) {
 //   return console.log(res.statusCode);
-// });
+//});
 
-
+//Test second ACCEPTING of a match
+var data = {"decision":"ACCEPT","contact_id":91,"pair_id":90};
+client.post('match/respond', data, function(err, res, body) {
+    return console.log(res.statusCode);
+});
 
 //Test the various 'GETS' of matches
-//client.get('/match?pair_id=87',function(err, res, body) {
+//client.get('/match?pair_id=86',function(err, res, body) {
 //    console.log("GET MATCH", body);
 //});
 
@@ -29,9 +33,9 @@ var client = request.newClient('http://localhost:5000/');
 //    console.log("GET MATCHES", JSON.stringify(body));
 //});
 
-client.get('/pendingMatches?contact_id=90',function(err, res, body) {
-    console.log("GET PENDING MATCHES", JSON.stringify(body));
-});
+//client.get('/pendingMatches?contact_id=90',function(err, res, body) {
+//    console.log("GET PENDING MATCHES", JSON.stringify(body));
+//});
 
 
 
