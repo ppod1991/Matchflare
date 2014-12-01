@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="297df0d5-d0e4-4a83-89d0-30eaaa0870ab" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/server/server.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/build/html/match/match.html" afterPath="$PROJECT_DIR$/client/build/html/match/match.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/views/match/match.jade" afterPath="$PROJECT_DIR$/client/views/match/match.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/matches.js" afterPath="$PROJECT_DIR$/server/matches.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests.js" afterPath="$PROJECT_DIR$/tests.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="website.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,8 +60,8 @@
       <file leaf-file-name="tests.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
-              <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="246" max-vertical-offset="960">
+              <caret line="55" column="5" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -95,16 +89,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="matches.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="matches.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/matches.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1665">
-              <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.7275321" vertical-offset="300" max-vertical-offset="1665">
+              <caret line="54" column="21" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
               <folding>
-                <element signature="e#2796#4098#0" expanded="false" />
-                <element signature="e#4145#10271#0" expanded="false" />
-                <element signature="e#10394#13795#0" expanded="false" />
-                <element signature="e#13843#13886#0" expanded="false" />
+                <element signature="e#2786#4088#0" expanded="false" />
+                <element signature="e#4135#10261#0" expanded="false" />
+                <element signature="e#10384#13785#0" expanded="false" />
+                <element signature="e#13833#13876#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -120,10 +114,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="match.jade" pinned="false" current-in-tab="true">
+      <file leaf-file-name="match.jade" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/views/match/match.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31512606" vertical-offset="0" max-vertical-offset="714">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
               <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
@@ -154,8 +148,8 @@
         <option value="$PROJECT_DIR$/server/chat.js" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/tests.js" />
-        <option value="$PROJECT_DIR$/server/matches.js" />
         <option value="$PROJECT_DIR$/client/views/match/match.jade" />
+        <option value="$PROJECT_DIR$/server/matches.js" />
       </list>
     </option>
   </component>
@@ -512,10 +506,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5070">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="27" />
           <folding>
-            <element signature="e#2796#4098#0" expanded="false" />
-            <element signature="e#4145#10271#0" expanded="false" />
-            <element signature="e#10394#13795#0" expanded="false" />
-            <element signature="e#13843#13886#0" expanded="false" />
+            <element signature="e#2786#4088#0" expanded="false" />
+            <element signature="e#4135#10261#0" expanded="false" />
+            <element signature="e#10384#13785#0" expanded="false" />
+            <element signature="e#13833#13876#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -599,10 +593,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5070">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="27" />
           <folding>
-            <element signature="e#2796#4098#0" expanded="false" />
-            <element signature="e#4145#10271#0" expanded="false" />
-            <element signature="e#10394#13795#0" expanded="false" />
-            <element signature="e#13843#13886#0" expanded="false" />
+            <element signature="e#2786#4088#0" expanded="false" />
+            <element signature="e#4135#10261#0" expanded="false" />
+            <element signature="e#10384#13785#0" expanded="false" />
+            <element signature="e#13833#13876#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -721,27 +715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
-          <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/matches.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1665">
-          <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
-          <folding>
-            <element signature="e#2796#4098#0" expanded="false" />
-            <element signature="e#4145#10271#0" expanded="false" />
-            <element signature="e#10394#13795#0" expanded="false" />
-            <element signature="e#13843#13886#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/js/controllers/matchController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
@@ -752,9 +725,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/views/match/match.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31512606" vertical-offset="0" max-vertical-offset="714">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
           <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="246" max-vertical-offset="960">
+          <caret line="55" column="5" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/matches.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7275321" vertical-offset="300" max-vertical-offset="1665">
+          <caret line="54" column="21" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
+          <folding>
+            <element signature="e#2786#4088#0" expanded="false" />
+            <element signature="e#4135#10261#0" expanded="false" />
+            <element signature="e#10384#13785#0" expanded="false" />
+            <element signature="e#13833#13876#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

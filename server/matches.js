@@ -56,7 +56,7 @@ exports.getPendingMatches = function(req, res) {
 				throw err;
 			}
 			else {
-				res.send(201,{matches:results});
+				res.send(201,results);
 			}
 		});
 	}).catch(function(err) {
