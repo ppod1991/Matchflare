@@ -1,12 +1,12 @@
 var request = require('request-json');
-var client = request.newClient('http://localhost:5000/');
-
-//var client = request.newClient('http://matchflare.herokuapp.com/');
+var client;
+client = request.newClient('http://localhost:5000/');
+//client = request.newClient('http://matchflare.herokuapp.com/');
 
 
 //Test the creation of a new match and associated notifications
-//var data = {first_contact_id:90, second_contact_id:91, match_status:"MATCHED", matcher_contact_id:90, is_anonymous:false}
-//
+//var data = {first_contact_id:90, second_contact_id:92, match_status:"MATCHED", matcher_contact_id:90, is_anonymous:false}
+
 //client.post('/postMatch', data, function(err, res, body) {
 //  return console.log(res.statusCode);
 //});
@@ -38,25 +38,28 @@ var client = request.newClient('http://localhost:5000/');
 //});
 
 
-
+//Test getNotificationLists
+client.get('/notificationLists?contact_id=90',function(err, res, body) {
+    console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
+});
 
 //Test websocket connection
 
-var WebSocket = require('ws');
-////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
-
-testSocket.on('open', function(event) {
-  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 5, sender_contact_id:91}));
-});
-
-testSocket.on('message',function(message) {
-  console.log("Received message", message);
-});
-
-
-var send = function(message) {
-    testSocket.send(JSON.stringify({chat_id:5, sender_contact_id: 91, content: message, type:'message'}));
-  }
+//var WebSocket = require('ws');
+//////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+//var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+//
+//testSocket.on('open', function(event) {
+//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 6, sender_contact_id:92}));
+//});
+//
+//testSocket.on('message',function(message) {
+//  console.log("Received message", message);
+//});
+//
+//
+//var send = function(message) {
+//    testSocket.send(JSON.stringify({chat_id:6, sender_contact_id: 92, content: message, type:'message'}));
+//  }
 
 

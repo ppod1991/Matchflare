@@ -1,6 +1,7 @@
 var PG = require('./knex');
 var gcm = require('./gcm');
 var int_encoder = require('int-encoder');
+var Matches = require('./matches');
 
 exports.sendNotification = function(contact_id, notification) {
 	console.log("Notification to " + contact_id + ": " + notification);
@@ -148,6 +149,79 @@ exports.getNotifications = function(req, res) {
 	PG.knex('notifications').where('target_contact_id',target_contact_id).where('seen',false).orderBy('created_at','desc').then(function(result) {
 		console.log("Notifications retrieved with result: ", result);
 		res.send(201,{notifications: result});
+	}).catch(function(err) {
+		console.error("Error retrieiving notifications for user: " + contact_id, err);
+		res.send(501,err);
+	});
+};
+
+exports.getNotificationLists = function(req, res) {
+	var contact_id = req.query.contact_id;
+	var objectToReturn = {};
+
+	PG.knex('notifications').where('target_contact_id',contact_id).where('seen',false).orderBy('created_at','desc').then(function(result) {
+		//Results after getting unseen notifications
+		console.log("Unseen Notifications retrieved with result: ", result);
+		objectToReturn.notifications = result;
+
+		PG.knex.raw("SELECT chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
+					first_contact_status, second_contact_status \
+					FROM pairs \
+					INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
+					INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
+					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
+					WHERE ((first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED')) \
+					OR ((first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT') AND (first.contact_id = ? OR second.contact_id = ?)) \
+					ORDER BY pairs.created_at DESC;",[contact_id, contact_id, contact_id, contact_id]).then(function(result) {
+			//Results after getting pending matches
+			console.log("Pending Matches Successfully retrieved: ", result.rows);
+			Matches.rowsToObjects(result.rows, function (err, pending_matches) {
+				if (err) {
+					throw err;
+				}
+				else {
+
+					objectToReturn.pending_matches = pending_matches;
+
+					PG.knex.raw("SELECT chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+						matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+						matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
+						first_contact_status, second_contact_status \
+						FROM pairs \
+						INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
+						INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
+						INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
+						WHERE ((first_contact_status = 'NOTIFIED' AND second_contact_status = 'ACCEPT') \
+						OR (first_contact_status = 'ACCEPT' AND second_contact_status = 'NOTIFIED') \
+						OR (first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT')) AND \
+						matcher_contact_id = ? \
+						ORDER BY pairs.created_at DESC;", [contact_id]).then(function (result) {
+
+							//Results after getting active matcher matches
+							Matches.rowsToObjects(result.rows, function (err, active_matcher_matches) {
+								if (err) {
+									throw err;
+								}
+								else {
+									objectToReturn.active_matcher_matches = active_matcher_matches;
+									console.log("Object To Return", JSON.stringify(objectToReturn));
+									res.send(201, objectToReturn);
+								}
+							});
+
+					}).catch(function (err) {
+								console.error("Error getting active matcher matches: ", err);
+								res.send(501, err);
+							});
+				}
+			});
+		}).catch(function(err) {
+			console.error("Error getting pending matches: ", err);
+			res.send(501,err);
+		});
+
 	}).catch(function(err) {
 		console.error("Error retrieiving notifications for user: " + contact_id, err);
 		res.send(501,err);

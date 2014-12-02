@@ -25,7 +25,7 @@ exports.getMatch = function(req, res) {
 					INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
 					WHERE pair_id = ? ;",[pair_id]).then(function(result) {
 		console.log('Retrieved match with result: ', result.rows);
-		var matches = rowsToObjects(result.rows, function(err, results) {
+		var matches = exports.rowsToObjects(result.rows, function(err, results) {
 			if(err) {
 				throw err;
 			}
@@ -53,7 +53,7 @@ exports.getPendingMatches = function(req, res) {
 					WHERE ((first.contact_id = ? AND first_contact_status = 'NOTIFIED') OR (second.contact_id = ? AND second_contact_status = 'NOTIFIED')) \
 					OR ((first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT') AND (first.contact_id = ? OR second.contact_id = ?));",[contact_id, contact_id, contact_id, contact_id]).then(function(result) {
 		console.log("Pending Matches Successfully retrieved: ", result.rows);
-		var matches = rowsToObjects(result.rows, function(err, results) {
+		var matches = exports.rowsToObjects(result.rows, function(err, results) {
 			if(err) {
 				throw err;
 			}
@@ -88,7 +88,7 @@ exports.getMatches = function(req, res) {
 	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30", [contact_id,contact_id,contact_id,contact_id, contact_id])
 	.then(function(result) {
    			console.log(result.rows);
-			var matches = rowsToObjects(result.rows, function(err, results) {
+			var matches = exports.rowsToObjects(result.rows, function(err, results) {
 				if(err) {
 					throw err;
 				}
@@ -341,7 +341,7 @@ exports.respondToMatchRequest = function(req, res) {
 
 };
 
-var rowsToObjects = function(rows, callback) {
+exports.rowsToObjects = function(rows, callback) {
 
 	async.map(rows,rowToObject,callback);
 };
