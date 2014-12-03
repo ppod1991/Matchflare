@@ -10,6 +10,7 @@ var matches = require('./server/matches');
 var gcm = require('./server/gcm');
 var notify = require('./server/notify');
 var chat = require('./server/chat');
+var authentication = require('./server/authentication');
 var WebSocketServer = require('ws').Server;
 var _ = require('lodash');
 
@@ -52,6 +53,10 @@ app.get('/notifications',notify.getNotifications);
 app.get('/notificationLists',notify.getNotificationLists);
 
 app.post('/seeNotification',notify.markAsSeen);
+
+app.post('/sendSMSVerification',authentication.sendVerificationSMS);
+
+app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 

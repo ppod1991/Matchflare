@@ -39,9 +39,9 @@ client = request.newClient('http://localhost:5000/');
 
 
 //Test getNotificationLists
-client.get('/notificationLists?contact_id=90',function(err, res, body) {
-    console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
-});
+//client.get('/notificationLists?contact_id=90',function(err, res, body) {
+//    console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
+//});
 
 //Test websocket connection
 
@@ -63,3 +63,14 @@ client.get('/notificationLists?contact_id=90',function(err, res, body) {
 //  }
 
 
+//Test authentication and SMS verification
+
+//var data = {};
+//client.post('/sendSMSVerification?phone_number=6098510054&device_id=MOCK_DEVICE_ID_1991',data,function(err,res,body) {
+//    console.log("Result of sending SMS verification:",JSON.stringify(body));
+//});
+
+var data = {guessed_full_name:"Dr. Piyush Poddar", guessed_gender:"MALE","age":23,zipcode:"08550", gender_preferences:["FEMALE"]};
+client.post('/verifyVerificationSMS?phone_number=6098510054&device_id=MOCK_DEVICE_ID_1991&input_verification_code=3989', data, function(err, res, body) {
+    return console.log("Result of verifying the Verification SMS:", JSON.stringify(body));
+});
