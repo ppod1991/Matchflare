@@ -105,7 +105,7 @@ exports.getMatches = function(req, res) {
 exports.addMatchResult = function(req, res) {
 	var match_status = req.body.match_status;
 	var first_contact_id = req.body.first_matchee.contact_id;
-	var second_contact_id = req.body.second_matchee.second_contact_id;
+	var second_contact_id = req.body.second_matchee.contact_id;
 	var is_anonymous = req.body.is_anonymous;
 	var matcher_contact_id = req.body.matcher.contact_id;
 

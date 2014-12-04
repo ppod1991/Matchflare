@@ -4,7 +4,6 @@
     <list default="true" id="297df0d5-d0e4-4a83-89d0-30eaaa0870ab" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/server/server.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/matches.js" afterPath="$PROJECT_DIR$/server/matches.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="website.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -85,8 +84,8 @@
       <file leaf-file-name="matches.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/matches.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22222222" vertical-offset="1365" max-vertical-offset="5775">
-              <caret line="101" column="11" selection-start-line="101" selection-start-column="11" selection-end-line="101" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.15555556" vertical-offset="1515" max-vertical-offset="5775">
+              <caret line="108" column="41" selection-start-line="108" selection-start-column="41" selection-end-line="108" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -747,8 +746,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/matches.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22222222" vertical-offset="1365" max-vertical-offset="5775">
-          <caret line="101" column="11" selection-start-line="101" selection-start-column="11" selection-end-line="101" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.15555556" vertical-offset="1515" max-vertical-offset="5775">
+          <caret line="108" column="41" selection-start-line="108" selection-start-column="41" selection-end-line="108" selection-end-column="41" />
           <folding />
         </state>
       </provider>
