@@ -58,6 +58,7 @@ app.post('/sendSMSVerification',authentication.sendVerificationSMS);
 
 app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
 
+app.get('/verifyAccessToken',authentication.verifyAccessToken);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 

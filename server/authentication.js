@@ -39,7 +39,7 @@ exports.sendVerificationSMS = function(req, res) {
             				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING proposed_phone_number_id; COMMIT;")
                 .then(function(results) {
                 console.log("Successfully inserted proposed phone number with verification info");
-                var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter the above code within the Matchflare app to start playing cupid!";
+                var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter " + insertObject.verification_code + " within the Matchflare app to start playing cupid!";
                 notify.sendSMS(insertObject.normalized_phone_number,messageToSend); 
                 res.send(201, {response: "Successfully inserted proposed phone number"});
             }).catch(function(err) {
@@ -57,6 +57,24 @@ var generateRandomCode = function(min, max) {
     var random_code = Math.floor(Math.random() * (max-min+1)) + min;
     return random_code;
 
+};
+
+exports.verifyAccessToken = function(req, res) {
+    var access_token = req.query.access_token;
+    PG.knex('contacts').select().where('access_token',access_token).then(function(results) {
+        if (results[0]) {
+            console.log("Successfully verified access token: " + results[0].contact_id);
+            res.send(201,results[0]);
+        }
+        else {
+            console.error("Failed to verify access token: " + access_token);
+            res.send(501,"Failed to verify access token");
+        }
+
+    }).catch(function(err){
+        console.error("Failed to verify access token", err.toString());
+        res.send(501,"Failed to verify access token: " + err.toString());
+    });
 };
 
 exports.verifyVerificationSMS = function(req, res) {
@@ -99,7 +117,10 @@ exports.verifyVerificationSMS = function(req, res) {
                             update.guessed_full_name = req.body.guessed_full_name;
                         }
 
-                        update.image_url = req.body.image_url;
+                        if (req.body.image_url) {
+                            update.image_url = req.body.image_url;
+                        }
+                        
                         update.guessed_gender = req.body.guessed_gender;
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;
