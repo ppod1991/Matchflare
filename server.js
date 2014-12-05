@@ -58,6 +58,7 @@ app.post('/sendSMSVerification',authentication.sendVerificationSMS);
 
 app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
 
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

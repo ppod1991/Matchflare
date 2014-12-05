@@ -2,6 +2,18 @@ var PG = require('./knex');
 var gcm = require('./gcm');
 var int_encoder = require('int-encoder');
 var Matches = require('./matches');
+var request = require('request-json');
+var nexmo = request.newClient('https://rest.nexmo.com');
+
+exports.sendSMS = function(phone_number, message) {
+	
+	var data = {text: message, api_key: '54de0318', api_secret: 'd21d277d', from: '12069396519', to: phone_number.replace(/\+/g, '')};
+	console.log("Sending SMS with data:", JSON.stringify(data));
+	nexmo.post('/sms/json', data, function(err, res, body) {
+	 	console.log("Sent text message", JSON.stringify(body));
+	});
+	
+};
 
 exports.sendNotification = function(contact_id, notification) {
 	console.log("Notification to " + contact_id + ": " + notification);
