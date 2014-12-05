@@ -39,7 +39,7 @@ exports.sendVerificationSMS = function(req, res) {
             				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING proposed_phone_number_id; COMMIT;")
                 .then(function(results) {
                 console.log("Successfully inserted proposed phone number with verification info");
-                var messageToSend = "Welcome to Matchflare! Enter the following verification code in the Matchflare app: " + insertObject.verification_code;
+                var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter the above code within the Matchflare app to start playing cupid!";
                 notify.sendSMS(insertObject.normalized_phone_number,messageToSend); 
                 res.send(201, {response: "Successfully inserted proposed phone number"});
             }).catch(function(err) {
