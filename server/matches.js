@@ -145,7 +145,11 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 };
 
 exports.getMatches = function (req, res) {
-	var contact_id = req.query.contact_id;
+	var contact_id;
+	if (req.query.contact_id) {
+		contact_id = req.query.contact_id;
+	}
+	
 	var contact_ids = req.body.contacts;
 
 	if (contact_id) {
