@@ -69,38 +69,154 @@ exports.getPendingMatches = function(req, res) {
 
 };
 
-exports.getMatches = function(req, res) {
-	var contact_id = Number(req.query.contact_id);
+exports.makeMatches = function(contact_id, contact_ids, callback) {
 
-	PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, ?::integer matcher_contact_id \
-	FROM contacts c1, contacts c2  \
-		WHERE c1.contact_id IN \
-			(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?)  \
-		AND c2.contact_id IN  \
-			(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?) \
-		AND c2.guessed_gender IN  \
-			(SELECT unnest(guess_preferences(c1.guessed_gender)))	 \
-		AND c1.guessed_gender IN  \
-			(SELECT unnest(guess_preferences(c2.guessed_gender)))	 \
-		AND c1.contact_id != c2.contact_id \
-		AND c1.contact_id != ? \
-		AND c2.contact_id != ? \
-	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30", [contact_id,contact_id,contact_id,contact_id, contact_id])
-	.then(function(result) {
-   			console.log(result.rows);
+	var sqlString;
+	var parameterArray;
+
+	if (!contact_id) {
+		var ids = idsJSONtoSQL(contact_ids);
+		sqlString = "SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender \
+						FROM contacts c1, contacts c2  \
+							WHERE c1.contact_id IN \
+								" + ids + " \
+							AND c2.contact_id IN  \
+								" + ids + " \
+							AND c2.guessed_gender IN  \
+								(SELECT unnest(c1.gender_preferences))	 \
+							AND c1.guessed_gender IN  \
+								(SELECT unnest(c2.gender_preferences))	 \
+							AND c1.contact_id != c2.contact_id \
+							AND c1.contact_id != ? \
+							AND c2.contact_id != ? \
+						ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30"
+		parameterArray = [0,0];
+	}
+	else {
+		var ids = "(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?)";
+
+		sqlString = "UPDATE contacts SET matches = (SELECT ARRAY(SELECT (c1.contact_id,c2.contact_id)::match \
+						FROM contacts c1, contacts c2  \
+							WHERE c1.contact_id IN \
+								" + ids + " \
+							AND c2.contact_id IN  \
+								" + ids + " \
+							AND c2.guessed_gender IN  \
+								(SELECT unnest(c1.gender_preferences))	 \
+							AND c1.guessed_gender IN  \
+								(SELECT unnest(c2.gender_preferences))	 \
+							AND c1.contact_id != c2.contact_id \
+							AND c1.contact_id != ? \
+							AND c2.contact_id != ? \
+						ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30)) WHERE contact_id = ? RETURNING matches"
+		parameterArray = [contact_id,contact_id,contact_id,contact_id, contact_id];
+	};
+	
+	PG.knex.raw(sqlString,parameterArray).then(function(result) {
+   			
+   			console.log("Result of making matches:", JSON.stringify(result.rows));
+   			if (contact_id) {
+   				//Set new matches for the current user (if verified)
+   				callback(null,null);
+   			}
+   			else {
+   				//just return match types...
+   				var matches = exports.rowsToObjects(result.rows, function(err, results) {
+   					if(err) {
+   						throw err;
+   					}
+   					else {
+   						callback(null,results);
+   					}
+   				});
+   			}
+			// var matches = exports.rowsToObjects(result.rows, function(err, results) {
+			// 	if(err) {
+			// 		throw err;
+			// 	}
+			// 	else {
+			// 		callback(err, results);
+			// 	}
+			// });
+   		}).catch(function(err) {
+   			console.error("Error getting matches", err);
+   			callback(err,null);
+   		});
+};
+
+exports.getMatches = function (req, res) {
+	var contact_id = req.query.contact_id;
+	var contact_ids = req.body.contacts;
+
+	if (contact_id) {
+		PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, \
+						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, ?::integer matcher_contact_id \
+						 FROM (SELECT unnest(matches) AS singleMatch FROM contacts WHERE contact_id=?) matchList \
+						 INNER JOIN contacts c1 ON c1.contact_id = (matchList.singleMatch).first_matchee_contact_id \
+						 INNER JOIN contacts c2 ON c2.contact_id = (matchList.singleMatch).second_matchee_contact_id;",[contact_id,contact_id])
+		.then(function(result) {
+
 			var matches = exports.rowsToObjects(result.rows, function(err, results) {
 				if(err) {
 					throw err;
 				}
 				else {
 					res.send(201,results);
+					exports.makeMatches(contact_id,null,function(err) {
+						if (err) {
+							console.error("Error making new matches", err);
+						}
+					});
 				}
 			});
-   		}).catch(function(err) {
-   			console.error("Error getting matches", err);
-   			res.send(500, "Error getting matches: " + err.toString());
-   		});
-};
+
+		}).catch(function(err) {
+			console.error("Error getting matches", err.toString());
+		});
+	}
+	else {
+		exports.makeMatches(null,contact_ids, function(err, matches) {
+			if (err) {
+				res.send(501,"Error making matches: " + err.toString());
+			} else {
+				res.send(201,matches);
+			}
+		});
+	}
+}
+
+// exports.getMatches = function(req, res) {
+// 	var contact_id = Number(req.query.contact_id);
+// 	var contact_ids = req.
+// 	PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, ?::integer matcher_contact_id \
+// 	FROM contacts c1, contacts c2  \
+// 		WHERE c1.contact_id IN \
+// 			" + sqlString + " \
+// 		AND c2.contact_id IN  \
+// 			" + sqlString + " \
+// 		AND c2.guessed_gender IN  \
+// 			(SELECT unnest(c1.gender_preferences))	 \
+// 		AND c1.guessed_gender IN  \
+// 			(SELECT unnest(c2.gender_preferences))	 \
+// 		AND c1.contact_id != c2.contact_id \
+// 		AND c1.contact_id != ? \
+// 		AND c2.contact_id != ? \
+// 	ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30", [contact_id,contact_id,contact_id,contact_id, contact_id])
+// 	.then(function(result) {
+//    			console.log(result.rows);
+// 			var matches = exports.rowsToObjects(result.rows, function(err, results) {
+// 				if(err) {
+// 					throw err;
+// 				}
+// 				else {
+// 					res.send(201,results);
+// 				}
+// 			});
+//    		}).catch(function(err) {
+//    			console.error("Error getting matches", err);
+//    			res.send(500, "Error getting matches: " + err.toString());
+//    		});
+// };
 
 exports.addMatchResult = function(req, res) {
 	var match_status = req.body.match_status;
@@ -356,6 +472,14 @@ var rowToObject = function(match, callback) {
 		callback(e,null);
 	}
 
+};
+
+var idsJSONtoSQL = function(contact_ids) {
+	var stringSQL = "(";
+	contact_ids.forEach(function(contact) {
+		stringSQL = stringSQL + "'" + contact.contact_id + "',"; 
+	});
+	return stringSQL.substring(0, stringSQL.length - 1) + ')';
 };
 
 var conversion = function(match) {

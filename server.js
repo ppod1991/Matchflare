@@ -60,6 +60,8 @@ app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
 
 app.get('/verifyAccessToken',authentication.verifyAccessToken);
 
+app.post('/getMatches',matches.getMatches);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

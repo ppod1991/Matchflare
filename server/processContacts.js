@@ -2,6 +2,8 @@ var PG = require('./knex');
 var Phone = require('libphonenumber');
 var async = require('async');
 var Names = require('./nameDatabase');
+var Matches = require('./matches');
+var _ = require('lodash');
 
 // var start = new Date().getTime();
 
@@ -10,6 +12,11 @@ exports.processContacts = function(req, res) {
 	var processedContacts = []; //Stores contacts with valid phone numbers
 	var my_contact_id = req.query.contact_id;
 	var allNormalizedPhoneNumbers = [];
+
+	var isVerified = false;
+	if (my_contact_id) {
+		isVerified = true;
+	};
 
 	async.each(contacts, function(contact, callback) {
 
@@ -60,43 +67,77 @@ exports.processContacts = function(req, res) {
 				// 				+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number); COMMIT;");
 
 				//UPSERT
-				PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
-								+" VALUES "
-								+ contactsJSONtoSQL(processedContacts)
-								+" ),"
-								+" upsert as "
-								+" ("
-								+"	UPDATE contacts c"
-								+"		SET guessed_gender = nv.guessed_gender"
-								+"	FROM new_values nv"
-								+"	WHERE c.normalized_phone_number = nv.normalized_phone_number"
-								+"	RETURNING c.normalized_phone_number"
-								+")"
-								+" INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender)"
-								+" SELECT guessed_full_name, normalized_phone_number, guessed_gender"
-								+" FROM (SELECT max(guessed_full_name) guessed_full_name, normalized_phone_number, max(guessed_gender) guessed_gender FROM new_values GROUP BY normalized_phone_number) groupedValues"
-								+" WHERE NOT EXISTS (SELECT 1"
-								+"				  FROM upsert up"
-								+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING contact_id; COMMIT;")
-								//+" AND WHERE NOT EXISTS (SELECT 1 FROM contacts WHERE contacts.normalized_phone_number = new_values.normalized_phone_number)")
-								.then(function(response) {
-									console.log("Response after upserting table:", response); 
+				// PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS ("
+				// 				+" VALUES "
+				// 				+ contactsJSONtoSQL(processedContacts)
+				// 				+" ),"
+				// 				+" upsert as "
+				// 				+" ("
+				// 				+"	UPDATE contacts c"
+				// 				+"		SET guessed_gender = nv.guessed_gender"
+				// 				+"	FROM new_values nv"
+				// 				+"	WHERE c.normalized_phone_number = nv.normalized_phone_number"
+				// 				+"	RETURNING c.normalized_phone_number"
+				// 				+")"
+				// 				+" INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender)"
+				// 				+" SELECT guessed_full_name, normalized_phone_number, guessed_gender"
+				// 				+" FROM (SELECT max(guessed_full_name) guessed_full_name, normalized_phone_number, max(guessed_gender) guessed_gender FROM new_values GROUP BY normalized_phone_number) groupedValues"
+				// 				+" WHERE NOT EXISTS (SELECT 1"
+				// 				+"				  FROM upsert up"
+				// 				+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING contact_id; COMMIT;")
+								
 
-									//Updates contacts of the current user
-									PG.knex.raw('UPDATE contacts SET contacts = contacts || (ARRAY(SELECT contact_id FROM contacts WHERE normalized_phone_number IN ' +  phoneJSONtoSQL(allNormalizedPhoneNumbers) + ' AND NOT contact_id = ANY(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?))) WHERE contact_id = ?;', [my_contact_id, my_contact_id])
-										.then(function(result) {
-											console.log("Successfully inserted id's of friends", result);
-									}).catch(function(err) {
-										console.log("Error inserting id's of contacts:", err);
-									});
+			PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; \
+				WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS \
+				(VALUES " + contactsJSONtoSQL(processedContacts) + ") \
+				INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender, gender_preferences) \
+				(SELECT * , guess_preferences(new_values.guessed_gender) FROM new_values WHERE new_values.normalized_phone_number NOT IN (SELECT contacts.normalized_phone_number FROM contacts));COMMIT;").then(function(response) {
+									console.log("Response after inserting new contacts:", response); 
 
-									res.send(201,{response:"OK"});
+									if (isVerified) {
+										//Updates contacts of the current user (if verifed)
+										PG.knex.raw('UPDATE contacts SET contacts = contacts || (ARRAY(SELECT contact_id FROM contacts WHERE normalized_phone_number IN ' +  phoneJSONtoSQL(allNormalizedPhoneNumbers) + ' AND NOT contact_id = ANY(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?))) WHERE contact_id = ?;', [my_contact_id, my_contact_id])
+											.then(function(result) {
+												console.log("Successfully inserted id's of friends", result);
+												Matches.makeMatches(my_contact_id,null, function(err) {
+													if (err) {
+														res.send(501,"Error making new matches: " + err.toString());
+													} else {
+														res.send(201,{matches: null, contacts: null});
+													}
+
+												});
+
+										}).catch(function(err) {
+											console.log("Error inserting id's of contacts:", err);
+										});
+									}
+
+									if (!isVerified) {
+										//Get id's of all contacts
+										PG.knex.raw("SELECT contact_id FROM contacts WHERE normalized_phone_number IN " + phoneJSONtoSQL(allNormalizedPhoneNumbers)).then(function(result) {
+											console.log("Retrieved all contact id of the current user");
+											//Get initial matches of this user
+											var contact_ids = result.rows;
+											Matches.makeMatches(null,contact_ids, function(err, matches) {
+												if (err) {
+													res.send(501,"Error making matches: " + err.toString());
+												} else {
+													res.send(201,{matches: matches, contacts: contact_ids});
+												}
+
+											});
+
+										}).catch(function(err){
+											console.error("Error retrieving contact id's of the current user");
+										});
+									}
+
 								})
 								.catch(function(err) {
 									console.log("Error", err);
-									res.status(500).send("Error upserting contacts: " + err);
+									res.status(500).send("Error inserting new contacts: " + err);
 								});
-
 
 			}
 
