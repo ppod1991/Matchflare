@@ -76,7 +76,9 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 
 	if (!contact_id) {
 		var ids = idsJSONtoSQL(contact_ids);
-		sqlString = "SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender \
+		sqlString = "SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, \
+						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, \
+						c1.image_url first_image, c2.image_url second_image \
 						FROM contacts c1, contacts c2  \
 							WHERE c1.contact_id IN \
 								" + ids + " \
