@@ -105,7 +105,6 @@ exports.processContacts = function(req, res) {
 													} else {
 														res.send(201,{matches: null, contacts: null});
 													}
-
 												});
 
 										}).catch(function(err) {

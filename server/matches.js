@@ -89,7 +89,7 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.contact_id != c2.contact_id \
 							AND c1.contact_id != ? \
 							AND c2.contact_id != ? \
-						ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30"
+						ORDER BY pair_score(c1,c2) DESC LIMIT 30"
 		parameterArray = [0,0];
 	}
 	else {
@@ -108,7 +108,7 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.contact_id != c2.contact_id \
 							AND c1.contact_id != ? \
 							AND c2.contact_id != ? \
-						ORDER BY (random()*0.5+1) * (matchflare_score(c1)) DESC LIMIT 30)) WHERE contact_id = ? RETURNING matches"
+						ORDER BY pair_score(c1,c2) DESC LIMIT 30)) WHERE contact_id = ? RETURNING matches"
 		parameterArray = [contact_id,contact_id,contact_id,contact_id, contact_id];
 	};
 	
@@ -146,7 +146,7 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 
 exports.getMatches = function (req, res) {
 	var contact_id;
-	if (req.query.contact_id) {
+	if (req.query.contact_id && req.query.contact_id != 0) {
 		contact_id = req.query.contact_id;
 	}
 	

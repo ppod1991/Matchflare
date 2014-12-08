@@ -1,6 +1,8 @@
 var PG = require('./knex');
 var Phone = require('libphonenumber');
 var notify = require('./notify');
+var _ = require('lodash');
+var Matches = require('./matches');
 
 exports.sendVerificationSMS = function(req, res) {
 
@@ -125,7 +127,7 @@ exports.verifyVerificationSMS = function(req, res) {
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;
                         update.zipcode = req.body.zipcode;
-
+                        update.contacts = _.pluck(req.body.contacts,'contact_id');
                         update.device_id = device_id;
                         update.access_token = access_token;
 
@@ -136,6 +138,12 @@ exports.verifyVerificationSMS = function(req, res) {
                                 console.log("Successfully inserted contact with verified info");
                                 update.contact_id = results[0];
                                 res.send(201, update); //Send back access token
+
+                                Matches.makeMatches(update.contact_id,null, function(err) {
+                                    console.log("New matches made!");
+                                    
+                                });
+
                             }).catch(function(err) {
                                 console.error("Error inserted contact with verified info", err);
                                 res.send(501,err);
@@ -147,6 +155,12 @@ exports.verifyVerificationSMS = function(req, res) {
                                 console.log("Successfully updated contact with verified info");
                                 update.contact_id = contact.contact_id;
                                 res.send(201, update); //Send back access token
+
+                                Matches.makeMatches(update.contact_id,null, function(err) {
+                                    console.log("New matches made!");
+                                    
+                                });
+
                             }).catch(function(err) {
                                 console.error("Error updating contact with verified info", err);
                                 res.send(501,err);
