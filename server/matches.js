@@ -116,8 +116,8 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
    			
    			console.log("Result of making matches:", JSON.stringify(result.rows));
    			if (contact_id) {
-   				//Set new matches for the current user (if verified)
    				callback(null,null);
+
    			}
    			else {
    				//just return match types...
@@ -146,7 +146,8 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 
 exports.getMatches = function (req, res) {
 	var contact_id;
-	if (req.query.contact_id && req.query.contact_id != 0) {
+	var second_call = req.second_call; //Variable to check if getMatches has been called before...
+	if (req.query.contact_id && req.query.contact_id !== 0) {
 		contact_id = req.query.contact_id;
 	}
 	
@@ -160,17 +161,32 @@ exports.getMatches = function (req, res) {
 						 INNER JOIN contacts c2 ON c2.contact_id = (matchList.singleMatch).second_matchee_contact_id;",[contact_id,contact_id])
 		.then(function(result) {
 
+
 			var matches = exports.rowsToObjects(result.rows, function(err, results) {
 				if(err) {
 					throw err;
 				}
 				else {
-					res.send(201,results);
-					exports.makeMatches(contact_id,null,function(err) {
-						if (err) {
-							console.error("Error making new matches", err);
-						}
-					});
+					if (results.length > 0) { //If there are some matches, then send results before making new ones...
+						res.send(201,results);
+					}
+					
+					if (results.length === 0 && second_call === true) {  //IF getMatches has been called a second time...
+						res.send(501,"No Matches Could be Made");
+					}
+					else {
+						exports.makeMatches(contact_id,null,function(err) {
+
+							if (err) {
+								console.error("Error making new matches", err);
+							}
+							else {
+								req.second_call = true;
+								exports.getMatches(req,res);
+							}
+						});
+					}
+
 				}
 			});
 
