@@ -155,7 +155,9 @@ exports.getMatches = function (req, res) {
 
 	if (contact_id) {
 		PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, \
-						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, ?::integer matcher_contact_id \
+						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, \
+						c1.image_url first_image, c2.image_url second_image, \
+						?::integer matcher_contact_id \
 						 FROM (SELECT unnest(matches) AS singleMatch FROM contacts WHERE contact_id=?) matchList \
 						 INNER JOIN contacts c1 ON c1.contact_id = (matchList.singleMatch).first_matchee_contact_id \
 						 INNER JOIN contacts c2 ON c2.contact_id = (matchList.singleMatch).second_matchee_contact_id;",[contact_id,contact_id])
