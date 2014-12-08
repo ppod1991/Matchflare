@@ -127,7 +127,7 @@ exports.verifyVerificationSMS = function(req, res) {
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;
                         update.zipcode = req.body.zipcode;
-                        update.contacts = _.pluck(req.body.contacts,'contact_id');
+                        update.contacts = _.pluck(req.body.contact_objects,'contact_id');
                         update.device_id = device_id;
                         update.access_token = access_token;
 
@@ -158,7 +158,7 @@ exports.verifyVerificationSMS = function(req, res) {
 
                                 Matches.makeMatches(update.contact_id,null, function(err) {
                                     console.log("New matches made!");
-                                    
+
                                 });
 
                             }).catch(function(err) {

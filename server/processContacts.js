@@ -103,7 +103,7 @@ exports.processContacts = function(req, res) {
 													if (err) {
 														res.send(501,"Error making new matches: " + err.toString());
 													} else {
-														res.send(201,{matches: null, contacts: null});
+														res.send(201,{matches: null, contact_objects: null});
 													}
 												});
 
@@ -122,7 +122,7 @@ exports.processContacts = function(req, res) {
 												if (err) {
 													res.send(501,"Error making matches: " + err.toString());
 												} else {
-													res.send(201,{matches: matches, contacts: contact_ids});
+													res.send(201,{matches: matches, contact_objects: contact_ids});
 												}
 
 											});
