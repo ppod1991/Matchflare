@@ -10,6 +10,7 @@ var matches = require('./server/matches');
 var gcm = require('./server/gcm');
 var notify = require('./server/notify');
 var chat = require('./server/chat');
+var contact = require('./server/contact');
 var authentication = require('./server/authentication');
 var WebSocketServer = require('ws').Server;
 var _ = require('lodash');
@@ -64,6 +65,7 @@ app.post('/getMatches',matches.getMatches);
 
 app.get('/pictureURL',authentication.getPicture);
 
+app.get('/getScore',contact.getMatchflareScore);
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation
