@@ -4,6 +4,27 @@ var notify = require('./notify');
 var _ = require('lodash');
 var Matches = require('./matches');
 
+exports.getPicture = function(req, res) {
+    var rawPhoneNumber = req.query.phone_number;
+    Phone.e164(rawPhoneNumber,'US', function(error, result) {
+        if (error) {
+            res.send(501,"Invalid phone number: " + error.toString());
+        }
+        else {
+            PG.knex('contacts').select('image_url','verified').where('normalized_phone_number',result).then(function(result) {
+                if (result[0].verified) {
+                    res.send(201,{response:result[0].image_url});
+                }
+                else {
+                    res.send(501,"This user does not have a verified profile picture");
+                }
+                
+            }).catch(function(err) {
+                console.error("Error retrieving image for phone: " + rawPhoneNumber, err.toString());
+            });
+        }
+};
+
 exports.sendVerificationSMS = function(req, res) {
 
     var rawPhoneNumber = req.query.phone_number;
