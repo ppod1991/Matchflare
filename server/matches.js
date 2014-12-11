@@ -326,10 +326,13 @@ exports.addMatchResult = function(req, res) {
 
 					
 					//Insert new match
-					PG.knex('chats').insert({},'chat_id').then(function(result) {
-						var chat_id = result[0];
+					PG.knex('chats').insert([{},{},{}],'chat_id').then(function(result) {
 
-						PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, chat_id: chat_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous},'pair_id').then(function(result) {
+						var chat_id = result[0];
+						var first_matcher_chat_id = result[1];
+						var second_matcher_chat_id = result[2];
+
+						PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, chat_id: chat_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_matcher_chat_id: first_matcher_chat_id, second_matcher_chat_id: second_matcher_chat_id},'pair_id').then(function(result) {
 							var pair_id = result[0];
 
 							// var recipientGenderPronoun = 'UNKNOWN';
