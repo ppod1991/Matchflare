@@ -269,7 +269,7 @@ exports.addMatchResult = function(req, res) {
 			if (matcher_contact_id) {
 				PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[eloUpdateValue,matcher_contact_id]).then(function(result) {
 					
-					res.send(201,result.rows[0]);
+					res.send(201,result.rows[0].matchflare_score);
 					console.log("Successfully updated matchflare score", JSON.stringify(result.rows));
 				}).catch(function(err) {
 					console.error("Error in updating the matchflare score", err);
@@ -376,7 +376,7 @@ exports.addMatchResult = function(req, res) {
 							notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
 
 							PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[matchUpdateValue,matcher_contact_id]).then(function(result) {
-								res.send(201,result.rows[0]);
+								res.send(201,result.rows[0].matchflare_score);
 								console.log("Successfully updated matchflare score", JSON.stringify(result.rows));
 							}).catch(function(err) {
 								console.error("Error in updating the matchflare score", err);
