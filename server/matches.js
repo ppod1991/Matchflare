@@ -244,6 +244,7 @@ exports.getMatches = function (req, res) {
 // };
 
 exports.addMatchResult = function(req, res) {
+
 	var match_status = req.body.match_status;
 	var first_contact_id = req.body.first_matchee.contact_id;
 	var second_contact_id = req.body.second_matchee.contact_id;
@@ -251,7 +252,7 @@ exports.addMatchResult = function(req, res) {
 	var matcher_contact_id = req.body.matcher.contact_id;
 
 	if (match_status === "FIRST_CONTACT_WINS" || match_status === "SECOND_CONTACT_WINS") { //If one of the contacts chosen rather than matched...
-		
+		var eloUpdateValue = 5;
 		var orderArray;
 
 		if (match_status === "FIRST_CONTACT_WINS") {
@@ -260,14 +261,29 @@ exports.addMatchResult = function(req, res) {
 		else {
 			orderArray = [second_contact_id, first_contact_id];
 		}
-			
+		
+
 		PG.knex.raw("SELECT update_elo_score(?,?)",orderArray).then(function(result) {
-			res.send(201,{response:"Elo scores updated"});
 			console.log({response:"Elo scores updated"});
+
+			if (matcher_contact_id) {
+				PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[eloUpdateValue,matcher_contact_id]).then(function(result) {
+					res.send(201,result[0]);
+					console.log("Successfully updated matchflare score");
+				}).catch(function(err) {
+					console.error("Error in updating the matchflare score", err);
+					res.send(501,"Error updating matchflare score: " + err);
+				});
+			}
+			else {
+				res.send(201,0);
+			}
+
 		}).catch(function(err) {
 			console.error("Error updating elo score");
-			res.send(501,"Error updating elo score: " + err);
+			res.send(501,'Error updating elo score');
 		});
+
 
 		//notify.sendNotification(90,{text_message:"ELO SCORES WOOT"});
 		
@@ -275,6 +291,7 @@ exports.addMatchResult = function(req, res) {
 	else if (match_status === "MATCHED") {
 		//If matched...
 
+		var matchUpdateValue = 10;
 		//Determine who to send first text to...
 		PG.knex('contacts').select('guessed_gender','guessed_full_name').where('contact_id',matcher_contact_id).then(function(result) {
 				var matcher = result[0];
@@ -322,9 +339,6 @@ exports.addMatchResult = function(req, res) {
 						}
 					}
 
-
-
-					
 					//Insert new match
 					PG.knex('chats').insert([{},{},{}],'chat_id').then(function(result) {
 
@@ -359,7 +373,15 @@ exports.addMatchResult = function(req, res) {
 							// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 							console.log("Successfully inserted match with pair_id: ", result);
 							notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
-							res.send(201);
+
+							PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[matchUpdateValue,matcher_contact_id]).then(function(result) {
+								res.send(201,result[0]);
+								console.log("Successfully updated matchflare score");
+							}).catch(function(err) {
+								console.error("Error in updating the matchflare score", err);
+								res.send(501,"Error updating matchflare score: " + err);
+							});
+
 						}).catch(function(err) {
 							console.error("Error inserting match:", err);
 							res.send(501,err);
@@ -379,6 +401,7 @@ exports.addMatchResult = function(req, res) {
 				
 			}).catch(function(err) {
 				console.error("Error getting gender of the matcher: ", err);
+				res.send(501, err);
 			});
 
 		
