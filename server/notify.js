@@ -177,7 +177,7 @@ exports.getNotificationLists = function(req, res) {
 		objectToReturn.notifications = result;
 
 		PG.knex.raw("SELECT chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
-					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, matcher.guessed_gender AS matcher_gender, \
 					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
 					first_contact_status, second_contact_status, is_anonymous, first_matcher_chat_id, second_matcher_chat_id \
 					FROM pairs \
@@ -198,7 +198,7 @@ exports.getNotificationLists = function(req, res) {
 					objectToReturn.pending_matches = pending_matches;
 
 					PG.knex.raw("SELECT chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
-						matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+						matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, matcher.guessed_gender AS matcher_gender, \
 						matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, \
 						first_contact_status, second_contact_status, is_anonymous, first_matcher_chat_id, second_matcher_chat_id \
 						FROM pairs \
