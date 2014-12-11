@@ -22,11 +22,11 @@ exports.getName = function(contact_id, callback) {
 };
 
 exports.addMessage = function(chatMessage, callback) {
-    PG.knex('messages').insert({content: chatMessage.content, chat_id: chatMessage.chat_id, sender_contact_id: chatMessage.sender_contact_id}).then(function(result) {
+    PG.knex('messages').insert({content: chatMessage.content, chat_id: chatMessage.chat_id, sender_contact_id: chatMessage.sender_contact_id},'created_at').then(function(result) {
         console.log("Successfully posted new chat message", chatMessage.content);
-        callback();
+        callback(result[0],null);
     }).catch(function(err) {
         console.error("Error posting new chat message", err);
-        callback(err);
+        callback(null,err);
     });
 }
