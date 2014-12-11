@@ -18,11 +18,12 @@ exports.getPicture = function(req, res) {
                 else {
                     res.send(501,"This user does not have a verified profile picture");
                 }
-                
+
             }).catch(function(err) {
                 console.error("Error retrieving image for phone: " + rawPhoneNumber, err.toString());
             });
         }
+    });
 };
 
 exports.sendVerificationSMS = function(req, res) {
