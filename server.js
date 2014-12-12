@@ -98,6 +98,7 @@ wss.on("connection", function(ws) {
 		//Check to see if the message is setting the chat ID
 		if (receivedData.type === 'set_chat_id') {
 			ws.chat_id = receivedData.chat_id;
+			ws.contact_id = receivedData.sender_contact_id;
 			console.log("Chat ID Set to: " + ws.chat_id);
 
 			//Send the current socket the chat history
@@ -118,10 +119,11 @@ wss.on("connection", function(ws) {
 
 					if (!err) {
 						receivedData.created_at = created_at;
+
+						//NEED TO IMPLEMENT -- NOTIFY RECIPIENTS WHO ARE NOT SIGNED IN! (PUSH NOTIFICATION/SMS)
 						_(activeConnections).filter(function (socket) {
 							return socket.chat_id === ws.chat_id;
 						}).forEach(function (socket) {
-
 							socket.send(JSON.stringify(receivedData));
 						});
 					}
@@ -138,7 +140,8 @@ wss.on("connection", function(ws) {
 	});
 
 	ws.on("close", function() {
-		console.log("Websocket connection close");
+		console.log("Websocket connection close -- updating last seen at");
+		chat.setLastSeenAt(ws.chat_id,ws.contact_id);
 		delete activeConnections[ws.myIndex];
 	});
 

@@ -341,7 +341,8 @@ exports.addMatchResult = function(req, res) {
 					}
 
 					//Insert new match
-					PG.knex('chats').insert([{},{},{}],'chat_id').then(function(result) {
+
+					PG.knex('chats').insert([{matcher_contact_id:matcher_contact_id, first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id},{matcher_contact_id:matcher_contact_id, first_contact_id: firstRecipient.contact_id},{matcher_contact_id:matcher_contact_id, second_contact_id: secondRecipient.contact_id}],'chat_id').then(function(result) {
 
 						var chat_id = result[0];
 						var first_matcher_chat_id = result[1];
