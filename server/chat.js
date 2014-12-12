@@ -35,7 +35,7 @@ exports.setLastSeenAt = function(chat_id,contact_id) {
 
   if (chat_id > 0 && contact_id > 0) {  //If valid contact id and chat id was set
       //Update the 'seen at' column for the correct participant in the chat
-      PG.knex.raw("
+      PG.knex.raw(" \
         UPDATE chats \
         SET     first_seen_at = CASE WHEN first_contact_id = ? THEN timezone('utc'::text, now()) ELSE first_seen_at END, \
           second_seen_at = CASE WHEN second_contact_id = ? THEN timezone('utc'::text, now()) ELSE second_seen_at END, \
