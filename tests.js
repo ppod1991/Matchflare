@@ -45,22 +45,24 @@ client = request.newClient('http://localhost:5000/');
 
 //Test websocket connection
 
-//var WebSocket = require('ws');
-//////var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-//var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
-//
-//testSocket.on('open', function(event) {
-//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: 6, sender_contact_id:92}));
-//});
-//
-//testSocket.on('message',function(message) {
-//  console.log("Received message", message);
-//});
-//
-//
-//var send = function(message) {
-//    testSocket.send(JSON.stringify({chat_id:6, sender_contact_id: 92, content: message, type:'message'}));
-//  }
+var WebSocket = require('ws');
+var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+
+var chat_id = 450;
+var sender_contact_id = 173;
+testSocket.on('open', function(event) {
+ testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id}));
+});
+
+testSocket.on('message',function(message) {
+ console.log("Received message", message);
+});
+
+
+var send = function(message) {
+   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+ }
 
 
 //Test authentication and SMS verification
@@ -76,22 +78,22 @@ client = request.newClient('http://localhost:5000/');
 // });
 
 //Test the processing of contacts
-var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
+// var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
 
-// client.post('/processContacts?contact_id=90',data, function(err,res,body) {
+// // client.post('/processContacts?contact_id=90',data, function(err,res,body) {
+// // 	if (err)
+// // 		console.error("Error processing contacts: ", err.toString());
+// // 	else {
+// // 		console.log("Processing contacts returned: ", JSON.stringify(body));
+// // 	}
+// // });
+
+// var data = {contacts:[{contact_id: 90},{contact_id: 91},{contact_id: 92},{contact_id: 93}]};
+
+// client.post('/getMatches',data,function(err, res,body) {
 // 	if (err)
 // 		console.error("Error processing contacts: ", err.toString());
 // 	else {
-// 		console.log("Processing contacts returned: ", JSON.stringify(body));
+// 		console.log("Matches: ", JSON.stringify(body));
 // 	}
 // });
-
-var data = {contacts:[{contact_id: 90},{contact_id: 91},{contact_id: 92},{contact_id: 93}]};
-
-client.post('/getMatches',data,function(err, res,body) {
-	if (err)
-		console.error("Error processing contacts: ", err.toString());
-	else {
-		console.log("Matches: ", JSON.stringify(body));
-	}
-});

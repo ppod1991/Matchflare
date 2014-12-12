@@ -119,13 +119,15 @@ wss.on("connection", function(ws) {
 
 					if (!err) {
 						receivedData.created_at = created_at;
-
+						var sentTo = [];
 						//NEED TO IMPLEMENT -- NOTIFY RECIPIENTS WHO ARE NOT SIGNED IN! (PUSH NOTIFICATION/SMS)
 						_(activeConnections).filter(function (socket) {
 							return socket.chat_id === ws.chat_id;
 						}).forEach(function (socket) {
 							socket.send(JSON.stringify(receivedData));
+							sentTo.push(socket.contact_id);
 						});
+						chat.notifyAway(sentTo,ws.chat_id,ws.contact_id,receivedData.content);
 					}
 					else {
 						ws.send(JSON.stringify({error: err}));
