@@ -284,6 +284,27 @@ exports.getNotificationLists = function(req, res) {
 	});
 };
 
+exports.hasUnreadMessages = function(req, res) {
+	var chat_id = req.query.chat_id;
+	var contact_id = req.query.contact_id;
+
+	PG.knex.raw("SELECT \
+		CASE 	 \
+			WHEN c.matcher_contact_id = ? THEN c.matcher_seen_at - last_time < interval '0 seconds' \
+			WHEN c.first_contact_id = ? THEN c.first_seen_at - last_time < interval '0 seconds' \
+			WHEN c.second_contact_id = ? THEN c.second_seen_at - last_time < interval '0 seconds' \
+	 	END has_unseen \
+	 FROM (SELECT *,(SELECT max(messages.created_at) AS last_time FROM messages WHERE messages.chat_id = ?) FROM chats WHERE chat_id = ?) c",[contact_id,contact_id,contact_id,chat_id,chat_id]).then(function(result) {
+
+	 	console.log("Successfully checked if unread: ",result[0].has_unseen);
+	 	res.send(201,result[0].has_unseen);
+	 }).catch(function(err) {
+	 	console.error("Error checking unread status of this chat",JSON.stringify(err));
+	 	res.send(501,err.toString());
+	 });
+};
+
+
 exports.markAsSeen = function(req, res) {
 	var notification_id = req.query.notification_id;
 	PG.knex.raw("UPDATE notifications SET seen=TRUE, seen_at=timezone('utc'::text, now()) WHERE notification_id = ?", notification_id).then(function(result) {

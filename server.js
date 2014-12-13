@@ -66,6 +66,9 @@ app.post('/getMatches',matches.getMatches);
 app.get('/pictureURL',authentication.getPicture);
 
 app.get('/getScore',contact.getMatchflareScore);
+
+app.get('/hasUnread',notify.hasUnreadMessages);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

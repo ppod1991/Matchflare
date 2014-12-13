@@ -49,8 +49,8 @@ var WebSocket = require('ws');
 //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
 var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-var chat_id = 450;
-var sender_contact_id = 173;
+var chat_id = 459;
+var sender_contact_id = 159;
 testSocket.on('open', function(event) {
  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id}));
 });
