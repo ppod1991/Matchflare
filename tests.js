@@ -33,21 +33,21 @@ client = request.newClient('http://localhost:5000/');
 //    console.log("GET MATCHES", JSON.stringify(body));
 //});
 
-//client.get('/pendingMatches?contact_id=90',function(err, res, body) {
+// client.get('/pendingMatches?contact_id=262',function(err, res, body) {
 //    console.log("GET PENDING MATCHES", JSON.stringify(body));
-//});
+// });
 
 
 //Test getNotificationLists
-//client.get('/notificationLists?contact_id=90',function(err, res, body) {
-//    console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
-//});
+client.get('/notificationLists?contact_id=90',function(err, res, body) {
+   console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
+});
 
 //Test websocket connection
 
 var WebSocket = require('ws');
-var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
 var chat_id = 450;
 var sender_contact_id = 173;

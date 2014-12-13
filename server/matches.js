@@ -541,6 +541,7 @@ var conversion = function(match) {
 		matcher:{guessed_full_name: match.matcher_full_name,image_url:match.matcher_image, contact_id:match.matcher_contact_id, guessed_gender: match.matcher_gender},
 		pair_id: match.pair_id,
 		chat_id: match.chat_id,
+		has_unseen: match.has_unseen,
 		is_anonymous: match.is_anonymous,
 		created_at: match.created_at
 	};
