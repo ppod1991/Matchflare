@@ -11,10 +11,11 @@ exports.sendSMS = function(phone_number, message, ignoreBlock) {
 			console.log("Invalid phone number. Can not send SMS");
 		}
 		else {
-			PG.knex('blocked_phone_numbers').count('blocked_phone_number_id').where('normalized_phone_number',phone_number).then(function(count) {
-				if (ignoreBlock || count < 1) {
+			PG.knex('blocked_phone_numbers').count('blocked_phone_number_id').where('normalized_phone_number',normalized_phone_number).then(function(result) {
+				console.log("Count:", result[0].count);
+				if (ignoreBlock || result[0].count < 1) {
 					//Phone number not found in 'blocked phone number list'...
-					var data = {text: message, api_key: '54de0318', api_secret: 'd21d277d', from: '12069396519', to: phone_number.replace(/\+/g, '')};
+					var data = {text: message, api_key: '54de0318', api_secret: 'd21d277d', from: '12069396519', to: normalized_phone_number.replace(/\+/g, '')};
 					console.log("Sending SMS with data:", JSON.stringify(data));
 					nexmo.post('/sms/json', data, function(err, res, body) {
 					 	console.log("Sent text message", JSON.stringify(body));
@@ -95,7 +96,7 @@ exports.receiveSMS = function(req, res) {
 						}
 						else {
 							console.log("Successfully resubscribed.");
-							exports.sendSMS(normalized_phone_number,"You're back! You'll continue to receive matches! Get more matches and match your own friends by getting the app at matchflare.com/app",false);
+							exports.sendSMS(normalized_phone_number,"You're back! You'll continue to receive matches! Get more matches and match your own friends using the app at matchflare.com/app",false);
 						}
 						
 					}).catch(function(err) {
@@ -112,7 +113,8 @@ exports.receiveSMS = function(req, res) {
 					console.log("Could not parse phone number because: " + JSON.stringify(err));
 				}
 				else {
-					PG.knex('contacts').count('contact_id').where('normalized_phone_number',normalized_phone_number).then(function(count) {
+					PG.knex('contacts').count('contact_id').where('normalized_phone_number',normalized_phone_number).then(function(result) {
+						var count = result[0].count;
 						if (count < 1) {
 							//Phone number not registered, add to do not contact list!
 							PG.knex('blocked_phone_numbers').insert({normalized_phone_number:normalized_phone_number}).then(function(result) {
@@ -122,7 +124,7 @@ exports.receiveSMS = function(req, res) {
 							});
 						}
 						else {
-							console.log("We don't this incoming messages from an existing user");
+							console.log("We don't do anything to this incoming message from an existing user");
 						}
 					}).catch(function(err) {
 						console.log("Could not check if this phone number was in our contacts list.",JSON.stringify(err));
@@ -132,5 +134,7 @@ exports.receiveSMS = function(req, res) {
 		};
 	}
 
-	res.send(200);
+	res.send(200,{});
 }
+
+exports.sendSMS("6098510053",'woohoo',false);

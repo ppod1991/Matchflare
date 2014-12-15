@@ -12,5 +12,12 @@ exports.contains = function(originalString, containsThis) {
 }
 
 exports.normalizedPhoneNumber = function(rawPhoneNumber, callback) {
-	Phone.e164(contact.raw_phone_number,'US', callback(error,result));
+	Phone.e164(rawPhoneNumber,'US', function(error,result) {
+		if (error) {
+			callback(error,null);
+		}
+		else {
+			callback(null,result);
+		}
+	});
 };

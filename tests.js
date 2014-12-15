@@ -91,18 +91,29 @@ client = request.newClient('http://localhost:5000/');
 // var data = {contacts:[{contact_id: 90},{contact_id: 91},{contact_id: 92},{contact_id: 93}]};
 
 // client.post('/getMatches',data,function(err, res,body) {
-// 	if (err)
-// 		console.error("Error processing contacts: ", err.toString());
-// 	else {
-// 		console.log("Matches: ", JSON.stringify(body));
-// 	}
+	// if (err)
+	// 	console.error("Error processing contacts: ", err.toString());
+	// else {
+	// 	console.log("Matches: ", JSON.stringify(body));
+	// }
 // });
 
 //Tests string utils
-var utils = require('./server/utils');
-console.log("1. Should be true: " + (utils.contains("STop","stop")==true));
-console.log("2. Should be true: " + (utils.contains("Snop","stop")==false));
-console.log("3. Should be true: " + (utils.contains("STopppp","stop")==true));
-console.log("4. Should be true: " + (utils.contains(" STop   stop","stop")==true));
-console.log("5. Should be true: " + (utils.contains("STop","stop")==true));
-console.log("5. Should be true: " + (utils.contains("asdfasdfSTop","stop")==true));
+// var utils = require('./server/utils');
+// console.log("1. Should be true: " + (utils.contains("STop","stop")==true));
+// console.log("2. Should be true: " + (utils.contains("Snop","stop")==false));
+// console.log("3. Should be true: " + (utils.contains("STopppp","stop")==true));
+// console.log("4. Should be true: " + (utils.contains(" STop   stop","stop")==true));
+// console.log("5. Should be true: " + (utils.contains("STop","stop")==true));
+// console.log("5. Should be true: " + (utils.contains("asdfasdfSTop","stop")==true));
+
+//Test Inbound SMS/Unsubscribing
+
+var messageText = encodeURIComponent('   undo');
+client.get('/receiveSMS?msisdn=16098510053&to=12069396519&messageId=020000004A2C43FC&text=' + messageText + '&type=text&keyword=TEST%21&message-timestamp=2014-12-15+20%3A34%3A30',function(err, res, body) {
+   if (err)
+   	console.error("Error Unsubscribing: ", err.toString());
+   else {
+   	console.log("Response: ", JSON.stringify(body));
+   }
+});
