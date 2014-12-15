@@ -35,7 +35,7 @@ exports.receiveSMS = function(req, res) {
 	var message_id = req.query.messageId;
 	var message_timestamp = req.query.message_timestamp;
 	var type = req.query.type;
-	if (text === 'type') {
+	if (type === 'text') {
 		var text = req.query.text;
 			console.log("Received SMS from: " + phone_number + " at " + message_timestamp + " saying: " + text);
 
