@@ -92,6 +92,8 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.contact_id != c2.contact_id \
 							AND c1.contact_id != ? \
 							AND c2.contact_id != ? \
+							AND NOT c1.blocked_matches \
+							AND NOT c2.blocked_matches \
 						ORDER BY pair_score(c1,c2) DESC LIMIT 30"
 		parameterArray = [0,0];
 	}
@@ -111,8 +113,14 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.contact_id != c2.contact_id \
 							AND c1.contact_id != ? \
 							AND c2.contact_id != ? \
+							AND NOT c1.blocked_matches \
+							AND NOT c2.blocked_matches \
+							AND ? NOT IN  \
+								(SELECT unnest(c1.blocked_contacts)) \
+							AND ? NOT IN  \
+								(SELECT unnest(c2.blocked_contacts)) \
 						ORDER BY pair_score(c1,c2) DESC LIMIT 30)) WHERE contact_id = ? RETURNING matches"
-		parameterArray = [contact_id,contact_id,contact_id,contact_id, contact_id];
+		parameterArray = [contact_id,contact_id,contact_id,contact_id, contact_id, contact_id, contact_id];
 	};
 	
 	PG.knex.raw(sqlString,parameterArray).then(function(result) {
@@ -252,7 +260,7 @@ exports.addMatchResult = function(req, res) {
 	var matcher_contact_id = req.body.matcher.contact_id;
 
 	if (match_status === "FIRST_CONTACT_WINS" || match_status === "SECOND_CONTACT_WINS") { //If one of the contacts chosen rather than matched...
-		var eloUpdateValue = 5;
+		var eloUpdateValue = 1;
 		var orderArray;
 
 		if (match_status === "FIRST_CONTACT_WINS") {
@@ -308,92 +316,99 @@ exports.addMatchResult = function(req, res) {
 
 					var contactA = result[0];
 					var contactB = result[1];
-					var firstRecipient;
-					var secondRecipient;
 
-					if (contactA.verified && !contactB.verified) {  //Send to un-verified contact first...
-						firstRecipient = contactB;
-						secondRecipient = contactA;
+					//If either contact blocked new matches or this specific matcher, then do not make the match
+					if (contactA.blocked_matches || contactB.blocked_matches || _.contains(contactA.blocked_contacts,matcher.contact_id) || _.contains(contactB.blocked_contacts,matcher.contact_id))  {
+						console.log("One of the contact blocked this match--cannot make the match");
+						res.send(501,"One of these contacts blocked new matches. Sorry!");
 					}
-					else if (!contactA.verified && contactB.verified) {
-						firstRecipient = contactA;
-						secondRecipient = contactB;
-					}
-					else {  //If both or neither are verified, send first message to contact with higher elo score...
-						if (contactA.elo_score > contactB.elo_score) {
-							firstRecipient = contactA;
-							secondRecipient = contactB;
-						}
-						else if (contactA.elo_score < contactB.elo_score) {
+					else {
+						var firstRecipient;
+						var secondRecipient;
+
+						if (contactA.verified && !contactB.verified) {  //Send to un-verified contact first...
 							firstRecipient = contactB;
 							secondRecipient = contactA;
 						}
-						else { //If equal elo score, send to assumed male
-							if (contactA.guessed_gender === "MALE") {
+						else if (!contactA.verified && contactB.verified) {
+							firstRecipient = contactA;
+							secondRecipient = contactB;
+						}
+						else {  //If both or neither are verified, send first message to contact with higher elo score...
+							if (contactA.elo_score > contactB.elo_score) {
 								firstRecipient = contactA;
 								secondRecipient = contactB;
 							}
-							else {
+							else if (contactA.elo_score < contactB.elo_score) {
 								firstRecipient = contactB;
 								secondRecipient = contactA;
 							}
+							else { //If equal elo score, send to assumed male
+								if (contactA.guessed_gender === "MALE") {
+									firstRecipient = contactA;
+									secondRecipient = contactB;
+								}
+								else {
+									firstRecipient = contactB;
+									secondRecipient = contactA;
+								}
+							}
 						}
-					}
 
-					//Insert new match
+						//Insert new match
 
-					PG.knex('chats').insert([{first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id},{matcher_contact_id:matcher_contact_id, first_contact_id: firstRecipient.contact_id},{matcher_contact_id:matcher_contact_id, second_contact_id: secondRecipient.contact_id}],'chat_id').then(function(result) {
+						PG.knex('chats').insert([{first_contact_id: firstRecipient.contact_id, second_contact_id: secondRecipient.contact_id},{matcher_contact_id:matcher_contact_id, first_contact_id: firstRecipient.contact_id},{matcher_contact_id:matcher_contact_id, second_contact_id: secondRecipient.contact_id}],'chat_id').then(function(result) {
 
-						var chat_id = result[0];
-						var first_matcher_chat_id = result[1];
-						var second_matcher_chat_id = result[2];
+							var chat_id = result[0];
+							var first_matcher_chat_id = result[1];
+							var second_matcher_chat_id = result[2];
 
-						PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, chat_id: chat_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_matcher_chat_id: first_matcher_chat_id, second_matcher_chat_id: second_matcher_chat_id},'pair_id').then(function(result) {
-							var pair_id = result[0];
+							PG.knex('pairs').insert({first_contact_id: firstRecipient.contact_id, chat_id: chat_id, second_contact_id: secondRecipient.contact_id, matcher_contact_id: matcher_contact_id, is_anonymous: is_anonymous, first_matcher_chat_id: first_matcher_chat_id, second_matcher_chat_id: second_matcher_chat_id},'pair_id').then(function(result) {
+								var pair_id = result[0];
 
-							// var recipientGenderPronoun = 'UNKNOWN';
-							// if (secondRecipient.guessed_gender === "MALE") {
-							// 	recipientGenderPronoun = 'him';
-							// }
-							// else if (secondRecipient.guessed_gender === "FEMALE") {
-							// 	recipientGenderPronoun = 'her';
-							// }
+								// var recipientGenderPronoun = 'UNKNOWN';
+								// if (secondRecipient.guessed_gender === "MALE") {
+								// 	recipientGenderPronoun = 'him';
+								// }
+								// else if (secondRecipient.guessed_gender === "FEMALE") {
+								// 	recipientGenderPronoun = 'her';
+								// }
 
-							// var text_message;
-							// var push_message;
-							// if (is_anonymous) {
-							// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-							// 	push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + ".";
-							// }
-							// else {
-							// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
-							// 	push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + ".";
+								// var text_message;
+								// var push_message;
+								// if (is_anonymous) {
+								// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+								// 	push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + ".";
+								// }
+								// else {
+								// 	text_message = firstRecipient.guessed_full_name.split(" ")[0] + "! " + matcher_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + secondRecipient.guessed_full_name + ".";
+								// 	push_message = matcher_full_name + " matched you with " + matcherGenderPronoun + " friend, " + secondRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + ".";
 
-							// }
+								// }
 
-							// var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
-							// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
-							console.log("Successfully inserted match with pair_id: ", result);
-							notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
+								// var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
+								// text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
+								console.log("Successfully inserted match with pair_id: ", result);
+								notify.newMatchNotification(firstRecipient, secondRecipient, matcher, is_anonymous, pair_id, 'first');
 
-							PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[matchUpdateValue,matcher_contact_id]).then(function(result) {
-								res.send(201,result.rows[0].matchflare_score);
-								console.log("Successfully updated matchflare score", JSON.stringify(result.rows));
+								PG.knex.raw('UPDATE contacts SET matchflare_score = matchflare_score + ? WHERE contact_id = ? returning matchflare_score;',[matchUpdateValue,matcher_contact_id]).then(function(result) {
+									res.send(201,result.rows[0].matchflare_score);
+									console.log("Successfully updated matchflare score", JSON.stringify(result.rows));
+								}).catch(function(err) {
+									console.error("Error in updating the matchflare score", err);
+									res.send(501,"Error updating matchflare score: " + err);
+								});
+
 							}).catch(function(err) {
-								console.error("Error in updating the matchflare score", err);
-								res.send(501,"Error updating matchflare score: " + err);
+								console.error("Error inserting match:", err);
+								res.send(501,err);
 							});
 
 						}).catch(function(err) {
-							console.error("Error inserting match:", err);
-							res.send(501,err);
+							console.error("Error inserting new chat", err);
 						});
 
-					}).catch(function(err) {
-						console.error("Error inserting new chat", err);
-					});
-
-
+					}
 
 				}).catch(function(err) {
 					console.error("Error getting matchee details", err);

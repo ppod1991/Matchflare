@@ -14,6 +14,7 @@ var contact = require('./server/contact');
 var authentication = require('./server/authentication');
 var WebSocketServer = require('ws').Server;
 var _ = require('lodash');
+var sms = require('./server/sms');
 
 app.use(logfmt.requestLogger());
 app.use(bodyParser.json());
@@ -68,6 +69,8 @@ app.get('/pictureURL',authentication.getPicture);
 app.get('/getScore',contact.getMatchflareScore);
 
 app.get('/hasUnread',notify.hasUnreadMessages);
+
+app.get('/receiveSMS',sms.receiveSMS);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 

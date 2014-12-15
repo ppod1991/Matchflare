@@ -5,11 +5,11 @@ client = request.newClient('http://localhost:5000/');
 
 
 //Test the creation of a new match and associated notifications
-//var data = {first_contact_id:90, second_contact_id:92, match_status:"MATCHED", matcher_contact_id:90, is_anonymous:false}
+// var data = {first_matchee:{contact_id:99},second_matchee:{contact_id:95},matcher:{contact_id:262}, match_status:"MATCHED", matcher_contact_id:262, is_anonymous:false}
 
-//client.post('/postMatch', data, function(err, res, body) {
+// client.post('/postMatch', data, function(err, res, body) {
 //  return console.log(res.statusCode);
-//});
+// });
 
 //Test ACCEPTING of a match
 //var data = {"decision":"ACCEPT","contact_id":90,"pair_id":90};
@@ -39,30 +39,30 @@ client = request.newClient('http://localhost:5000/');
 
 
 //Test getNotificationLists
-client.get('/notificationLists?contact_id=90',function(err, res, body) {
-   console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
-});
+// client.get('/notificationLists?contact_id=90',function(err, res, body) {
+//    console.log("GET NOTIFICATION LISTS", JSON.stringify(body));
+// });
 
 //Test websocket connection
 
-var WebSocket = require('ws');
-//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+// var WebSocket = require('ws');
+// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-var chat_id = 459;
-var sender_contact_id = 159;
-testSocket.on('open', function(event) {
- testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id}));
-});
+// var chat_id = 459;
+// var sender_contact_id = 159;
+// testSocket.on('open', function(event) {
+//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id}));
+// });
 
-testSocket.on('message',function(message) {
- console.log("Received message", message);
-});
+// testSocket.on('message',function(message) {
+//  console.log("Received message", message);
+// });
 
 
-var send = function(message) {
-   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
- }
+// var send = function(message) {
+//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+//  }
 
 
 //Test authentication and SMS verification
@@ -97,3 +97,12 @@ var send = function(message) {
 // 		console.log("Matches: ", JSON.stringify(body));
 // 	}
 // });
+
+//Tests string utils
+var utils = require('./server/utils');
+console.log("1. Should be true: " + (utils.contains("STop","stop")==true));
+console.log("2. Should be true: " + (utils.contains("Snop","stop")==false));
+console.log("3. Should be true: " + (utils.contains("STopppp","stop")==true));
+console.log("4. Should be true: " + (utils.contains(" STop   stop","stop")==true));
+console.log("5. Should be true: " + (utils.contains("STop","stop")==true));
+console.log("5. Should be true: " + (utils.contains("asdfasdfSTop","stop")==true));

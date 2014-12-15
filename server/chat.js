@@ -104,7 +104,7 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
             notification.chat_id = chat_id;
             notification.text_message = sender.guessed_full_name + " asked: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
             notification.push_message = sender.guessed_full_name + " asked: " + shortenedMessage + ". Tap to reply.";
-            notify.postNotification(match.matcher.contact_id,notification);
+            notify.postNotification(match.matcher.contact_id,notification,sender.contact_id);
           }
 
           if (result.rows[0].has_first && !(_.contains(sentTo,match.first_matchee.contact_id))) {  //If the first matchee is in the chat and not already notified...
@@ -128,7 +128,7 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
                 notification.text_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
                 notification.push_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Tap to reply.";
             }
-            notify.postNotification(match.first_matchee.contact_id,notification);
+            notify.postNotification(match.first_matchee.contact_id,notification,sender.contact_id);
           }
 
           if (result.rows[0].has_second && !(_.contains(sentTo,match.second_matchee.contact_id))) {  //If the second matchee is in the chat and not already notified...
@@ -152,7 +152,7 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
                 notification.text_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
                 notification.push_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Tap to reply.";
             }
-            notify.postNotification(match.second_matchee.contact_id,notification);
+            notify.postNotification(match.second_matchee.contact_id,notification,sender.contact_id);
           }
       }
       else {

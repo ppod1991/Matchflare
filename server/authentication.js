@@ -3,6 +3,7 @@ var Phone = require('libphonenumber');
 var notify = require('./notify');
 var _ = require('lodash');
 var Matches = require('./matches');
+var sms = require('./sms');
 
 exports.getPicture = function(req, res) {
     var rawPhoneNumber = req.query.phone_number;
@@ -64,7 +65,7 @@ exports.sendVerificationSMS = function(req, res) {
                 .then(function(results) {
                 console.log("Successfully inserted proposed phone number with verification info");
                 var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter " + insertObject.verification_code + " within the Matchflare app to start playing cupid!";
-                notify.sendSMS(insertObject.normalized_phone_number,messageToSend); 
+                sms.sendSMS(insertObject.normalized_phone_number,messageToSend); 
                 res.send(201, {response: "Successfully inserted proposed phone number"});
             }).catch(function(err) {
                 console.error("Error inserting proposed phone number with verification info", err);
