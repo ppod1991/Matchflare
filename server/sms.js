@@ -136,5 +136,3 @@ exports.receiveSMS = function(req, res) {
 
 	res.send(200,{});
 }
-
-exports.sendSMS("6098510053",'woohoo',false);
