@@ -24,3 +24,16 @@ exports.getContacts = function(contact_id,callback) {
 		callback(err,null);
 	});
 }
+
+exports.removeContact = function(req,res) {
+	var contact_id = req.query.contact_id;
+	var to_remove_contact_id = req.query.to_remove_contact_id;
+
+	PG.knex.raw("UPDATE contacts SET removed_contacts = array_append(removed_contacts, ?) where contact_id = ?",[to_remove_contact_id,contact_id]).then(function(result) {
+		console.log("Successfully added " + to_remove_contact_id + " to the removed contacts of " + contact_id);
+		res.send(201,{response:"Will not show this person in future matches"});
+	}).catch(function(err) {
+		console.error("Error adding this contact to the removed contacts list: ", JSON.stringify(err));
+		res.send(501,err);
+	})
+}

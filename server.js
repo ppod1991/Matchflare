@@ -72,6 +72,8 @@ app.get('/hasUnread',notify.hasUnreadMessages);
 
 app.get('/receiveSMS',sms.receiveSMS);
 
+app.post('/removeContact',contact.removeContact);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

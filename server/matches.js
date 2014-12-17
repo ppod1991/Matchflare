@@ -90,12 +90,10 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.guessed_gender IN  \
 								(SELECT unnest(c2.gender_preferences))	 \
 							AND c1.contact_id != c2.contact_id \
-							AND c1.contact_id != ? \
-							AND c2.contact_id != ? \
 							AND NOT c1.blocked_matches \
 							AND NOT c2.blocked_matches \
 						ORDER BY pair_score(c1,c2) DESC LIMIT 30"
-		parameterArray = [0,0];
+		parameterArray = [];
 	}
 	else {
 		var ids = "(SELECT unnest(contacts) FROM contacts WHERE contact_id = ?)";
@@ -113,6 +111,8 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND c1.contact_id != c2.contact_id \
 							AND c1.contact_id != ? \
 							AND c2.contact_id != ? \
+							AND c1.contact_id NOT IN (SELECT unnest(removed_contacts) FROM contacts WHERE contact_id = ?) \
+							AND c2.contact_id NOT IN (SELECT unnest(removed_contacts) FROM contacts WHERE contact_id = ?) \
 							AND NOT c1.blocked_matches \
 							AND NOT c2.blocked_matches \
 							AND ? NOT IN  \
@@ -120,7 +120,7 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 							AND ? NOT IN  \
 								(SELECT unnest(c2.blocked_contacts)) \
 						ORDER BY pair_score(c1,c2) DESC LIMIT 30)) WHERE contact_id = ? RETURNING matches"
-		parameterArray = [contact_id,contact_id,contact_id,contact_id, contact_id, contact_id, contact_id];
+		parameterArray = [contact_id,contact_id,contact_id,contact_id,contact_id,contact_id, contact_id, contact_id, contact_id];
 	};
 	
 	PG.knex.raw(sqlString,parameterArray).then(function(result) {
