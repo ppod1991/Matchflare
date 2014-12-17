@@ -4,6 +4,7 @@ var notify = require('./notify');
 var _ = require('lodash');
 var Matches = require('./matches');
 var sms = require('./sms');
+var contact = require('./contact');
 
 exports.getPicture = function(req, res) {
     var rawPhoneNumber = req.query.phone_number;
@@ -88,8 +89,18 @@ exports.verifyAccessToken = function(req, res) {
     var access_token = req.query.access_token;
     PG.knex('contacts').select().where('access_token',access_token).then(function(results) {
         if (results[0]) {
-            console.log("Successfully verified access token: " + results[0].contact_id);
-            res.send(201,results[0]);
+            var user = results[0];
+            console.log("Successfully verified access token: " + user.contact_id);
+            //Retrieve the actual people objects from the list of contacts
+            contact.getContacts(user.contact_id, function(err,contact_objects) {
+                if (err) {
+                    res.send(501,"Failed to verify access token:", JSON.stringify(err));
+                }
+                else {
+                    user.contact_objects = contact_objects;
+                    res.send(201,user);
+                }
+            })            
         }
         else {
             console.error("Failed to verify access token: " + access_token);
@@ -160,6 +171,7 @@ exports.verifyVerificationSMS = function(req, res) {
                             PG.knex('contacts').insert(update).returning('contact_id').then(function(results) {
                                 console.log("Successfully inserted contact with verified info");
                                 update.contact_id = results[0];
+                                update.contact_objects = req.body.contact_objects;
                                 res.send(201, update); //Send back access token
 
                                 Matches.makeMatches(update.contact_id,null, function(err) {
@@ -177,6 +189,7 @@ exports.verifyVerificationSMS = function(req, res) {
                             PG.knex('contacts').update(update).where('contact_id',contact.contact_id).then(function(results) {
                                 console.log("Successfully updated contact with verified info");
                                 update.contact_id = contact.contact_id;
+                                update.contact_objects = req.body.contact_objects;
                                 res.send(201, update); //Send back access token
 
                                 Matches.makeMatches(update.contact_id,null, function(err) {

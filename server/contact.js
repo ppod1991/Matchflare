@@ -9,5 +9,18 @@ exports.getMatchflareScore = function(req,res) {
 	}).catch(function(err) {
 		res.send(501,"Error getting matchflare score: ", err.toString());
 	});
-	
+
 };
+
+exports.getContacts = function(contact_id,callback) {
+
+	PG.knex.raw("SELECT guessed_full_name, contact_id FROM 
+	(SELECT unnest(contacts) friends FROM contacts WHERE contact_id=?) c1 
+	INNER JOIN contacts c2 
+	ON c1.friends=c2.contact_id;",[contact_id]).then(function(result) {
+		callback(null,result.rows);
+	}).catch(function(err) {
+		console.error("Error retrieving contacts for this person", JSON.stringify(err));
+		callback(err,null);
+	});
+}
