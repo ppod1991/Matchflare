@@ -74,6 +74,8 @@ app.get('/receiveSMS',sms.receiveSMS);
 
 app.post('/removeContact',contact.removeContact);
 
+app.post('/blockContact',contact.blockContact);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

@@ -37,3 +37,16 @@ exports.removeContact = function(req,res) {
 		res.send(501,err);
 	})
 }
+
+exports.blockContact = function(req, res) {
+	var contact_id = req.query.contact_id;
+	var to_block_contact_id = req.query.to_block_contact_id;
+
+	PG.knex.raw("UPDATE contacts SET blocked_contacts = array_append(blocked_contacts, ?) where contact_id = ?",[to_block_contact_id,contact_id]).then(function(result) {
+		console.log("Successfully added " + to_block_contact_id + " to the blocked contacts of " + contact_id);
+		res.send(201,{response:"This person won't match you in the future"});
+	}).catch(function(err) {
+		console.error("Error adding this contact to the blocked contacts list: ", JSON.stringify(err));
+		res.send(501,err);
+	})
+}
