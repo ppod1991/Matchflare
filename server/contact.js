@@ -14,7 +14,7 @@ exports.getMatchflareScore = function(req,res) {
 
 exports.getContacts = function(contact_id,callback) {
 
-	PG.knex.raw("SELECT guessed_full_name, contact_id FROM \
+	PG.knex.raw("SELECT guessed_full_name, contact_id, image_url FROM \
 	(SELECT unnest(contacts) friends FROM contacts WHERE contact_id=?) c1 \
 	INNER JOIN contacts c2 \
 	ON c1.friends=c2.contact_id;",[contact_id]).then(function(result) {
