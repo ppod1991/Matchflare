@@ -53,10 +53,15 @@ exports.blockContact = function(req, res) {
 
 exports.updateProfile = function(req, res) {
 	var this_user = req.body;
-	var updateObject = {guessed_gender: this_user.guessed_gender, guessed_preferences: this_user.guessed_preferences, image_url:this_user.image_url};
+	var updateObject = {guessed_gender: this_user.guessed_gender, gender_preferences: this_user.gender_preferences, image_url:this_user.image_url};
 	PG.knex('contacts').update(updateObject).where('contact_id',this_user.contact_id).then(function(result) {
-		console.log("Successfully updated user: " + this_user.contact_id);
-		res.send(201,{response:"Successfully updated your profile"});
+		PG.knex('contacts').select().where('contact_id',this_user.contact_id).then(function(result) {
+			console.log("Successfully updated user: " + JSON.stringify(result));
+			res.send(201,result[0]);
+		}).catch(function(err) {
+			throw err;
+		});
+
 	}).catch(function(err) {
 		console.error("Error updating this user", JSON.stringify(err));
 		res.send(500,err);

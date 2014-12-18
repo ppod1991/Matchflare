@@ -109,11 +109,23 @@ client = request.newClient('http://localhost:5000/');
 
 //Test Inbound SMS/Unsubscribing
 
-var messageText = encodeURIComponent('   undo');
-client.get('/receiveSMS?msisdn=16098510053&to=12069396519&messageId=020000004A2C43FC&text=' + messageText + '&type=text&keyword=TEST%21&message-timestamp=2014-12-15+20%3A34%3A30',function(err, res, body) {
-   if (err)
-   	console.error("Error Unsubscribing: ", err.toString());
-   else {
-   	console.log("Response: ", JSON.stringify(body));
-   }
+// var messageText = encodeURIComponent('   undo');
+// client.get('/receiveSMS?msisdn=16098510053&to=12069396519&messageId=020000004A2C43FC&text=' + messageText + '&type=text&keyword=TEST%21&message-timestamp=2014-12-15+20%3A34%3A30',function(err, res, body) {
+//    if (err)
+//    	console.error("Error Unsubscribing: ", err.toString());
+//    else {
+//    	console.log("Response: ", JSON.stringify(body));
+//    }
+// });
+
+
+// Test updating profile
+var data = {guessed_gender:"MALE",guessed_preferences:["FEMALE"],contact_id:262,image_url:"www.test.com"};
+
+client.post('/updateProfile',data,function(err, res,body) {
+	if (err)
+		console.error("Error updating profile: ", err.toString());
+	else {
+		console.log("Response: ", JSON.stringify(body));
+	}
 });
