@@ -53,7 +53,7 @@ exports.blockContact = function(req, res) {
 
 exports.updateProfile = function(req, res) {
 	var this_user = req.body;
-	var updateObject;
+	var updateObject = {};
 	if (this_user.guessed_gender) {
 		updateObject.guessed_gender = this_user.guessed_gender;
 	}
