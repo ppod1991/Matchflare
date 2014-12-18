@@ -76,6 +76,8 @@ app.post('/removeContact',contact.removeContact);
 
 app.post('/blockContact',contact.blockContact);
 
+app.post('/updateProfile',contact.updateProfile);
+
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
 //Chat implementation

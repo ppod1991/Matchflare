@@ -181,7 +181,7 @@ exports.getNotificationLists = function(req, res) {
 
 		PG.knex.raw("SELECT * FROM \
 				( \
-				(SELECT c1.first_seen_at matcher_seen_at, c2.first_seen_at main_seen_at, c2.chat_id main_chat_id, c1.chat_id matcher_chat_id, pairs.created_at, \
+				(SELECT c1.first_seen_at matcher_seen_at, c2.first_seen_at main_seen_at, c2.chat_id main_chat_id, c1.chat_id matcher_chat_id, pairs.updated_at, \
 					pairs.chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name,  \
 					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, matcher.guessed_gender AS matcher_gender,  \
 					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id,  \
@@ -196,7 +196,7 @@ exports.getNotificationLists = function(req, res) {
 					(first_contact_status = 'NOTIFIED') OR \
 					(first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT'))) \
 				UNION \
-				(SELECT c1.second_seen_at matcher_seen_at, c2.second_seen_at main_seen_at, c2.chat_id main_chat_id, c1.chat_id matcher_chat_id, pairs.created_at, \
+				(SELECT c1.second_seen_at matcher_seen_at, c2.second_seen_at main_seen_at, c2.chat_id main_chat_id, c1.chat_id matcher_chat_id, pairs.updated_at, \
 					pairs.chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name,  \
 					matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, matcher.guessed_gender AS matcher_gender,  \
 					matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id,  \
@@ -218,7 +218,7 @@ exports.getNotificationLists = function(req, res) {
 						(SELECT pending_matches.main_seen_at - max(m2.created_at) time_diff FROM messages m2 \
 							WHERE m2.chat_id = pending_matches.main_chat_id GROUP BY m2.chat_id)) s \
 						) p2 ON true \
-				ORDER BY has_unseen ASC, pending_matches.created_at DESC;",[contact_id, contact_id]).then(function(result) {
+				ORDER BY has_unseen ASC, pending_matches.updated_at DESC;",[contact_id, contact_id]).then(function(result) {
 			//Results after getting pending matches
 			console.log("Pending Matches Successfully retrieved: ", result.rows);
 			Matches.rowsToObjects(result.rows, function (err, pending_matches) {
@@ -231,7 +231,7 @@ exports.getNotificationLists = function(req, res) {
 
 					PG.knex.raw(" \
  						SELECT * FROM  \
-							(SELECT c1.matcher_seen_at first_seen_at, c2.matcher_seen_at second_seen_at, pairs.created_at, \
+							(SELECT c1.matcher_seen_at first_seen_at, c2.matcher_seen_at second_seen_at, pairs.updated_at, \
 								pairs.chat_id, pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name,  \
 								matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, matcher.guessed_gender AS matcher_gender,  \
 								matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id,  \
@@ -255,7 +255,7 @@ exports.getNotificationLists = function(req, res) {
 								(SELECT pending_matches.second_seen_at - max(m2.created_at) time_diff FROM messages m2 \
 									WHERE m2.chat_id = pending_matches.second_matcher_chat_id GROUP BY m2.chat_id)) s \
 								) p2 ON true \
-						ORDER BY has_unseen ASC, pending_matches.created_at DESC; \
+						ORDER BY has_unseen ASC, pending_matches.updated_at DESC; \
 						", [contact_id]).then(function (result) {
 
 							//Results after getting active matcher matches
