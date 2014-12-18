@@ -122,8 +122,8 @@ exports.verifiedMatchNotification = function(pair, first, second, matcher) {
 	var notificationToMatcher = {text_message: messageToMatcher, push_message:messageToMatcher, notification_type: 'MATCHER_BOTH_ACCEPTED', pair_id: pair.pair_id};
 
 	exports.postNotification(first.contact_id, notificationToFirst,matcher.contact_id);
-	exports.postNotification(second.contact_id, notificationToSecond,matcher_contact_id);
-	exports.postNotification(matcher.contact_id, notificationToMatcher,matcher_contact_id);
+	exports.postNotification(second.contact_id, notificationToSecond,matcher.contact_id);
+	exports.postNotification(matcher.contact_id, notificationToMatcher,matcher.contact_id);
 };
 
 exports.otherMatchNotification = function(pair, first, second, matcher, which_contact) {
