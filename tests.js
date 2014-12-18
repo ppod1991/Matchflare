@@ -120,7 +120,7 @@ client = request.newClient('http://localhost:5000/');
 
 
 // Test updating profile
-var data = {guessed_gender:"MALE",guessed_preferences:["FEMALE"],contact_id:262,image_url:"www.test.com"};
+var data = {guessed_gender:"MALE",gender_preferences:["FEMALE"],contact_id:262,image_url:"www.test.com"};
 
 client.post('/updateProfile',data,function(err, res,body) {
 	if (err)
