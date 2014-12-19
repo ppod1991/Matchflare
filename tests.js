@@ -45,24 +45,25 @@ client = request.newClient('http://localhost:5000/');
 
 //Test websocket connection
 
-// var WebSocket = require('ws');
-// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+var WebSocket = require('ws');
+var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+//var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-// var chat_id = 459;
-// var sender_contact_id = 159;
-// testSocket.on('open', function(event) {
-//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id}));
-// });
+var chat_id = 459;
+var sender_contact_id = 159;
+var pair_id = 460;
+testSocket.on('open', function(event) {
+ testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
+});
 
-// testSocket.on('message',function(message) {
-//  console.log("Received message", message);
-// });
+testSocket.on('message',function(message) {
+ console.log("Received message", message);
+});
 
 
-// var send = function(message) {
-//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
-//  }
+var send = function(message) {
+   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+ }
 
 
 //Test authentication and SMS verification
@@ -120,12 +121,12 @@ client = request.newClient('http://localhost:5000/');
 
 
 // Test updating profile
-var data = {guessed_gender:"MALE",gender_preferences:["FEMALE"],contact_id:262,image_url:"www.test.com"};
+// var data = {guessed_gender:"MALE",gender_preferences:["FEMALE"],contact_id:262,image_url:"www.test.com"};
 
-client.post('/updateProfile',data,function(err, res,body) {
-	if (err)
-		console.error("Error updating profile: ", err.toString());
-	else {
-		console.log("Response: ", JSON.stringify(body));
-	}
-});
+// client.post('/updateProfile',data,function(err, res,body) {
+// 	if (err)
+// 		console.error("Error updating profile: ", err.toString());
+// 	else {
+// 		console.log("Response: ", JSON.stringify(body));
+// 	}
+// });

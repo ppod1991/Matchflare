@@ -157,6 +157,7 @@ exports.verifyVerificationSMS = function(req, res) {
                             update.image_url = req.body.image_url;
                         }
                         
+                        update.image_url = req.body.image_url;
                         update.guessed_gender = req.body.guessed_gender;
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;

@@ -110,18 +110,42 @@ wss.on("connection", function(ws) {
 		//Check to see if the message is setting the chat ID
 		if (receivedData.type === 'set_chat_id') {
 			ws.chat_id = receivedData.chat_id;
+			ws.pair_id = receivedData.pair_id;
 			ws.contact_id = receivedData.sender_contact_id;
 			console.log("Chat ID Set to: " + ws.chat_id);
 
 			//Send the current socket the chat history
-			chat.getChatHistory(receivedData.chat_id,function(chatHistory) {
-				chat.getName(receivedData.sender_contact_id,function(name) {
-					var registrationObject = {type: 'history', history: chatHistory, guessed_full_name:name };
-					ws.guessed_full_name = name;
-					ws.send(JSON.stringify(registrationObject));
+			try {
+				chat.getChatHistory(receivedData.chat_id,function(err, chatHistory) {
+					if (!err) {
+						chat.getName(receivedData.sender_contact_id,function(err,name) {
+							if (!err) {
+								chat.getPair(receivedData.pair_id,function(err,pair) {
+									if (!err) {
+										var registrationObject = {type: 'history', history: chatHistory, guessed_full_name:name, pair:pair };
+										ws.guessed_full_name = name;
+										ws.send(JSON.stringify(registrationObject));
+									}
+									else {
+										throw err;
+									}
+								});
+							}
+							else {
+								throw err;
+							}
+						});
+					}
+					else {
+						throw err;
+					}
 				});
+			}
+			catch (err) {
+				err.type = "error";
+				ws.send(JSON.stringify(err));
+			}
 
-			});
 
 		}
 		else if (ws.chat_id) {  //Else if it is a normal message, then post the message and send it to all active sockets in that chat

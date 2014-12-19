@@ -9,19 +9,45 @@ var matches = require('./matches');
 exports.getChatHistory = function(chat_id, callback) {
   PG.knex.select('content','sender_contact_id','messages.created_at','guessed_full_name').from('messages').where('chat_id',chat_id).orderBy('created_at','asc').innerJoin('contacts','contacts.contact_id','messages.sender_contact_id').then(function(results) {
      console.log("Successfully retrieved chat " + chat_id);
-     callback(results);
+     callback(null,results);
   }).catch(function(err) {
      console.error("Error retrieving chat history", err);
+     callback(err,null);
   });
 };
 
 exports.getName = function(contact_id, callback) {
     PG.knex.select('guessed_full_name').from('contacts').where('contact_id',contact_id).then(function(result) {
         console.log("Successfully retrieved name", result[0].guessed_full_name);
-        callback(result[0].guessed_full_name);
+        callback(null, result[0].guessed_full_name);
     }).catch(function(err) {
         console.error("Error retrieving associated name", err);
+        callback(err,null)
     });
+};
+
+exports.getPair = function(pair_id, callback) {
+    PG.knex.raw("SELECT pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
+          matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
+          matcher.contact_id AS matcher_contact_id, first.contact_id AS first_contact_id, second.contact_id AS second_contact_id, matcher.guessed_gender AS matcher_gender, \
+          is_anonymous, first_matcher_chat_id, second_matcher_chat_id \
+          FROM pairs \
+          INNER JOIN contacts AS matcher ON matcher.contact_id = pairs.matcher_contact_id \
+          INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
+          INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
+          WHERE pair_id = ? ;",[pair_id]).then(function(result) {
+              matches.rowsToObjects(result.rows, function(err, results) {
+                  if(err) {
+                    throw err;
+                  }
+                  else {
+                    callback(null,results[0]);
+                  }
+              });
+  }).catch(function(err) {
+    console.error('Error retrieving match: ', err);
+    callback(err,null);
+  });
 };
 
 exports.addMessage = function(chatMessage, callback) {
