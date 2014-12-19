@@ -123,7 +123,13 @@ wss.on("connection", function(ws) {
 								chat.getPair(receivedData.pair_id,function(err,pair) {
 									if (!err) {
 										var registrationObject = {type: 'history', history: chatHistory, guessed_full_name:name, pair:pair };
-										ws.guessed_full_name = name;
+										if (receivedData.sender_contact_id === pair.matcher.contact_id && pair.is_anonymous) {
+											ws.guessed_full_name = "Matcher";
+										}
+										else {
+											ws.guessed_full_name = name;
+										} 
+										
 										ws.send(JSON.stringify(registrationObject));
 									}
 									else {
