@@ -48,3 +48,4 @@ exports.notify = function(registration_id, data) {
 
     });
 }
+
