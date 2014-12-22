@@ -245,7 +245,7 @@ exports.getNotificationLists = function(req, res) {
 							WHERE pairs.matcher_contact_id = ? \
 								AND ((pairs.first_contact_status = 'NOTIFIED' AND pairs.second_contact_status = 'ACCEPT')  \
 								OR (pairs.first_contact_status = 'NOTIFIED' AND pairs.second_contact_status = 'NOT_SENT')  \
-								OR (pairs.first_contact_status = 'NOT_SENT' AND pairs.second_contact_status = 'NOTIFIED')  \	
+								OR (pairs.first_contact_status = 'NOT_SENT' AND pairs.second_contact_status = 'NOTIFIED')  \
 								OR (pairs.first_contact_status = 'ACCEPT' AND pairs.second_contact_status = 'NOTIFIED')  \
 								OR (pairs.first_contact_status = 'ACCEPT' AND pairs.second_contact_status = 'ACCEPT')) \
 							) pending_matches \
