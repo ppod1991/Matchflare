@@ -21,3 +21,7 @@ exports.normalizedPhoneNumber = function(rawPhoneNumber, callback) {
 		}
 	});
 };
+
+exports.formatName = function(rawNameString) {
+	return _(rawNameString).chain.trim().titleize().value();
+}

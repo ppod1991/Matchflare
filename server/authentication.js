@@ -5,6 +5,7 @@ var _ = require('lodash');
 var Matches = require('./matches');
 var sms = require('./sms');
 var contact = require('./contact');
+var utils = require('./utils');
 
 exports.getPicture = function(req, res) {
     var rawPhoneNumber = req.query.phone_number;
@@ -150,13 +151,13 @@ exports.verifyVerificationSMS = function(req, res) {
                         if (!contact.verified) {
                             //If not already verified, then change everything to user input values...
                             update.verified = true;
-                            update.guessed_full_name = req.body.guessed_full_name;
+                            update.guessed_full_name = utils.formatName(req.body.guessed_full_name);
                         }
 
                         if (req.body.image_url) {
                             update.image_url = req.body.image_url;
                         }
-                        
+
                         update.image_url = req.body.image_url;
                         update.guessed_gender = req.body.guessed_gender;
                         update.gender_preferences = req.body.gender_preferences;

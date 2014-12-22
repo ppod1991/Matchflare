@@ -1,4 +1,5 @@
 var PG = require('./knex');
+var utils = require('./utils');
 
 exports.getMatchflareScore = function(req,res) {
 	var contact_id = req.query.contact_id;

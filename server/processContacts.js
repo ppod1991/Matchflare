@@ -4,6 +4,7 @@ var async = require('async');
 var Names = require('./nameDatabase');
 var Matches = require('./matches');
 var _ = require('lodash');
+var utils = require('./utils');
 
 // var start = new Date().getTime();
 
@@ -26,6 +27,7 @@ exports.processContacts = function(req, res) {
 			//Only store contacts for which there was a normalized phone number
 			if (!error && result !== null) {
 				contact.normalized_phone_number = result;
+				contact.guessed_full_name = utils.formatName(contact.guessed_full_name);
 				allNormalizedPhoneNumbers.push(result);
 				//console.log((contact.full_name.split(' ')[0]).toLowerCase());
 
