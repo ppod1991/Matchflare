@@ -211,7 +211,7 @@ exports.getNotificationLists = function(req, res) {
 					(second_contact_status = 'NOTIFIED') OR \
 					(first_contact_status = 'ACCEPT' AND second_contact_status = 'ACCEPT')))) pending_matches \
 				LEFT JOIN LATERAL  \
-					(SELECT min(time_diff) < interval '0 seconds' has_unseen FROM  \
+					(SELECT (min(time_diff) < interval '0 seconds' AND NOT min(time_diff) ISNULL) has_unseen FROM  \
 						((SELECT pending_matches.matcher_seen_at - max(m1.created_at) time_diff FROM messages m1 \
 							WHERE m1.chat_id = pending_matches.matcher_chat_id GROUP BY m1.chat_id) \
 						UNION  \
@@ -250,7 +250,7 @@ exports.getNotificationLists = function(req, res) {
 								OR (pairs.first_contact_status = 'ACCEPT' AND pairs.second_contact_status = 'ACCEPT')) \
 							) pending_matches \
 						LEFT JOIN LATERAL  \
-							(SELECT min(time_diff) < interval '0 seconds' has_unseen FROM  \
+							(SELECT (min(time_diff) < interval '0 seconds' AND NOT min(time_diff) ISNULL) has_unseen FROM  \
 								((SELECT pending_matches.first_seen_at - max(m1.created_at) time_diff FROM messages m1 \
 									WHERE m1.chat_id = pending_matches.first_matcher_chat_id GROUP BY m1.chat_id) \
 								UNION  \

@@ -6,10 +6,10 @@ client = request.newClient('http://localhost:5000/');
 
 
 //Test GCM notifications
-var notify = require('./server/notify');
-var target_contact_id = 262;
-var notification = {push_message:"Test", notification_type:"MATCHEE_NEW_MATCH", pair_id:459, target_contact_id:262};
-notify.sendNotification(262,notification);
+// var notify = require('./server/notify');
+// var target_contact_id = 262;
+// var notification = {push_message:"Test", notification_type:"MATCHEE_NEW_MATCH", pair_id:459, target_contact_id:262};
+// notify.sendNotification(262,notification);
 
 //Test the creation of a new match and associated notifications
 // var data = {first_matchee:{contact_id:99},second_matchee:{contact_id:95},matcher:{contact_id:262}, match_status:"MATCHED", matcher_contact_id:262, is_anonymous:false}
@@ -52,25 +52,24 @@ notify.sendNotification(262,notification);
 
 //Test websocket connection
 
-// var WebSocket = require('ws');
-// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+var WebSocket = require('ws');
+//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-// var chat_id = 454;
-// var sender_contact_id = 113;
-// var pair_id = 459;
-// testSocket.on('open', function(event) {
-//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
-// });
+var chat_id = 457;
+var sender_contact_id = 159;
+var pair_id = 460;
+testSocket.on('open', function(event) {
+ testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
+});
 
-// testSocket.on('message',function(message) {
-//  console.log("Received message", message);
-// });
+testSocket.on('message',function(message) {
+ console.log("Received message", message);
+});
 
-
-// var send = function(message) {
-//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
-//  }
+var send = function(message) {
+   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+ }
 
 
 //Test authentication and SMS verification
