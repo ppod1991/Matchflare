@@ -218,7 +218,7 @@ exports.getNotificationLists = function(req, res) {
 						(SELECT pending_matches.main_seen_at - max(m2.created_at) time_diff FROM messages m2 \
 							WHERE m2.chat_id = pending_matches.main_chat_id GROUP BY m2.chat_id)) s \
 						) p2 ON true \
-				ORDER BY has_unseen ASC, pending_matches.updated_at DESC;",[contact_id, contact_id]).then(function(result) {
+				ORDER BY has_unseen DESC, pending_matches.updated_at DESC;",[contact_id, contact_id]).then(function(result) {
 			//Results after getting pending matches
 			console.log("Pending Matches Successfully retrieved: ", result.rows);
 			Matches.rowsToObjects(result.rows, function (err, pending_matches) {
@@ -257,7 +257,7 @@ exports.getNotificationLists = function(req, res) {
 								(SELECT pending_matches.second_seen_at - max(m2.created_at) time_diff FROM messages m2 \
 									WHERE m2.chat_id = pending_matches.second_matcher_chat_id GROUP BY m2.chat_id)) s \
 								) p2 ON true \
-						ORDER BY has_unseen ASC, pending_matches.updated_at DESC; \
+						ORDER BY has_unseen DESC, pending_matches.updated_at DESC; \
 						", [contact_id]).then(function (result) {
 
 							//Results after getting active matcher matches
