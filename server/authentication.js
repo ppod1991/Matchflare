@@ -166,6 +166,7 @@ exports.verifyVerificationSMS = function(req, res) {
                         update.contacts = _.pluck(req.body.contact_objects,'contact_id');
                         update.device_id = device_id;
                         update.access_token = access_token;
+                        update.blocked_matches = false;  //Unblock the user if they had blocked matches before, but are registering now
 
                         //If the contact did not exist, then insert the new contact...
                         if (!contact.contact_id) {

@@ -48,7 +48,7 @@ exports.receiveSMS = function(req, res) {
 					console.log("Could not parse phone number because: " + JSON.stringify(err));
 				}
 				else {
-					PG.knex('contacts').update({'did_block_sms':true}).where('normalized_phone_number',normalized_phone_number).returning('contact_id').then(function(result) {
+					PG.knex('contacts').update({'did_block_sms':true, 'blocked_matches':true}).where('normalized_phone_number',normalized_phone_number).returning('contact_id').then(function(result) {
 						if (result.length < 1) {
 							//If no users were found with this phone number, then add to global block list
 							PG.knex('blocked_phone_numbers').insert({normalized_phone_number:normalized_phone_number}).then(function(result) {
@@ -83,7 +83,7 @@ exports.receiveSMS = function(req, res) {
 					console.log("Could not parse phone number because: " + JSON.stringify(err));
 				}
 				else {
-					PG.knex('contacts').update({'did_block_sms':false}).where('normalized_phone_number',normalized_phone_number).returning('contact_id').then(function(result) {
+					PG.knex('contacts').update({'did_block_sms':false, 'blocked_matches':false}).where('normalized_phone_number',normalized_phone_number).returning('contact_id').then(function(result) {
 						if (result.length < 1) {
 							//Did not find anyone with this number
 							PG.knex('blocked_phone_numbers').delete().where('normalized_phone_number',normalized_phone_number).then(function(result) {

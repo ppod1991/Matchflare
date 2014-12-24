@@ -25,3 +25,11 @@ exports.normalizedPhoneNumber = function(rawPhoneNumber, callback) {
 exports.formatName = function(rawNameString) {
 	return _(rawNameString).chain().trim().titleize().value();
 }
+
+exports.test = function(req, res) {
+	console.log("Test query: " + JSON.stringify(req.query));
+	console.log("Test body: " + JSON.stringify(req.body));
+	res.send(201);
+	
+
+}

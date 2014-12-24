@@ -132,7 +132,7 @@ exports.otherMatchNotification = function(pair, first, second, matcher, which_co
 
 	var notificationToMatcher = {text_message: messageToMatcher, push_message:messageToMatcher, notification_type: 'MATCHER_ONE_MATCH_ACCEPTED', pair_id: pair.pair_id};
 
-	exports.postNotification(matcher.contact_id, notificationToMatcher, matcher_contact_id);
+	exports.postNotification(matcher.contact_id, notificationToMatcher, matcher.contact_id);
 
 	var other_contact;
 	if (which_contact === 'first') {

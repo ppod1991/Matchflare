@@ -15,6 +15,7 @@ var authentication = require('./server/authentication');
 var WebSocketServer = require('ws').Server;
 var _ = require('lodash');
 var sms = require('./server/sms');
+var utils = require('./server/utils');
 
 app.use(logfmt.requestLogger());
 app.use(bodyParser.json());
@@ -77,6 +78,8 @@ app.post('/removeContact',contact.removeContact);
 app.post('/blockContact',contact.blockContact);
 
 app.post('/updateProfile',contact.updateProfile);
+
+app.post('/test',utils.test);
 
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);

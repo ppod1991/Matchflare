@@ -1,7 +1,6 @@
 var request = require('request-json');
 var client;
 client = request.newClient('http://localhost:5000/');
-
 //client = request.newClient('http://matchflare.herokuapp.com/');
 
 
@@ -12,24 +11,24 @@ client = request.newClient('http://localhost:5000/');
 // notify.sendNotification(262,notification);
 
 //Test the creation of a new match and associated notifications
-// var data = {first_matchee:{contact_id:99},second_matchee:{contact_id:95},matcher:{contact_id:262}, match_status:"MATCHED", matcher_contact_id:262, is_anonymous:false}
+var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:95},matcher:{contact_id:96}, match_status:"MATCHED", matcher_contact_id:262, is_anonymous:false}
 
-// client.post('/postMatch', data, function(err, res, body) {
-//  return console.log(res.statusCode);
-// });
+client.post('/postMatch', data, function(err, res, body) {
+ return console.log(res.statusCode);
+});
 
 //Test ACCEPTING of a match
-//var data = {"decision":"ACCEPT","contact_id":90,"pair_id":90};
+// var data = {"decision":"ACCEPT","contact_id":165,"pair_id":557};
 
-//client.post('match/respond', data, function(err, res, body) {
+// client.post('/match/respond', data, function(err, res, body) {
 //   return console.log(res.statusCode);
-//});
+// });
 
 //Test second ACCEPTING of a match
-//var data = {"decision":"ACCEPT","contact_id":91,"pair_id":90};
-//client.post('match/respond', data, function(err, res, body) {
+// var data = {"decision":"ACCEPT","contact_id":162,"pair_id":556};
+// client.post('match/respond', data, function(err, res, body) {
 //    return console.log(res.statusCode);
-//});
+// });
 
 //Test the various 'GETS' of matches
 //client.get('/match?pair_id=86',function(err, res, body) {
@@ -52,24 +51,24 @@ client = request.newClient('http://localhost:5000/');
 
 //Test websocket connection
 
-var WebSocket = require('ws');
-//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+// var WebSocket = require('ws');
+// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-var chat_id = 722;
-var sender_contact_id = 218;
-var pair_id = 1;
-testSocket.on('open', function(event) {
- testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
-});
+// var chat_id = 727;
+// var sender_contact_id = 95;
+// var pair_id = 550;
+// testSocket.on('open', function(event) {
+//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
+// });
 
-testSocket.on('message',function(message) {
- console.log("Received message", message);
-});
+// testSocket.on('message',function(message) {
+//  console.log("Received message", message);
+// });
 
-var send = function(message) {
-   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
- }
+// var send = function(message) {
+//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+//  }
 
 
 //Test authentication and SMS verification
