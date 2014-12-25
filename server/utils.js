@@ -28,7 +28,7 @@ exports.formatName = function(rawNameString) {
 
 exports.test = function(req, res) {
 	console.log("Test query: " + JSON.stringify(req.query));
-	console.log("Name: " + req.body.guessed_full_name);
+	console.log("Name: " + JSON.stringify(req.body));
 	res.send(201,{woo: "yay"});
 
 
