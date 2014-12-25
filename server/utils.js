@@ -29,7 +29,7 @@ exports.formatName = function(rawNameString) {
 exports.test = function(req, res) {
 	console.log("Test query: " + JSON.stringify(req.query));
 	console.log("Test body: " + JSON.stringify(req.body));
-	res.send(201);
-	
+	res.send(201,{woo: "yay"});
+
 
 }
