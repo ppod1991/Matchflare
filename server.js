@@ -187,4 +187,9 @@ wss.on("connection", function(ws) {
 		delete activeConnections[ws.myIndex];
 	});
 
+	ws.on("error", function(err) {
+		console.log("Error in websocket!", JSON.stringify(err));
+
+	})
+
 });
