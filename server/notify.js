@@ -302,6 +302,7 @@ exports.hasUnreadMessages = function(req, res) {
 	 FROM (SELECT *,(SELECT max(messages.created_at) AS last_time FROM messages WHERE messages.chat_id = ?) FROM chats WHERE chat_id = ?) c",[contact_id,contact_id,contact_id,chat_id,chat_id]).then(function(result) {
 
 	 	console.log("Successfully checked if unread: ",JSON.stringify(result.rows[0]));
+	 	res.contentType("text/plain");
 	 	res.send(201,result.rows[0].has_unseen);
 	 }).catch(function(err) {
 	 	console.error("Error checking unread status of this chat",JSON.stringify(err));
