@@ -300,9 +300,10 @@ exports.hasUnreadMessages = function(req, res) {
 			WHEN c.second_contact_id = ? THEN c.second_seen_at - last_time < interval '0 seconds' \
 	 	END has_unseen \
 	 FROM (SELECT *,(SELECT max(messages.created_at) AS last_time FROM messages WHERE messages.chat_id = ?) FROM chats WHERE chat_id = ?) c",[contact_id,contact_id,contact_id,chat_id,chat_id]).then(function(result) {
-
-	 	console.log("Successfully checked if unread: ",JSON.stringify(result.rows[0]));
-	 	res.send(201,result.rows[0]);
+	 	var hasUnseen = (result.rows[0].has_unseen === true);
+	 	var responseObject = {has_unseen:hasUnseen};
+	 	console.log("Successfully checked if unread: ",JSON.stringify(responseObject);
+	 	res.send(201,responseObject);
 	 }).catch(function(err) {
 	 	console.error("Error checking unread status of this chat",JSON.stringify(err));
 	 	res.send(501,err.toString());
