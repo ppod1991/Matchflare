@@ -302,7 +302,7 @@ exports.hasUnreadMessages = function(req, res) {
 	 FROM (SELECT *,(SELECT max(messages.created_at) AS last_time FROM messages WHERE messages.chat_id = ?) FROM chats WHERE chat_id = ?) c",[contact_id,contact_id,contact_id,chat_id,chat_id]).then(function(result) {
 	 	var hasUnseen = (result.rows[0].has_unseen === true);
 	 	var responseObject = {has_unseen:hasUnseen};
-	 	console.log("Successfully checked if unread: ",JSON.stringify(responseObject);
+	 	console.log("Successfully checked if unread: ",JSON.stringify(responseObject));
 	 	res.send(201,responseObject);
 	 }).catch(function(err) {
 	 	console.error("Error checking unread status of this chat",JSON.stringify(err));
