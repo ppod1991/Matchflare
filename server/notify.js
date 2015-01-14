@@ -1,5 +1,6 @@
 var PG = require('./knex');
 var gcm = require('./gcm');
+var apns = require('./apns');
 var int_encoder = require('int-encoder');
 var Matches = require('./matches');
 var _ = require('lodash');
@@ -34,8 +35,8 @@ exports.sendNotification = function(contact_id, notification) {
 			}
 
 			if(contact.apn_device_token) {
-				console.log("MOCK Sending iOS Push Notification to " + contact_id + ": " + notification.push_message);
-
+				console.log("Sending iOS Push Notification to " + contact_id + ": " + notification.push_message);
+				apns.notify(contact.apn_device_token,notification);
 				//Send iOS push notification
 			}
 		}	
