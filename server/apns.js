@@ -3,14 +3,9 @@
 var apn = require('apn');
 var PG = require('./knex');
 
-
+//NEED TO IMPLEMENT -- CHANGE DEVELOPMENT CERTIFICATE TO PRODUCTION CERTIFICATE
 var options = {cert:'./developmentCertificates/cert.pem',key:'./developmentCertificates/key.pem'};
 var apnConnection = new apn.Connection(options);
-
-
-//NEED TO IMPLEMENT -- CHANGE DEVELOPMENT CERTIFICATE TO PRODUCTION CERTIFICATE
-var sender = new gcm.Sender('AIzaSyDDKjUl2v-V4ehHZba9OxVmQx6_3FYFJjg');
-
 
 
 exports.updateRegistrationId = function(req, res) {
