@@ -1,7 +1,7 @@
 var request = require('request-json');
 var client;
 client = request.newClient('http://localhost:5000/');
-//client = request.newClient('http://matchflare.herokuapp.com/');
+client = request.newClient('http://matchflare.herokuapp.com/');
 
 
 //Test GCM notifications
@@ -10,12 +10,18 @@ client = request.newClient('http://localhost:5000/');
 // var notification = {push_message:"Test", notification_type:"MATCHEE_NEW_MATCH", pair_id:459, target_contact_id:262};
 // notify.sendNotification(262,notification);
 
-//Test the creation of a new match and associated notifications
-var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:95},matcher:{contact_id:96}, match_status:"MATCHED", matcher_contact_id:262, is_anonymous:false}
+//Test APN notifications
+var notify = require('./server/notify');
+var target_contact_id = 453;
+var notification = {push_message:"Test", notification_type:"MATCHEE_NEW_MATCH", pair_id:459, target_contact_id:target_contact_id};
+notify.sendNotification(target_contact_id,notification);
 
-client.post('/postMatch', data, function(err, res, body) {
- return console.log(res.statusCode);
-});
+//Test the creation of a new match and associated notifications
+// var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:453},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:false}
+
+// client.post('/postMatch', data, function(err, res, body) {
+//  return console.log(JSON.stringify(body));
+// });
 
 //Test ACCEPTING of a match
 // var data = {"decision":"ACCEPT","contact_id":165,"pair_id":557};
