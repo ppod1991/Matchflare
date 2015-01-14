@@ -8,6 +8,7 @@ var http = require('http');
 var processContacts = require('./server/processContacts');
 var matches = require('./server/matches');
 var gcm = require('./server/gcm');
+var apns = require('./apns');
 var notify = require('./server/notify');
 var chat = require('./server/chat');
 var contact = require('./server/contact');
@@ -39,6 +40,8 @@ app.get('/getMatches', matches.getMatches);
 app.post('/postMatch', matches.addMatchResult);
 
 app.post('/gcm/registrationId',gcm.updateRegistrationId);
+
+app.post('/apns/registrationId',apns.updateRegistrationId);
 
 app.get('/match',matches.getMatch);
 
