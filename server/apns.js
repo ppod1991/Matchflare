@@ -4,7 +4,10 @@ var apn = require('apn');
 var PG = require('./knex');
 
 //NEED TO IMPLEMENT -- CHANGE DEVELOPMENT CERTIFICATE TO PRODUCTION CERTIFICATE
-var options = {cert:'./developmentCertificates/cert.pem',key:'./developmentCertificates/key.pem'};
+
+var options = {cert:__dirname + '/developmentCertificates/cert.pem',key: __dirname + '/developmentCertificates/key.pem'};
+console.log("Certificate locations: ", JSON.stringify(options));
+
 var apnConnection = new apn.Connection(options);
 
 apnConnection.on('connected', function() {
