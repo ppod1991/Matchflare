@@ -60,7 +60,7 @@ exports.notify = function(apn_device_token, data) {
 
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = 1;
-    note.alert = encapsulated_data.push_message;
+    note.alert = data.push_message;
     note.payload = encapsulated_data;
 
     apnConnection.pushNotification(note, myDevice);
