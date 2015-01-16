@@ -88,6 +88,7 @@ exports.notify = function(apn_device_token, data) {
     note.badge = 1;
     note.alert = notificationTitle ? notificationTitle : encapsulated_data.push_message;
     note.payload = encapsulated_data;
+    note.sound = "click_sound.mp3";
 
     apnConnection.pushNotification(note, myDevice);
 }
