@@ -57,9 +57,36 @@ exports.notify = function(apn_device_token, data) {
 
     var note = new apn.Notification();
 
+    var notificationTitle = "Matchflare Notification!";
+    if (encapsulated_data.notification_type) {
+        if (encapsulated_data.notification_type === "USER_REMINDER") {
+            notificationTitle = "What do you think of them?";
+        }
+        else if (encapsulated_data.notification_type === "MATCHER_ONE_MATCH_ACCEPTED") {
+            notificationTitle = "Match Accepted!";
+        }
+        else if (encapsulated_data.notification_type === "MATCHER_MESSAGING_STARTED") {
+            notificationTitle = "They started talking!";
+        }
+        else if (encapsulated_data.notification_type === "MATCHER_QUESTION_ASKED") {
+            notificationTitle = "New Question?";
+        }
+        else if (encapsulated_data.notification_type === "MATCHEE_NEW_MATCH") {
+            notificationTitle = "New Match!";
+        }
+        else if (encapsulated_data.notification_type === "MATCHEE_MATCH_ACCEPTED") {
+            notificationTitle = "Match made!";
+        }
+        else if (encapsulated_data.notification_type === "MATCHEE_QUESTION_ANSWERED") {
+            notificationTitle = "Question Answered!";
+        }
+        else if (encapsulated_data.notification_type === "MATCHEE_MESSAGE_SENT") {
+            notificationTitle = "New Message!";
+        }
+    }
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = 1;
-    note.alert = data.push_message;
+    note.alert = notificationTitle ? notificationTitle : encapsulated_data.push_message;
     note.payload = encapsulated_data;
 
     apnConnection.pushNotification(note, myDevice);

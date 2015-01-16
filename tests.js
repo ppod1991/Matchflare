@@ -13,7 +13,7 @@ client = request.newClient('http://matchflare.herokuapp.com/');
 //Test APN notifications
 var notify = require('./server/notify');
 var target_contact_id = 453;
-var notification = {push_message:"Test", notification_type:"MATCHEE_NEW_MATCH", pair_id:459, target_contact_id:target_contact_id};
+var notification = {push_message:"To Chat", notification_type:"MATCHEE_NEW_MATCH", pair_id:628,chat_id:961, target_contact_id:target_contact_id};
 notify.sendNotification(target_contact_id,notification);
 
 //Test the creation of a new match and associated notifications
