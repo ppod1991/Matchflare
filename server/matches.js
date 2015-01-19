@@ -77,8 +77,8 @@ exports.makeMatches = function(contact_id, contact_ids, callback) {
 
 	if (!contact_id) {
 		var ids = idsJSONtoSQL(contact_ids);
-		sqlString = "SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, \
-						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, \
+		sqlString = "SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c1.verified first_verified, \
+						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, c2.verified second_verified, \
 						c1.image_url first_image, c2.image_url second_image \
 						FROM contacts c1, contacts c2  \
 							WHERE c1.contact_id IN \
@@ -165,8 +165,8 @@ exports.getMatches = function (req, res) {
 	var contact_ids = req.body.contacts;
 
 	if (contact_id) {
-		PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, \
-						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, \
+		PG.knex.raw("SELECT c1.contact_id first_contact_id, c1.guessed_full_name first_full_name, c1.guessed_gender first_gender, c1.verified first_verified,\
+						c2.contact_id second_contact_id, c2.guessed_full_name second_full_name, c2.guessed_gender second_gender, c2.verified second_verified, \
 						c1.image_url first_image, c2.image_url second_image, \
 						?::integer matcher_contact_id \
 						 FROM (SELECT unnest(matches) AS singleMatch FROM contacts WHERE contact_id=?) matchList \
@@ -551,8 +551,8 @@ var idsJSONtoSQL = function(contact_ids) {
 };
 
 var conversion = function(match) {
-	return {first_matchee:{guessed_full_name: match.first_full_name,image_url:match.first_image, contact_id:match.first_contact_id, guessed_gender: match.first_gender, contact_status:match.first_contact_status, matcher_chat_id: match.first_matcher_chat_id},
-		second_matchee: {guessed_full_name: match.second_full_name,image_url:match.second_image, contact_id:match.second_contact_id, guessed_gender: match.second_gender, contact_status: match.second_contact_status,matcher_chat_id: match.second_matcher_chat_id},
+	return {first_matchee:{guessed_full_name: match.first_full_name,image_url:match.first_image, contact_id:match.first_contact_id, guessed_gender: match.first_gender, contact_status:match.first_contact_status, matcher_chat_id: match.first_matcher_chat_id, verified:match.first_verified},
+		second_matchee: {guessed_full_name: match.second_full_name,image_url:match.second_image, contact_id:match.second_contact_id, guessed_gender: match.second_gender, contact_status: match.second_contact_status,matcher_chat_id: match.second_matcher_chat_id, verified:match.second_verified},
 		matcher:{guessed_full_name: match.matcher_full_name,image_url:match.matcher_image, contact_id:match.matcher_contact_id, guessed_gender: match.matcher_gender},
 		pair_id: match.pair_id,
 		chat_id: match.chat_id,
