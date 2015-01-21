@@ -109,7 +109,7 @@ exports.processContacts = function(req, res) {
 				// 				+"				  FROM upsert up"
 				// 				+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING contact_id; COMMIT;")
 		
-
+			//Process contacts
 			PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; \
 				WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender, image_url) AS \
 				(VALUES " + contactsJSONtoSQL(processedContacts) + ") \
