@@ -36,6 +36,27 @@ exports.processContacts = function(req, res) {
 				if (typeof contact.guessed_gender === "undefined") {
 					contact.guessed_gender = "UNKNOWN";
 				}
+
+				//Set the generic image url of the contact based on gender
+				if (contact.guessed_gender === "UNKNOWN") {
+					contact.image_url = 'http://s3.amazonaws.com/matchflare-profile-pictures/pair.jpg';
+				}
+				else if (contact.guessed_gender === "MALE") {
+					if (Math.random() < 0.5) {
+						contact.image_url = 'http://s3.amazonaws.com/matchflare-profile-pictures/male_silhouette_3.jpg';
+					}
+					else {
+						contact.image_url = 'http://s3.amazonaws.com/matchflare-profile-pictures/male_silhouette_2.jpg';
+					}
+				}
+				else if (contact.guessed_gender === "FEMALE") {
+					if (Math.random() < 0.5) {
+						contact.image_url = 'http://s3.amazonaws.com/matchflare-profile-pictures/female_silhouette_1.jpg';
+					}
+					else {
+						contact.image_url = 'http://s3.amazonaws.com/matchflare-profile-pictures/female_silhouette_2.jpg';
+					}
+				}
 				processedContacts.push(contact);
 			}
 			callback();
@@ -90,9 +111,9 @@ exports.processContacts = function(req, res) {
 								
 
 			PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; \
-				WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender) AS \
+				WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender, image_url) AS \
 				(VALUES " + contactsJSONtoSQL(processedContacts) + ") \
-				INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender, gender_preferences) \
+				INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender, gender_preferences, image_url) \
 				(SELECT * , guess_preferences(new_values.guessed_gender) FROM new_values WHERE new_values.normalized_phone_number NOT IN (SELECT contacts.normalized_phone_number FROM contacts));COMMIT;").then(function(response) {
 									console.log("Response after inserting new contacts:", response); 
 
@@ -149,7 +170,7 @@ exports.processContacts = function(req, res) {
 var contactsJSONtoSQL = function(contacts) {
 	var stringSQL = "";
 	contacts.forEach(function(contact) {
-		stringSQL = stringSQL + "('" + contact.guessed_full_name.replace(/'/g, "''") + "','" + contact.normalized_phone_number + "','" + contact.guessed_gender + "'),"; 
+		stringSQL = stringSQL + "('" + contact.guessed_full_name.replace(/'/g, "''") + "','" + contact.normalized_phone_number + "','" + contact.guessed_gender + "','" + contact.image_url + "'),"; 
 	});
 	return stringSQL.substring(0, stringSQL.length - 1);
 };
