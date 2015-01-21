@@ -66,10 +66,10 @@ exports.receiveSMS = function(req, res) {
 					}).catch(function(err) {
 						console.error("Error unsubscribing the user",JSON.stringify(err));
 						PG.knex('blocked_phone_numbers').insert({normalized_phone_number:normalized_phone_number}).then(function(result) {
-							console.log("2 Could not find your phone number, but successfully added number to blocked phone numbers");
+							console.log("Could not find your phone number, but successfully added number to blocked phone numbers");
 							exports.sendSMS(normalized_phone_number,"Thanks! You will no longer receive messages from Matchflare. Reply UNDO to undo or contact help@matchflare.com for help.", true);
 						}).catch(function(err) {
-							console.error("2 Could not insert phone number to block phone number list",JSON.stringify(err));
+							console.error("Could not insert phone number to block phone number list",JSON.stringify(err));
 							exports.sendSMS(normalized_phone_number,"We had some trouble removing your phone number. Contact help@matchflare.com if you continue to get texts",true);
 						});
 					});

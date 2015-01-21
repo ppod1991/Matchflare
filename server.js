@@ -84,6 +84,7 @@ app.post('/updateProfile',contact.updateProfile);
 
 app.post('/test',utils.test);
 
+app.post('/preventMatches',contact.preventMatches);
 
 //app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
 
