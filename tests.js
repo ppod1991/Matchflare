@@ -90,15 +90,15 @@ client = request.newClient('http://localhost:5000/');
 // });
 
 //Test the processing of contacts
-// var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
+var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
 
-// // client.post('/processContacts?contact_id=90',data, function(err,res,body) {
-// // 	if (err)
-// // 		console.error("Error processing contacts: ", err.toString());
-// // 	else {
-// // 		console.log("Processing contacts returned: ", JSON.stringify(body));
-// // 	}
-// // });
+client.post('/processContacts?contact_id=90',data, function(err,res,body) {
+	if (err)
+		console.error("Error processing contacts: ", err.toString());
+	else {
+		console.log("Processing contacts returned: ", JSON.stringify(body));
+	}
+});
 
 // var data = {contacts:[{contact_id: 90},{contact_id: 91},{contact_id: 92},{contact_id: 93}]};
 
@@ -144,11 +144,11 @@ client = request.newClient('http://localhost:5000/');
 
 
 //Test changing of prevent matches status
-client.post('/preventMatches?contact_id=262&toPreventMatches=false',{none:0},function(err, res, body) {
-	if (err)
-   		console.error("Error changing prevent matches status ", err.toString());
-   	else {
-   		console.log("Success!");
-   	}
-}); 
+// client.post('/preventMatches?contact_id=262&toPreventMatches=false',{none:0},function(err, res, body) {
+// 	if (err)
+//    		console.error("Error changing prevent matches status ", err.toString());
+//    	else {
+//    		console.log("Success!");
+//    	}
+// }); 
 

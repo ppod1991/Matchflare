@@ -108,12 +108,12 @@ exports.processContacts = function(req, res) {
 				// 				+" WHERE NOT EXISTS (SELECT 1"
 				// 				+"				  FROM upsert up"
 				// 				+"				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING contact_id; COMMIT;")
-								
+		
 
 			PG.knex.raw("BEGIN; LOCK TABLE contacts IN SHARE ROW EXCLUSIVE MODE; \
 				WITH new_values (guessed_full_name, normalized_phone_number, guessed_gender, image_url) AS \
 				(VALUES " + contactsJSONtoSQL(processedContacts) + ") \
-				INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender, image_url, gender_preferences \
+				INSERT INTO contacts (guessed_full_name, normalized_phone_number, guessed_gender, image_url, gender_preferences) \
 				(SELECT * , guess_preferences(new_values.guessed_gender) FROM new_values WHERE new_values.normalized_phone_number NOT IN (SELECT contacts.normalized_phone_number FROM contacts));COMMIT;").then(function(response) {
 									console.log("Response after inserting new contacts:", response); 
 
