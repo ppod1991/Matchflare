@@ -1,7 +1,7 @@
 var request = require('request-json');
 var client;
-client = request.newClient('http://localhost:5000/');
-//client = request.newClient('http://matchflare.herokuapp.com/');
+//client = request.newClient('http://localhost:5000/');
+client = request.newClient('http://matchflare.herokuapp.com/');
 
 
 //Test GCM notifications
@@ -24,11 +24,11 @@ client = request.newClient('http://localhost:5000/');
 // });
 
 //Test ACCEPTING of a match
-// var data = {"decision":"ACCEPT","contact_id":165,"pair_id":557};
+var data = {"decision":"ACCEPT","contact_id":439,"pair_id":657};
 
-// client.post('/match/respond', data, function(err, res, body) {
-//   return console.log(res.statusCode);
-// });
+client.post('/match/respond', data, function(err, res, body) {
+  return console.log(res.statusCode);
+});
 
 //Test second ACCEPTING of a match
 // var data = {"decision":"ACCEPT","contact_id":162,"pair_id":556};
@@ -90,15 +90,15 @@ client = request.newClient('http://localhost:5000/');
 // });
 
 //Test the processing of contacts
-var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
+// var data = {contacts:[{raw_phone_number:'6098510053',guessed_full_name:'John'},{raw_phone_number:'7328510053',guessed_full_name:'Jenny'},{raw_phone_number:'9078510053',guessed_full_name:'Patrick'}]};
 
-client.post('/processContacts?contact_id=90',data, function(err,res,body) {
-	if (err)
-		console.error("Error processing contacts: ", err.toString());
-	else {
-		console.log("Processing contacts returned: ", JSON.stringify(body));
-	}
-});
+// client.post('/processContacts?contact_id=90',data, function(err,res,body) {
+// 	if (err)
+// 		console.error("Error processing contacts: ", err.toString());
+// 	else {
+// 		console.log("Processing contacts returned: ", JSON.stringify(body));
+// 	}
+// });
 
 // var data = {contacts:[{contact_id: 90},{contact_id: 91},{contact_id: 92},{contact_id: 93}]};
 
