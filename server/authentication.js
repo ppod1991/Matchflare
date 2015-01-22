@@ -140,15 +140,15 @@ exports.verifyVerificationSMS = function(req, res) {
                     });
 
                     var maxTimeDifference = 900000; //15 min = 900000 milliseconds
-                    var contact = result[0];
+                    var thisContact = result[0];
 
-                    if (input_verification_code === contact.verification_code && device_id === contact.device_id && (new Date(currentTime) - new Date(contact.verification_created_at)) < maxTimeDifference) {
+                    if (input_verification_code === thisContact.verification_code && device_id === thisContact.device_id && (new Date(currentTime) - new Date(thisContact.verification_created_at)) < maxTimeDifference) {
                         //If successfully verified, then generate access token and insert/update the contact
                         var access_token = generateRandomCode(1000000000,9999999999);
 
                         var update = {};
 
-                        if (!contact.verified) {
+                        if (!thisContact.verified) {
                             //If not already verified, then change everything to user input values...
                             update.verified = true;
                             update.guessed_full_name = utils.formatName(req.body.guessed_full_name);
@@ -163,13 +163,13 @@ exports.verifyVerificationSMS = function(req, res) {
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;
                         update.zipcode = req.body.zipcode;
-                        update.contacts = _.union(contact.contacts,_.pluck(req.body.contact_objects,'contact_id'));
+                        update.contacts = _.union(thisContact.contacts,_.pluck(req.body.contact_objects,'contact_id'));
                         update.device_id = device_id;
                         update.access_token = access_token;
                         update.blocked_matches = false;  //Unblock the user if they had blocked matches before, but are registering now
 
                         //If the contact did not exist, then insert the new contact...
-                        if (!contact.contact_id) {
+                        if (!thisContact.contact_id) {
                             update.normalized_phone_number = normalizedPhoneNumber;
                             PG.knex('contacts').insert(update).returning('contact_id').then(function(results) {
                                 console.log("Successfully inserted contact with verified info");
@@ -196,9 +196,9 @@ exports.verifyVerificationSMS = function(req, res) {
                         }
                         else {
                             //Otherwise update the existing contact...
-                            PG.knex('contacts').update(update).where('contact_id',contact.contact_id).then(function(results) {
+                            PG.knex('contacts').update(update).where('contact_id',thisContact.contact_id).then(function(results) {
                                 console.log("Successfully updated contact with verified info");
-                                update.contact_id = contact.contact_id;
+                                update.contact_id = thisContact.contact_id;
 
                                 //Get new contact objects
                                 contact.getContacts(update.contact_id, function(err,contact_objects) {
