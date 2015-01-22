@@ -127,7 +127,7 @@ exports.verifyVerificationSMS = function(req, res) {
         else {
             //Retrieve the proposed phone number info...
             PG.knex('proposed_phone_numbers')
-                .select('contacts.contact_id','contacts.verified','proposed_phone_numbers.verification_code','proposed_phone_numbers.verification_created_at','proposed_phone_numbers.device_id')
+                .select('contacts.contact_id','contacts.verified','contacts.contacts','proposed_phone_numbers.verification_code','proposed_phone_numbers.verification_created_at','proposed_phone_numbers.device_id')
                 .leftJoin('contacts','proposed_phone_numbers.normalized_phone_number','contacts.normalized_phone_number')
                 .where('proposed_phone_numbers.normalized_phone_number',normalizedPhoneNumber).then(function(result) {
                     console.log("Successfully retrieved verification info");
@@ -163,7 +163,7 @@ exports.verifyVerificationSMS = function(req, res) {
                         update.gender_preferences = req.body.gender_preferences;
                         update.birth_year = (new Date()).getFullYear() - req.body.age;
                         update.zipcode = req.body.zipcode;
-                        update.contacts = _.pluck(req.body.contact_objects,'contact_id');
+                        update.contacts = _.union(contact.contacts,_.pluck(req.body.contact_objects,'contact_id'));
                         update.device_id = device_id;
                         update.access_token = access_token;
                         update.blocked_matches = false;  //Unblock the user if they had blocked matches before, but are registering now
