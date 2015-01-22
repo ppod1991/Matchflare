@@ -101,7 +101,7 @@ exports.verifyAccessToken = function(req, res) {
                     user.contact_objects = contact_objects;
                     res.send(201,user);
                 }
-            })            
+            });            
         }
         else {
             console.error("Failed to verify access token: " + access_token);
@@ -174,12 +174,19 @@ exports.verifyVerificationSMS = function(req, res) {
                             PG.knex('contacts').insert(update).returning('contact_id').then(function(results) {
                                 console.log("Successfully inserted contact with verified info");
                                 update.contact_id = results[0];
-                                update.contact_objects = req.body.contact_objects;
-                                res.send(201, update); //Send back access token
+
+                                contact.getContacts(update.contact_id, function(err,contact_objects) {
+                                    if (err) {
+                                        res.send(501,"Failed to get contact objects:", JSON.stringify(err));
+                                    }
+                                    else {
+                                        update.contact_objects = contact_objects;
+                                        res.send(201, update); //Send current user (with contact objects)
+                                    }
+                                });  
 
                                 Matches.makeMatches(update.contact_id,null, function(err) {
                                     console.log("New matches made!");
-                                    
                                 });
 
                             }).catch(function(err) {
@@ -192,6 +199,9 @@ exports.verifyVerificationSMS = function(req, res) {
                             PG.knex('contacts').update(update).where('contact_id',contact.contact_id).then(function(results) {
                                 console.log("Successfully updated contact with verified info");
                                 update.contact_id = contact.contact_id;
+
+                                //Get new contact objects
+
                                 update.contact_objects = req.body.contact_objects;
                                 res.send(201, update); //Send back access token
 

@@ -137,8 +137,8 @@ exports.processContacts = function(req, res) {
 
 									if (!isVerified) {
 										//Get id's of all contacts
-										PG.knex.raw("SELECT contact_id, guessed_full_name, image_url FROM contacts WHERE normalized_phone_number IN " + phoneJSONtoSQL(allNormalizedPhoneNumbers) + " ORDER BY guessed_full_name").then(function(result) {
-											console.log("Retrieved all contact id of the current user");
+										PG.knex.raw("SELECT contact_id, guessed_full_name, image_url, verified FROM contacts WHERE normalized_phone_number IN " + phoneJSONtoSQL(allNormalizedPhoneNumbers) + " ORDER BY guessed_full_name").then(function(result) {
+											console.log("Retrieved all contact ids of the current user");
 											//Get initial matches of this user
 											var contact_ids = result.rows;
 											Matches.makeMatches(null,contact_ids, function(err, matches) {
