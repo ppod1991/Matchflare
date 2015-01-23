@@ -11,5 +11,6 @@ app.config(['$routeProvider',
       .when('/m/:encoded_pair_id',  { templateUrl: 'build/html/match/match.html' })
       .when('/privacy',{templateUrl:'build/html/privacy/privacy.html'})
       .when('/contact',{templateUrl:'build/html/contact/contact.html'})
+      .when('/faq',{templateUrl:'build/html/FAQ/FAQ.html'})
       .otherwise(       { redirectTo: '/' });
     }]);

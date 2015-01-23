@@ -17,11 +17,11 @@ client = request.newClient('http://matchflare.herokuapp.com/');
 // notify.sendNotification(target_contact_id,notification);
 
 //Test the creation of a new match and associated notifications
-var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:486},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:true}
+// var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:486},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:true}
 
-client.post('/postMatch', data, function(err, res, body) {
- return console.log(JSON.stringify(body));
-});
+// client.post('/postMatch', data, function(err, res, body) {
+//  return console.log(JSON.stringify(body));
+// });
 
 //Test ACCEPTING of a match
 // var data = {"decision":"ACCEPT","contact_id":439,"pair_id":657};
@@ -57,24 +57,24 @@ client.post('/postMatch', data, function(err, res, body) {
 
 //Test websocket connection
 
-// var WebSocket = require('ws');
-// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+var WebSocket = require('ws');
+//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-// var chat_id = 727;
-// var sender_contact_id = 95;
-// var pair_id = 550;
-// testSocket.on('open', function(event) {
-//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
-// });
+var chat_id = 1128;
+var sender_contact_id = 97;
+var pair_id = 683;
+testSocket.on('open', function(event) {
+ testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
+});
 
-// testSocket.on('message',function(message) {
-//  console.log("Received message", message);
-// });
+testSocket.on('message',function(message) {
+ console.log("Received message", message);
+});
 
-// var send = function(message) {
-//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
-//  }
+var send = function(message) {
+   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+ }
 
 
 //Test authentication and SMS verification

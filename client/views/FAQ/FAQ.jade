@@ -1,0 +1,11 @@
+section.container.content-section.text-center(ng-controller="faqController")
+	.row
+		.col-lg-10.col-lg-offset-1
+			.panel-group#accordian(role="tablist" aria-multiselectable="true")
+				.panel.panel-default(ng-repeat="question in questions")
+					.panel-heading(id="{{'heading' + $index}}" role="tab" data-toggle="collapse" aria-expanded="false" data-target="{{'#collapse' + $index}}" aria-controls="{{'collapse' + $index}}")
+						p.panel-title 
+							{{questions[$index]}}
+					.panel-collapse.collapse(id="{{'collapse' + $index}}" role="tabpanel" aria-labelledby="{{'heading' + $index}}")
+						.panel-body
+							{{answers[$index]}}
