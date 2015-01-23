@@ -17,18 +17,18 @@ client = request.newClient('http://matchflare.herokuapp.com/');
 // notify.sendNotification(target_contact_id,notification);
 
 //Test the creation of a new match and associated notifications
-// var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:453},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:false}
+var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:486},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:true}
 
-// client.post('/postMatch', data, function(err, res, body) {
-//  return console.log(JSON.stringify(body));
-// });
+client.post('/postMatch', data, function(err, res, body) {
+ return console.log(JSON.stringify(body));
+});
 
 //Test ACCEPTING of a match
-var data = {"decision":"ACCEPT","contact_id":439,"pair_id":657};
+// var data = {"decision":"ACCEPT","contact_id":439,"pair_id":657};
 
-client.post('/match/respond', data, function(err, res, body) {
-  return console.log(res.statusCode);
-});
+// client.post('/match/respond', data, function(err, res, body) {
+//   return console.log(res.statusCode);
+// });
 
 //Test second ACCEPTING of a match
 // var data = {"decision":"ACCEPT","contact_id":162,"pair_id":556};
