@@ -22,7 +22,7 @@ angular.module('matchflareApp.controllers.faq', [])
       $scope.answers.push("On the Android version, you can match anonymously--but there a better chance of your friends accepting if they know who you are! On the iOS verison, you can only match anonymously if both friends in the match have registered.");
 
       $scope.questions.push("Do I get charged for the text messages that are sent?");
-      $scope.answers.push("No, sending the text messages are free for our users. However, the friends who receive the messages can still get charged the normal inbound text message rate");
+      $scope.answers.push("No, sending the text messages are free for our users. However, the friends who receive the messages can still get charged their normal inbound text message rate, if they have one.");
 
       $scope.questions.push("I don't want to get any texts from you!");
       $scope.answers.push("We get it. Just reply back 'STOP' (no quotes) to the same phone number that sent you a text. If you don't have that phone number or if it doesn't seem to be working email us at support@matchflare.com");

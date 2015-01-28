@@ -78,18 +78,18 @@ exports.updateProfile = function(req, res) {
 	}).catch(function(err) {
 		console.error("Error updating this user", JSON.stringify(err));
 		res.send(500,err);
-	})
-}
+	});
+};
 
 exports.preventMatches = function(req, res) {
 	var toPreventMatches = req.query.toPreventMatches;
 	var contact_id = req.query.contact_id;
 
-	PG.knex('contacts').update({'blocked_matches':toPreventMatches}).where('contact_id',contact_id).then(function(result) {
+	PG.knex('contacts').update({'blocked_matches':toPreventMatches ? true : false}).where('contact_id',contact_id).then(function(result) {
 		console.log("Successfully changed blocked matches status");
 		res.send(201,{response: 'successful'});
 	}).catch(function(err) {
 		console.error("Error changing blocked matches status",JSON.stringify(err));
 		res.send(500,err);
 	});
-}
+};
