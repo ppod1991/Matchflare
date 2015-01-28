@@ -82,7 +82,7 @@ exports.updateProfile = function(req, res) {
 };
 
 exports.preventMatches = function(req, res) {
-	var toPreventMatches = req.query.toPreventMatches;
+	var toPreventMatches = parseInt(req.query.toPreventMatches);
 	var contact_id = req.query.contact_id;
 
 	PG.knex('contacts').update({'blocked_matches':toPreventMatches ? true : false}).where('contact_id',contact_id).then(function(result) {
