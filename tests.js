@@ -1,7 +1,7 @@
 var request = require('request-json');
 var client;
-//client = request.newClient('http://localhost:5000/');
-client = request.newClient('http://matchflare.herokuapp.com/');
+client = request.newClient('http://localhost:5000/');
+//client = request.newClient('http://matchflare.herokuapp.com/');
 
 
 //Test GCM notifications
