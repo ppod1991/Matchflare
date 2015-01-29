@@ -57,33 +57,39 @@ client = request.newClient('http://matchflare.herokuapp.com/');
 
 //Test websocket connection
 
-var WebSocket = require('ws');
-//var testSocket = new WebSocket("ws://localhost:5000/liveChat");
-var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
+// var WebSocket = require('ws');
+// //var testSocket = new WebSocket("ws://localhost:5000/liveChat");
+// var testSocket = new WebSocket("ws://matchflare.herokuapp.com/liveChat");
 
-var chat_id = 1128;
-var sender_contact_id = 97;
-var pair_id = 683;
-testSocket.on('open', function(event) {
- testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
-});
+// var chat_id = 1128;
+// var sender_contact_id = 97;
+// var pair_id = 683;
+// testSocket.on('open', function(event) {
+//  testSocket.send(JSON.stringify({type:"set_chat_id", chat_id: chat_id, sender_contact_id:sender_contact_id, pair_id:pair_id}));
+// });
 
-testSocket.on('message',function(message) {
- console.log("Received message", message);
-});
+// testSocket.on('message',function(message) {
+//  console.log("Received message", message);
+// });
 
-var send = function(message) {
-   testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
- }
+// var send = function(message) {
+//    testSocket.send(JSON.stringify({chat_id:chat_id, sender_contact_id: sender_contact_id, content: message, type:'message'}));
+//  }
 
 
 //Test authentication and SMS verification
 
-// var data = {};
-// client.post('/sendSMSVerification?phone_number=6098510053&device_id=MOCK_DEVICE_ID_1991',data,function(err,res,body) {
-//    console.log("Result of sending SMS verification:",JSON.stringify(body));
-// });
+var data = {};
+client.post('/sendSMSVerification?phone_number=6098510053&device_id=MOCK_DEVICE_ID_1991',data,function(err,res,body) {
+    console.log("Result of sending SMS verification:",JSON.stringify(body));
+});
 
+//var nexmo = request.newClient('https://rest.nexmo.com');
+//var data = {text: 'Enter 8852 within the Matchflare app to start playing cupid!', api_key: '54de0318', api_secret: 'd21d277d', from: '12069396519', to: '16098510053'};
+//console.log("Sending SMS with data:", JSON.stringify(data));
+//nexmo.post('/sms/json', data, function(err, res, body) {
+// 	console.log("Sent text message", JSON.stringify(body));
+//});
 // var data = {guessed_full_name:"Dr. Piyush Poddar", guessed_gender:"MALE","age":23,zipcode:"08550", gender_preferences:["FEMALE"]};
 // client.post('/verifyVerificationSMS?phone_number=6098510054&device_id=MOCK_DEVICE_ID_1991&input_verification_code=3989', data, function(err, res, body) {
 //     return console.log("Result of verifying the Verification SMS:", JSON.stringify(body));

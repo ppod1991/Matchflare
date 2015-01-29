@@ -30,6 +30,23 @@ exports.sendSMS = function(phone_number, message, ignoreBlock) {
 	
 };
 
+exports.sendVerificationSMS = function(phone_number, pin) {
+
+	utils.normalizedPhoneNumber(phone_number,function(err,normalized_phone_number) {
+
+		if (err) {
+			console.log("Invalid phone number. Can not send Verification Code SMS");
+		}
+		else {
+			var data = {api_key: '54de0318', api_secret: 'd21d277d', to: normalized_phone_number.replace(/\+/g, ''), pin:pin};
+			console.log("Sending SMS Code with data:", JSON.stringify(data));
+			nexmo.post('/sc/us/2fa/json', data, function(err, res, body) {
+				console.log("Sent text message", JSON.stringify(body));
+			});
+		}
+	});
+};
+
 exports.receiveSMS = function(req, res) {
 	var phone_number = req.query.msisdn;
 	var to = req.query.to;

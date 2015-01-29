@@ -65,10 +65,11 @@ exports.sendVerificationSMS = function(req, res) {
             				  FROM upsert up \
             				  WHERE up.normalized_phone_number = groupedValues.normalized_phone_number) RETURNING proposed_phone_number_id; COMMIT;")
                 .then(function(results) {
-                console.log("Successfully inserted proposed phone number with verification info");
-                var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter " + insertObject.verification_code + " within the Matchflare app to start playing cupid!";
-                sms.sendSMS(insertObject.normalized_phone_number,messageToSend); 
-                res.send(201, {response: "Successfully inserted proposed phone number"});
+                    console.log("Successfully inserted proposed phone number with verification info");
+                    //var messageToSend = "Verification Code: " + insertObject.verification_code + ". Enter " + insertObject.verification_code + " within the Matchflare app to start playing cupid!";
+                    //sms.sendSMS(insertObject.normalized_phone_number,messageToSend);
+                    sms.sendVerificationSMS(insertObject.normalized_phone_number,insertObject.verification_code);
+                    res.send(201, {response: "Successfully inserted proposed phone number"});
             }).catch(function(err) {
                 console.error("Error inserting proposed phone number with verification info", err);
                 res.send(501,err);
