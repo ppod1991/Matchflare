@@ -20,7 +20,7 @@ exports.processContacts = function(req, res) {
 	};
 
 	console.log("CONTACTS:", JSON.stringify(contacts));
-	if (contacts && contacts.size > 4) {
+	if (contacts && contacts.length > 4) {
 		async.each(contacts, function(contact, callback) {
 
 			//Extract normalized phone number
