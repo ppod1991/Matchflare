@@ -4,6 +4,7 @@ var apns = require('./apns');
 var int_encoder = require('int-encoder');
 var Matches = require('./matches');
 var _ = require('lodash');
+var sms = require('./sms');
 
 
 
@@ -24,7 +25,15 @@ exports.sendNotification = function(contact_id, notification) {
 			else {
 				//Send message via SMS
 				//NEED TO IMPLEMENT
-				console.log("MOCK Sending SMS to " + contact_id + ": " + notification.text_message);
+
+				if (notification.notification_type==="MATCHEE_NEW_MATCH") {
+					sms.sendNewMatchSMS(contact.normalized_phone_number,notification.extras);
+				}
+				else {
+					console.log("MOCK Sending SMS to " + contact_id + ": " + notification.text_message);
+				}
+
+
 			}
 			
 		}
@@ -67,18 +76,36 @@ exports.newMatchNotification = function(toNotifyRecipient, otherRecipient, match
 	var text_message;
 	var push_message;
 
+	var extras = {}; //For filling out NEXMO alert template
+
+	var matchURL = "matchflare.com/m/" + int_encoder.encode(pair_id);
+
 	if (is_anonymous) {
 		text_message = toNotifyRecipient.guessed_full_name.split(" ")[0] + "! Your friend thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + otherRecipient.guessed_full_name + ".";
 		push_message = "Your friend matched you with " + matcherGenderPronoun + " friend, " + otherRecipient.guessed_full_name  + ". Tap to message " + recipientGenderPronoun + "."; 
+		extras.targetName = toNotifyRecipient.guessed_full_name.split(" ")[0];
+		extras.matcherPronoun = matcherGenderPronoun;
+		extras.otherRecipientName = otherRecipient.guessed_full_name;
+		extras.recipientPronoun = recipientGenderPronoun;
+		extras.matchURL = matchURL;
+		extras.template = 1; //Anonymous NEXMO message template
 	}
 	else {
 		text_message = toNotifyRecipient.guessed_full_name.split(" ")[0] + "! " + matcher.guessed_full_name + " thinks you’d hit it off with " + matcherGenderPronoun + " pal, " + otherRecipient.guessed_full_name + ".";
 		push_message = matcher.guessed_full_name + " matched you with " + matcherGenderPronoun + " friend, " + otherRecipient.guessed_full_name + ". Tap to message " + recipientGenderPronoun + "."; 
+	
+		extras.targetName = toNotifyRecipient.guessed_full_name.split(" ")[0];
+		extras.matcherName = matcher.guessed_full_name;
+		extras.matcherPronoun = matcherGenderPronoun;
+		extras.otherRecipientName = otherRecipient.guessed_full_name;
+		extras.recipientPronoun = recipientGenderPronoun;
+		extras.matchURL = matchURL;
+		extras.template = 2; //Non-anonymous NEXMO message template
 	}
-	var matchURL = "matchflare.herokuapp.com/m/" + int_encoder.encode(pair_id);
+	
 	text_message = text_message + " See " + recipientGenderPronoun + " and learn more at " + matchURL + ". Text SAD to stop new matches";
 	
-	var notification = {text_message: text_message, push_message: push_message, notification_type: 'MATCHEE_NEW_MATCH', pair_id: pair_id};
+	var notification = {text_message: text_message, push_message: push_message, notification_type: 'MATCHEE_NEW_MATCH', pair_id: pair_id, extras: extras};
 
 	exports.postNotification(toNotifyRecipient.contact_id,notification,matcher.contact_id);
 

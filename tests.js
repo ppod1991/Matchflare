@@ -17,11 +17,11 @@ client = request.newClient('http://localhost:5000/');
 // notify.sendNotification(target_contact_id,notification);
 
 //Test the creation of a new match and associated notifications
-// var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:486},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:true}
+var data = {first_matchee:{contact_id:262},second_matchee:{contact_id:453},matcher:{contact_id:97}, match_status:"MATCHED", matcher_contact_id:97, is_anonymous:true}
 
-// client.post('/postMatch', data, function(err, res, body) {
-//  return console.log(JSON.stringify(body));
-// });
+client.post('/postMatch', data, function(err, res, body) {
+ return console.log(JSON.stringify(body));
+});
 
 //Test ACCEPTING of a match
 // var data = {"decision":"ACCEPT","contact_id":439,"pair_id":657};
@@ -79,10 +79,10 @@ client = request.newClient('http://localhost:5000/');
 
 //Test authentication and SMS verification
 
-var data = {};
-client.post('/sendSMSVerification?phone_number=6098510053&device_id=MOCK_DEVICE_ID_1991',data,function(err,res,body) {
-    console.log("Result of sending SMS verification:",JSON.stringify(body));
-});
+// var data = {};
+// client.post('/sendSMSVerification?phone_number=6098510053&device_id=MOCK_DEVICE_ID_1991',data,function(err,res,body) {
+//     console.log("Result of sending SMS verification:",JSON.stringify(body));
+// });
 
 //var nexmo = request.newClient('https://rest.nexmo.com');
 //var data = {text: 'Enter 8852 within the Matchflare app to start playing cupid!', api_key: '54de0318', api_secret: 'd21d277d', from: '12069396519', to: '16098510053'};

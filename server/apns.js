@@ -51,19 +51,24 @@ exports.updateRegistrationId = function(req, res) {
 };
 
 exports.notify = function(apn_device_token, data) {
+    try {
+            var myDevice = new apn.Device(apn_device_token);
+            var registrationIds = [];
+            var encapsulated_data = {data: JSON.stringify(data)};
+            // or with object values
 
-	var myDevice = new apn.Device(apn_device_token);
-    var registrationIds = [];
-    var encapsulated_data = {data: JSON.stringify(data)};
-    // or with object values
-
-    var note = new apn.Notification();
+            var note = new apn.Notification();
 
 
-    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-    note.badge = 1;
-    note.alert = data.push_message;
-    note.payload = encapsulated_data;
+            note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+            note.badge = 1;
+            note.alert = data.push_message;
+            note.payload = encapsulated_data;
 
-    apnConnection.pushNotification(note, myDevice);
+            apnConnection.pushNotification(note, myDevice);
+    }
+    catch(e) {
+        console.error("Could not send apple push notification:", JSON.stringify(e));
+
+    }
 }

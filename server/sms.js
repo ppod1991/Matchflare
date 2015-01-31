@@ -47,6 +47,27 @@ exports.sendVerificationSMS = function(phone_number, pin) {
 	});
 };
 
+exports.sendNewMatchSMS = function(phone_number, extras) {
+
+	utils.normalizedPhoneNumber(phone_number,function(err,normalized_phone_number) {
+
+		if (err) {
+			console.log("Invalid phone number. Can not send Verification Code SMS");
+		}
+		else {
+			extras.api_key = '54de0318';
+			extras.api_secret = 'd21d277d';
+			extras.to = normalized_phone_number.replace(/\+/g, '');
+
+			console.log("Sending New Match SMS with data:", JSON.stringify(extras));
+			nexmo.post('/sc/us/alert/json', extras, function(err, res, body) {
+				console.log("Sent new match text message", JSON.stringify(body));
+			});
+		}
+	});
+
+};
+
 exports.receiveSMS = function(req, res) {
 	var phone_number = req.query.msisdn;
 	var to = req.query.to;
