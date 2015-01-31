@@ -19,7 +19,7 @@ exports.processContacts = function(req, res) {
 		isVerified = true;
 	};
 
-	console.log("CONTACTS:", JSON.stringify(contacts));
+	//console.log("CONTACTS:", JSON.stringify(contacts));
 	if (contacts && contacts.length > 4) {
 		async.each(contacts, function(contact, callback) {
 
