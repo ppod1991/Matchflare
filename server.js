@@ -19,7 +19,11 @@ var sms = require('./server/sms');
 var utils = require('./server/utils');
 
 app.use(logfmt.requestLogger());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 app.use(express.static(__dirname + '/client'));
 app.use(cors());
 
