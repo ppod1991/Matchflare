@@ -1,3 +1,4 @@
+//Import Node dependencies
 var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
@@ -18,17 +19,15 @@ var _ = require('lodash');
 var sms = require('./server/sms');
 var utils = require('./server/utils');
 
+//Set up express server settings
 app.use(logfmt.requestLogger());
-//app.use(bodyParser.json());
-
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb'}));  //Required for large post message bodies
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-
 app.use(express.static(__dirname + '/client'));
-app.use(cors());
+app.use(cors()); //Allow cross-origin requests
 
+//Initialize express server
 var port = Number(process.env.PORT || 5000);
-
 var server = http.createServer(app);
 server.listen(port);
 console.log("http server listening on %d", port);
