@@ -1,7 +1,13 @@
-var PG = require('./knex');
-var utils = require('./utils');
+'use strict';
 
+//Module to handle requests about specific user information
+
+//External dependencies
+var PG = require('./knex');
+
+//Get the matchflare score for the current user
 exports.getMatchflareScore = function(req,res) {
+
 	var contact_id = req.query.contact_id;
 
 	PG.knex('contacts').select('matchflare_score').where('contact_id',contact_id).then(function(result) {
@@ -10,9 +16,9 @@ exports.getMatchflareScore = function(req,res) {
 	}).catch(function(err) {
 		res.send(501,"Error getting matchflare score: ", err.toString());
 	});
-
 };
 
+//Get the expanded contacts of the specified contacts
 exports.getContacts = function(contact_id,callback) {
 
 	PG.knex.raw("SELECT guessed_full_name, contact_id, image_url, verified FROM \
@@ -24,8 +30,9 @@ exports.getContacts = function(contact_id,callback) {
 		console.error("Error retrieving contacts for this person", JSON.stringify(err));
 		callback(err,null);
 	});
-}
+};
 
+//Update the "Remove Contacts" list of this user so that the user won't see matches containing this person any more
 exports.removeContact = function(req,res) {
 	var contact_id = req.query.contact_id;
 	var to_remove_contact_id = req.query.to_remove_contact_id;
@@ -36,9 +43,10 @@ exports.removeContact = function(req,res) {
 	}).catch(function(err) {
 		console.error("Error adding this contact to the removed contacts list: ", JSON.stringify(err));
 		res.send(501,err);
-	})
-}
+	});
+};
 
+//Update the "Blocked Contacts" list of the specified user so that this user cannot be matched by that person
 exports.blockContact = function(req, res) {
 	var contact_id = req.query.contact_id;
 	var to_block_contact_id = req.query.to_block_contact_id;
@@ -49,12 +57,15 @@ exports.blockContact = function(req, res) {
 	}).catch(function(err) {
 		console.error("Error adding this contact to the blocked contacts list: ", JSON.stringify(err));
 		res.send(501,err);
-	})
-}
+	});
+};
 
+//Updates the profile information of the specified user and returns the updated profile
 exports.updateProfile = function(req, res) {
 	var this_user = req.body;
 	var updateObject = {};
+
+	//Check if the update included certain fields
 	if (this_user.guessed_gender) {
 		updateObject.guessed_gender = this_user.guessed_gender;
 	}
@@ -81,6 +92,7 @@ exports.updateProfile = function(req, res) {
 	});
 };
 
+//Update the current user's settings to prevent them from receiving any matches
 exports.preventMatches = function(req, res) {
 	var toPreventMatches = parseInt(req.query.toPreventMatches);
 	var contact_id = req.query.contact_id;

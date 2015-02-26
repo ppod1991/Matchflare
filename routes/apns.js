@@ -1,17 +1,18 @@
+'use strict';
+
 //Module to handle apple push notification registration and notification delivery
 
+//Import external node dependencies
 var apn = require('apn');
 var PG = require('./knex');
 
-//NEED TO IMPLEMENT -- CHANGE DEVELOPMENT CERTIFICATE TO PRODUCTION CERTIFICATE
+var options = {cert:__dirname + '/developmentCertificates/cert.pem',key: __dirname + '/developmentCertificates/key.pem'};  //Development certificates
+options = {cert:__dirname + '/productionCertificates/cert.pem',key: __dirname + '/productionCertificates/key.pem'}; //Production certificates
 
-var options = {cert:__dirname + '/developmentCertificates/cert.pem',key: __dirname + '/developmentCertificates/key.pem'};
-options = {cert:__dirname + '/productionCertificates/cert.pem',key: __dirname + '/productionCertificates/key.pem'};
+var apnConnection = new apn.Connection(options); //Start APN Connection
 
-console.log("Certificate locations: ", JSON.stringify(options));
 
-var apnConnection = new apn.Connection(options);
-
+//Log APN Connection events
 apnConnection.on('connected', function() {
     console.log("Connected");
 });
@@ -37,6 +38,8 @@ apnConnection.on('disconnected', function() {
 
 apnConnection.on('socketError', console.error);
 
+
+//Update the APN Registration ID for the current user
 exports.updateRegistrationId = function(req, res) {
     var contact_id = req.body.contact_id;
     var apn_device_token = req.body.apn_device_token;
@@ -50,25 +53,21 @@ exports.updateRegistrationId = function(req, res) {
     });
 };
 
+//Send a Notification to the Specified User
 exports.notify = function(apn_device_token, data) {
     try {
-            var myDevice = new apn.Device(apn_device_token);
-            var registrationIds = [];
-            var encapsulated_data = {data: JSON.stringify(data)};
-            // or with object values
+        var myDevice = new apn.Device(apn_device_token);
+        var encapsulated_data = {data: JSON.stringify(data)};
+        var note = new apn.Notification();
 
-            var note = new apn.Notification();
+        note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+        note.badge = 1;
+        note.alert = data.push_message;
+        note.payload = encapsulated_data;
 
-
-            note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-            note.badge = 1;
-            note.alert = data.push_message;
-            note.payload = encapsulated_data;
-
-            apnConnection.pushNotification(note, myDevice);
+        apnConnection.pushNotification(note, myDevice);
     }
     catch(e) {
         console.error("Could not send apple push notification:", JSON.stringify(e));
-
     }
 }

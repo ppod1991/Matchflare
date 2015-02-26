@@ -1,11 +1,17 @@
-/**
- * Created by piyushpoddar on 11/26/14.
- */
+'use strict';
+
+//Module to handle all real-time chat operations including receiving chat history, adding new messages, notifying users
+
+//External dependencies
+var _ = require('lodash');
+
+//Internal dependencies
 var PG = require('./knex');
 var notify = require('./notify');
-var _ = require('lodash');
 var matches = require('./matches');
 
+
+//Retrieve the chat history for the specified chat
 exports.getChatHistory = function(chat_id, callback) {
   PG.knex.select('content','sender_contact_id','messages.created_at','guessed_full_name').from('messages').where('chat_id',chat_id).orderBy('created_at','asc').innerJoin('contacts','contacts.contact_id','messages.sender_contact_id').then(function(results) {
      console.log("Successfully retrieved chat " + chat_id);
@@ -16,16 +22,18 @@ exports.getChatHistory = function(chat_id, callback) {
   });
 };
 
+//Get the full name of the chat user
 exports.getName = function(contact_id, callback) {
     PG.knex.select('guessed_full_name').from('contacts').where('contact_id',contact_id).then(function(result) {
         console.log("Successfully retrieved name", result[0].guessed_full_name);
         callback(null, result[0].guessed_full_name);
     }).catch(function(err) {
         console.error("Error retrieving associated name", err);
-        callback(err,null)
+        callback(err,null);
     });
 };
 
+//Get the pair information for the specified pair id
 exports.getPair = function(pair_id, callback) {
     PG.knex.raw("SELECT pair_id, matcher.guessed_full_name AS matcher_full_name, first.guessed_full_name AS first_full_name, second.guessed_full_name AS second_full_name, \
           matcher.image_url AS matcher_image, first.image_url AS first_image, second.image_url AS second_image, \
@@ -36,7 +44,8 @@ exports.getPair = function(pair_id, callback) {
           INNER JOIN contacts AS first ON first.contact_id = pairs.first_contact_id \
           INNER JOIN contacts AS second ON second.contact_id = pairs.second_contact_id \
           WHERE pair_id = ? ;",[pair_id]).then(function(result) {
-              matches.rowsToObjects(result.rows, function(err, results) {
+
+              matches.rowsToObjects(result.rows, function(err, results) { //Convert the rows to objects
                   if(err) {
                     throw err;
                   }
@@ -50,6 +59,7 @@ exports.getPair = function(pair_id, callback) {
   });
 };
 
+//Add the chat message to the database
 exports.addMessage = function(chatMessage, callback) {
     PG.knex('messages').insert({content: chatMessage.content, chat_id: chatMessage.chat_id, sender_contact_id: chatMessage.sender_contact_id},'created_at').then(function(result) {
         console.log("Successfully posted new chat message", chatMessage.content);
@@ -60,24 +70,23 @@ exports.addMessage = function(chatMessage, callback) {
     });
 }
 
+//Set the 'last seen at' time for the specified chat and user
 exports.setLastSeenAt = function(chat_id,contact_id) {
 
   if (chat_id > 0 && contact_id > 0) {  //If valid contact id and chat id was set
+
       //Update the 'seen at' column for the correct participant in the chat
       PG.knex.raw(" \
         UPDATE chats \
-        SET     first_seen_at = CASE WHEN first_contact_id = ? THEN timezone('utc'::text, now()) ELSE first_seen_at END, \
-          second_seen_at = CASE WHEN second_contact_id = ? THEN timezone('utc'::text, now()) ELSE second_seen_at END, \
-          matcher_seen_at = CASE WHEN matcher_contact_id = ? THEN timezone('utc'::text, now()) ELSE matcher_seen_at END \
+        SET  first_seen_at = CASE WHEN first_contact_id = ? THEN timezone('utc'::text, now()) ELSE first_seen_at END, \
+             second_seen_at = CASE WHEN second_contact_id = ? THEN timezone('utc'::text, now()) ELSE second_seen_at END, \
+             matcher_seen_at = CASE WHEN matcher_contact_id = ? THEN timezone('utc'::text, now()) ELSE matcher_seen_at END \
         WHERE chat_id = ?;",[contact_id,contact_id,contact_id,chat_id]).then(function(result) {
-          
             console.log("Successfully updated seen at column");
         }).catch(function(err) {
             console.error("Error updating seen at column", JSON.stringify(err));
-        })
-
+        });
   }
-
 };
 
 //Notify members of this chat who have not been notified via web socket chat that they have a new chat message
@@ -96,12 +105,14 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
     WHERE   chats.chat_id = ? \
     AND (chats.chat_id = p.chat_id \
     OR  chats.chat_id = p.first_matcher_chat_id \
-    OR  chats.chat_id = p.second_matcher_chat_id);",[chat_id]).then(function(result) {  
+    OR  chats.chat_id = p.second_matcher_chat_id);",[chat_id]).then(function(result) {   //Gets the contact ids and names of users in specified chat
     
-      matches.rowsToObjects(result.rows,function(err,matchObjects) {
+      matches.rowsToObjects(result.rows,function(err,matchObjects) { //Convert rows to objects
 
         if (!err) {
           var match = matchObjects[0];
+
+          //Short the message to fit in text message screen
           var shortenedMessage;
           if (message.length > 22) {
                 shortenedMessage = "'" + message.substring(0,25) + "...'";
@@ -110,6 +121,7 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
                 shortenedMessage = "'" + message + "'";
           }
 
+          //Determine the role of the sender
           var sender;
           if (match.first_matchee.contact_id === sender_contact_id) {
             sender = match.first_matchee;
@@ -122,23 +134,25 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
           }
 
           var notification;
+
           if (result.rows[0].has_matcher && !(_.contains(sentTo,match.matcher.contact_id))) {  //If the matcher is in the chat and not already notified...
-            //The notification to the matcher
+            //Build the notification to the matcher
             notification = {};
             notification.notification_type = "MATCHER_QUESTION_ASKED";
             notification.pair_id = match.pair_id;
             notification.chat_id = chat_id;
             notification.text_message = sender.guessed_full_name + " asked: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
             notification.push_message = sender.guessed_full_name + " asked: " + shortenedMessage + ". Tap to reply.";
-            notify.postNotification(match.matcher.contact_id,notification,sender.contact_id);
+            notify.postNotification(match.matcher.contact_id,notification,sender.contact_id); //Post the notification
           }
 
           if (result.rows[0].has_first && !(_.contains(sentTo,match.first_matchee.contact_id))) {  //If the first matchee is in the chat and not already notified...
-            //The notification to the first matchee
+
+            //Build the notification to the first matchee
             notification = {};
             notification.pair_id = match.pair_id;
             notification.chat_id = chat_id;
-            if (sender === match.matcher) {
+            if (sender === match.matcher) { //If the sender was the matcher...
                 notification.notification_type = "MATCHEE_QUESTION_ANSWERED";
                 if (match.is_anonymous) {
                   notification.text_message = "Your friend answered: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP."; //NEED TO IMPLEMENT -- GIVE URL to SEE REPLY ON WEBSITE
@@ -149,20 +163,21 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
                   notification.push_message = sender.guessed_full_name + " answered: " + shortenedMessage + ". Tap to reply.";
                 }
             }
-            else {
+            else { //If the sender was the other matchee...
                 notification.notification_type = "MATCHEE_MESSAGE_SENT";
                 notification.text_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
                 notification.push_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Tap to reply.";
             }
-            notify.postNotification(match.first_matchee.contact_id,notification,sender.contact_id);
+            notify.postNotification(match.first_matchee.contact_id,notification,sender.contact_id); //Post the notification
           }
 
           if (result.rows[0].has_second && !(_.contains(sentTo,match.second_matchee.contact_id))) {  //If the second matchee is in the chat and not already notified...
-            //The notification to the second matchee
+
+            //Build the notification to the second matchee
             notification = {};
             notification.pair_id = match.pair_id;
             notification.chat_id = chat_id;
-            if (sender === match.matcher) {
+            if (sender === match.matcher) { //If the sender was the matcher...
                 notification.notification_type = "MATCHEE_QUESTION_ANSWERED";
                 if (match.is_anonymous) {
                   notification.text_message = "Your friend answered: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP."; //NEED TO IMPLEMENT -- GIVE URL to SEE REPLY ON WEBSITE
@@ -173,16 +188,16 @@ exports.notifyAway = function(sentTo, chat_id, sender_contact_id, message) {
                   notification.push_message = sender.guessed_full_name + " answered: " + shortenedMessage + ". Tap to reply.";
                 }
             }
-            else {
+            else { //If the sender was the other matchee...
                 notification.notification_type = "MATCHEE_MESSAGE_SENT";
                 notification.text_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Respond in the Matchflare app or reply STOP.";
                 notification.push_message = sender.guessed_full_name + " said: " + shortenedMessage + ". Tap to reply.";
             }
-            notify.postNotification(match.second_matchee.contact_id,notification,sender.contact_id);
+            notify.postNotification(match.second_matchee.contact_id,notification,sender.contact_id);  //Post the notification
           }
       }
       else {
-        throw new error(err);
+        throw new Error(err);
       }
     });
   }).catch(function(err) {

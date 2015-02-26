@@ -1,4 +1,6 @@
-//Import Node dependencies
+'use strict';
+
+//Import external Node dependencies
 var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
@@ -6,18 +8,20 @@ var pg = require('pg');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http');
-var processContacts = require('./server/processContacts');
-var matches = require('./server/matches');
-var gcm = require('./server/gcm');
-var apns = require('./server/apns');
-var notify = require('./server/notify');
-var chat = require('./server/chat');
-var contact = require('./server/contact');
-var authentication = require('./server/authentication');
-var WebSocketServer = require('ws').Server;
 var _ = require('lodash');
-var sms = require('./server/sms');
-var utils = require('./server/utils');
+var WebSocketServer = require('ws').Server;
+
+//Import internal dependencies
+var processContacts = require('./routes/processContacts');
+var matches = require('./routes/matches');
+var gcm = require('./routes/gcm');
+var apns = require('./routes/apns');
+var notify = require('./routes/notify');
+var chat = require('./routes/chat');
+var contact = require('./routes/contact');
+var authentication = require('./routes/authentication');
+var sms = require('./routes/sms');
+var utils = require('./routes/utils');
 
 //Set up express server settings
 app.use(logfmt.requestLogger());
@@ -32,83 +36,80 @@ var server = http.createServer(app);
 server.listen(port);
 console.log("http server listening on %d", port);
 
+
+//Client-Side Request Routing
+
+//Home page
 app.get('/', function(req, res) {
     res.sendfile('./client/build/html/index.html');
 });
 
-app.post('/processContacts',processContacts.processContacts);
-
-app.get('/getMatches', matches.getMatches);
-
-app.post('/postMatch', matches.addMatchResult);
-
-app.post('/gcm/registrationId',gcm.updateRegistrationId);
-
-app.post('/apns/registrationId',apns.updateRegistrationId);
-
-app.get('/match',matches.getMatch);
-
-app.post('/match/respond', matches.respondToMatchRequest);
-
-app.get('/pendingMatches', matches.getPendingMatches);
-
+//Match-specific web page
 app.get('/m/:encoded_pair_id',function(req, res) {
 	var encoded_pair_id = req.params.encoded_pair_id;
 	res.redirect('/#/m/' + encoded_pair_id);
 });
 
-app.get('/notifications',notify.getNotifications);
 
-app.get('/notificationLists',notify.getNotificationLists);
+//API Request Routing
 
-app.post('/seeNotification',notify.markAsSeen);
-
-app.post('/sendSMSVerification',authentication.sendVerificationSMS);
-
-app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
-
-app.get('/verifyAccessToken',authentication.verifyAccessToken);
-
+//Match related requests
+app.get('/getMatches', matches.getMatches);
+app.post('/postMatch', matches.addMatchResult);
+app.post('/match/respond', matches.respondToMatchRequest);
+app.get('/pendingMatches', matches.getPendingMatches);
 app.post('/getMatches',matches.getMatches);
+app.post('/processContacts',processContacts.processContacts);
+app.get('/match',matches.getMatch);
 
-app.get('/pictureURL',authentication.getPicture);
-
-app.get('/getScore',contact.getMatchflareScore);
-
-app.get('/hasUnread',notify.hasUnreadMessages);
-
+//Push Notification Related requests
+app.post('/gcm/registrationId',gcm.updateRegistrationId);
+app.post('/apns/registrationId',apns.updateRegistrationId);
 app.get('/receiveSMS',sms.receiveSMS);
 
+//Notification Related requests
+app.get('/notifications',notify.getNotifications);
+app.get('/notificationLists',notify.getNotificationLists);
+app.post('/seeNotification',notify.markAsSeen);
+app.get('/hasUnread',notify.hasUnreadMessages);
+
+//SMS Authentication Related requests
+app.post('/sendSMSVerification',authentication.sendVerificationSMS);
+app.post('/verifyVerificationSMS',authentication.verifyVerificationSMS);
+app.get('/verifyAccessToken',authentication.verifyAccessToken);
+app.get('/pictureURL',authentication.getPicture);
+
+//User Related requests
+app.get('/getScore',contact.getMatchflareScore);
 app.post('/removeContact',contact.removeContact);
-
 app.post('/blockContact',contact.blockContact);
-
 app.post('/updateProfile',contact.updateProfile);
-
-app.post('/test',utils.test);
-
 app.post('/preventMatches',contact.preventMatches);
 
-//app.post('/specifiedCompetitors',companies.setSpecifiedCompetitors);
+//Test Related requests
+app.post('/test',utils.test);
 
-//Chat implementation
-//Create websocket server
+
+
+//Websocket Chat Server
+
 var wss = new WebSocketServer({server: server, path:"/liveChat"});
 console.log("Websocket server created");
-var activeConnections = {};
-var index = 1;
+var activeConnections = {}; //Maintains list of active connections
+var index = 1; //Connection index counter
 
 //Accept web-socket connections
 wss.on("connection", function(ws) {
 
-	activeConnections[index + ""]  = ws;
-	ws["myIndex"] = index + "";
+	activeConnections[index + ""]  = ws;  //Store current connection
+	ws["myIndex"] = index + ""; //Store connection index
 
 	console.log("websocket connection open with index: " + index);
 	console.log("# of Active Connections:" + Object.keys(activeConnections).length);
 
-	index++;
+	index++; //Increment index
 
+	//On received message...
 	ws.on("message", function(rawData, flags) {
 		console.log("Received message: " + JSON.stringify(rawData));
 		var receivedData = JSON.parse(rawData);
@@ -120,83 +121,70 @@ wss.on("connection", function(ws) {
 
 		//Check to see if the message is setting the chat ID
 		if (receivedData.type === 'set_chat_id') {
+
+			//Assign properties of chat to this connection
 			ws.chat_id = receivedData.chat_id;
 			ws.pair_id = receivedData.pair_id;
 			ws.contact_id = receivedData.sender_contact_id;
 			console.log("Chat ID Set to: " + ws.chat_id);
 
-			//Send the current socket the chat history
+			//Send the current socket connection the chat history
 			try {
 				chat.getChatHistory(receivedData.chat_id,function(err, chatHistory) {
-					if (!err) {
-						chat.getName(receivedData.sender_contact_id,function(err,name) {
-							if (!err) {
-								chat.getPair(receivedData.pair_id,function(err,pair) {
-									if (!err) {
-										var registrationObject = {type: 'history', history: chatHistory, guessed_full_name:name, pair:pair };
-										ws.guessed_full_name = name;
-										ws.send(JSON.stringify(registrationObject));
-									}
-									else {
-										throw err;
-									}
-								});
-							}
-							else {
-								throw err;
-							}
+
+					if (err) { throw err; }
+					chat.getName(receivedData.sender_contact_id,function(err,name) {
+						if (err) { throw err; }
+
+						chat.getPair(receivedData.pair_id,function(err,pair) {
+							if (err) { throw err; }
+
+							var registrationObject = {type: 'history', history: chatHistory, guessed_full_name:name, pair:pair };
+							ws.guessed_full_name = name;
+							ws.send(JSON.stringify(registrationObject));
 						});
-					}
-					else {
-						throw err;
-					}
+					});
 				});
 			}
-			catch (err) {
+			catch (err) { //Error in sending chat history--respond by sending error message to connection
 				err.type = "error";
 				ws.send(JSON.stringify(err));
 			}
 
-
 		}
-		else if (ws.chat_id) {  //Else if it is a normal message, then post the message and send it to all active sockets in that chat
+		else if (ws.chat_id && receivedData.type === 'message') {  //Else if it is a normal user message, then post the message and send it to all active sockets in that chat
 
-			if(receivedData.type==='message') {
-				chat.addMessage(receivedData, function (created_at,err) {
+			chat.addMessage(receivedData, function (created_at, err) { //Persist the message to database
+				if (!err) {
 
-					if (!err) {
-						receivedData.created_at = created_at;
-						var sentTo = [];
-						//NEED TO IMPLEMENT -- NOTIFY RECIPIENTS WHO ARE NOT SIGNED IN! (PUSH NOTIFICATION/SMS)
-						_(activeConnections).filter(function (socket) {
-							return socket.chat_id === ws.chat_id;
-						}).forEach(function (socket) {
-							socket.send(JSON.stringify(receivedData));
-							sentTo.push(socket.contact_id);
-						});
-						chat.notifyAway(sentTo,ws.chat_id,ws.contact_id,receivedData.content);
-					}
-					else {
-						ws.send(JSON.stringify({error: err}));
-					}
-				});
-			}
+					receivedData.created_at = created_at;
+					var sentTo = [];
+					_(activeConnections).filter(function (socket) {  //Find active connections in the same chat and send message to each of them
+						return socket.chat_id === ws.chat_id;
+					}).forEach(function (socket) {
+						socket.send(JSON.stringify(receivedData));
+						sentTo.push(socket.contact_id);
+					});
 
-
+					chat.notifyAway(sentTo, ws.chat_id, ws.contact_id, receivedData.content); //Alert 'Away' users via Push Notification of a new message
+				}
+				else {
+					ws.send(JSON.stringify({error: err}));  //Send error message to connection
+				}
+			});
 		}
-
-
 	});
 
+	//On websocket connection close
 	ws.on("close", function() {
 		console.log("Websocket connection close -- updating last seen at");
-		chat.setLastSeenAt(ws.chat_id,ws.contact_id);
-		delete activeConnections[ws.myIndex];
+		chat.setLastSeenAt(ws.chat_id,ws.contact_id); //Update the 'last seen at' column for the current user for the current chat
+		delete activeConnections[ws.myIndex]; //Remove connection from the active connections
 	});
 
+	//On websocket error
 	ws.on("error", function(err) {
 		console.log("Error in websocket!", JSON.stringify(err));
-
-	})
+	});
 
 });

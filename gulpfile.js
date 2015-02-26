@@ -1,22 +1,19 @@
+//Gulp tasks
+
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var imagemin = require('gulp-imagemin');
-var sourcemaps = require('gulp-sourcemaps');
 var htmlmin = require('gulp-htmlmin');
-//var zip = require('gulp-zip');
 var jade = require('gulp-jade');
-//var livereload = require('gulp-livereload');
 var nodemon = require('gulp-nodemon');
 var autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
     clean = require('gulp-clean'),
     notify = require('gulp-notify'),
     cache = require('gulp-cache');
-
-
 
 var paths = {scripts: ['client/js/**/*.js','client/js/*.js'],
 			 images: ['client/img/*'],
@@ -33,13 +30,8 @@ gulp.task('lint', function () {
 
 gulp.task('scripts',function() {
 	return gulp.src(paths.scripts)
-			//.pipe(sourcemaps.init())
 			.pipe(concat('all.js'))
-			//.pipe(gulp.dest('client/build/js'))
 			.pipe(rename('all.min.js'))
-			//.pipe(uglify())
-			//.pipe(sourcemaps.write('maps'))
-			//.pipe(zip('archive.zip'))
 			.pipe(gulp.dest('client/build/js'));
 });
 
@@ -60,8 +52,6 @@ gulp.task('images', function() {
     .pipe(gulp.dest('client/build/img'));
 });
 
-
-
 gulp.task('htmlmin', function() {
   gulp.src(paths.jade)
   	.pipe(jade({}))
@@ -79,12 +69,6 @@ gulp.task('watch',function() {
 	gulp.watch(paths.jade,['htmlmin']);
 	gulp.watch(paths.css,['styles']);
 	gulp.watch(paths.images,['images']);
-
-	//var server = livereload();
-
-	// gulp.watch(paths.compile, function(file) {
- //        server.changed(file.path);
- //    });
 });
 
 //run app using nodemon
@@ -94,7 +78,6 @@ gulp.task('serve',['default'], function(){
 				console.log("Restarted");
 			});
 });
-
 
 gulp.task('default',['clean'], function() {
 	gulp.start(['styles','lint','scripts','watch','images','htmlmin']);

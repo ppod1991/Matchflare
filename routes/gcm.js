@@ -1,13 +1,15 @@
+'use strict';
+
+//Module to handle request related to GCM (Google Cloud Messaging) i.e. Android Push Notifications
+
+//External dependencies
 var gcm = require('node-gcm');
+var sender = new gcm.Sender(process.env.GCM_KEY);
+
+//Internal dependencies
 var PG = require('./knex');
 
-
-
-
-var sender = new gcm.Sender('AIzaSyDDKjUl2v-V4ehHZba9OxVmQx6_3FYFJjg');
-
-
-
+//Updates the specified users GCM Registration ID
 exports.updateRegistrationId = function(req, res) {
     var contact_id = req.body.contact_id;
     var registration_id = req.body.registration_id;
@@ -21,11 +23,12 @@ exports.updateRegistrationId = function(req, res) {
     });
 };
 
+//Send push notification to the specified Google user
 exports.notify = function(registration_id, data) {
 
     var registrationIds = [];
     var encapsulated_data = {data: JSON.stringify(data)};
-    // or with object values
+
     var message = new gcm.Message({
         collapseKey: 'Notifications from Matchflare!',
         delayWhileIdle: false,

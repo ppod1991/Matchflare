@@ -1,3 +1,5 @@
+//List of names for 'best guess' of gender
+
 module.exports = {
   "aabriella": "FEMALE",
   "aadhya": "FEMALE",
