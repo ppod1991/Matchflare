@@ -5,6 +5,9 @@ Matchflare is a mobile app that lets you set up your friends. This repo contains
 
 The back-end was built with NodeJS and PostgreSQL.
 
-## Features
+## Components
+
+Instructional View Pager
+![Instructions] (http://cdn.makeagif.com/media/3-15-2015/wo_6ww.gif)
 
 
