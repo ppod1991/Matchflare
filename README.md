@@ -8,6 +8,9 @@ The back-end was built with NodeJS and PostgreSQL.
 ## Components
 
 Instructional View Pager
-![Instructions] (http://cdn.makeagif.com/media/3-15-2015/wo_6ww.gif)
+
+![Instructions] (www.piyushpoddar.com/public/images/gifs/matchflare/android/instructions.gif)
+
+
 
 
