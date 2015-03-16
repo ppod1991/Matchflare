@@ -9,7 +9,7 @@ The back-end was built with NodeJS and PostgreSQL.
 
 Instructional View Pager
 
-![Instructions] (www.piyushpoddar.com/public/images/gifs/matchflare/android/instructions.gif)
+![Instructions] (http://www.piyushpoddar.com/public/images/gifs/matchflare/android/chat.gif)
 
 
 
