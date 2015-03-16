@@ -37,11 +37,6 @@ The back-end was built with NodeJS and PostgreSQL.
 
 ![Instructions] (http://www.piyushpoddar.com/public/images/gifs/matchflare/android/search_friends.gif)
 
-###Picture Upload
-* Take a picture using the camera or upload a previously stored one. Uploads the image to Amazon S3.
-
-![Instructions] (http://www.piyushpoddar.com/public/images/gifs/matchflare/android/pic_upload.gif)
-
 ###Push Notifications
 * Custom APNS and GCM Push notifications
 * Sorted by most recent activity and date
